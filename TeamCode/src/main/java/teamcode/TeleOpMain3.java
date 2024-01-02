@@ -99,12 +99,17 @@ public class TeleOpMain3 extends LinearOpMode {
 
 
         telemetry.update();
+        // because the gear is always outside or inside then one size of wheels need to be revers
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
+
+
 
         driveControl = new DriveControl_NanoTorjan(frontLeft, frontRight, backLeft, backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
 
+
+        //intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         double lspower = 0;
         waitForStart();
         //while (!isStopRequested()) {
@@ -114,15 +119,15 @@ public class TeleOpMain3 extends LinearOpMode {
             driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
            // Game Pad 2 controller for other motors
-            intake.setPower(gamepad2.left_stick_y);
+           // control intake motor
+           intake.setPower(gamepad2.left_stick_y);
+           int currentPosition = intake.getCurrentPosition();
+           telemetry.addData("Encoder Position", currentPosition);
 
             //lift power take from the second game pad
             lspower= gamepad2.right_stick_y*0.2;
             lsRight.setPower(lspower);
             lsLeft.setPower(-lspower);
-
-//            telemetry.addData("Gamepad2_left_y ", gamepad2.left_stick_y);
-//            telemetry.addData("Gamepad2_right_y ", gamepad2.right_stick_y);
 
 
             /* HuskyLens.Block[] blocks = huskyLens.blocks();
@@ -131,77 +136,57 @@ public class TeleOpMain3 extends LinearOpMode {
                 telemetry.addData("Block", blocks[i].toString());
             } */
 
-
-
-
             //Plane launcher
             //if(gamepad2.left_trigger >=0.1){
             if(gamepad2.y){
                 // 1 is the after launch position
                 planeLaunch.setPosition(1);
                 // after launched wait 2 seconds move back to ready position
-                sleep(2000);
+                sleep(1500);
                 // 0.4 is the ready position
                 planeLaunch.setPosition(0.4);
             }
 
-            //Claw contols
+            //Claw contols  -  close
             if(gamepad2.left_trigger >=0.1) {
-                clawLeft.setPosition(0.30);
+                clawLeft.setPosition(0.33);
                 clawRight.setPosition(0.25);
-
-
             }
 
-            //Claw contols
+            //Claw   -   open
             if(gamepad2.right_trigger >=0.1) {
-
                 clawLeft.setPosition(0.10);
                 clawRight.setPosition(0.5);
             }
 
-
-            if(gamepad2.right_bumper ) {
-                armLift.setPosition(0);
-                sleep(2000);
-                armLift.setPosition(0.3);
-                sleep(2000);
-
-                armLift.setPosition(0.5);
-                sleep(2000);
-
-                armLift.setPosition(1);
-                sleep(2000);
-
-
-            }
-
+            // Move arm to ready pick up pixel position
             if(gamepad2.left_bumper ) {
-                //Get motor encoding information
-                intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                clawLift.setPosition(0);
-                sleep(2000);
-                clawLift.setPosition(0.3);
-                sleep(2000);
-
-                clawLift.setPosition(0.5);
-                sleep(2000);
 
                 clawLift.setPosition(1);
                 sleep(2000);
 
+                clawLift.setPosition(0.5);
+                armLift.setPosition(0.5);
+                sleep(2000);
+                armLift.setPosition(0.3);
+                sleep(2000);
+
+                armLift.setPosition(0);
+                sleep(2000);
+
             }
-            int currentPosition = intake.getCurrentPosition();
-            intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            // Display encoder position
-            telemetry.addData("Encoder Position", currentPosition);
-            //sleep(500);
-            telemetry.addData("Encoder Position", currentPosition);
-            //sleep(500);
-            telemetry.addData("Encoder Position", currentPosition);
-            //sleep(500);
-            telemetry.addData("Encoder Position", currentPosition);
+
+            // Move arm to ready place pixel position
+            if(gamepad2.right_bumper ) {
+                clawLift.setPosition(0.3);
+                sleep(2000);
+                clawLift.setPosition(0.5);
+                armLift.setPosition(0.8);
+                sleep(2000);
+                clawLift.setPosition(1);
+
+            }
+
 
             telemetry.update();
 
