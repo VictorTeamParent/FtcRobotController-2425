@@ -13,6 +13,8 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
 
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+
 @TeleOp(name="TeleOpMain3", group="TeleOp")
 public class TeleOpMain3 extends LinearOpMode {
 
@@ -88,6 +90,8 @@ public class TeleOpMain3 extends LinearOpMode {
 
         rateLimit.expire();
 
+
+
        /* if (!huskyLens.knock()) {
             telemetry.addData(">>", "Problem communicating with " + huskyLens.getDeviceName());
         } else {
@@ -151,14 +155,23 @@ public class TeleOpMain3 extends LinearOpMode {
 
             //Claw contols  -  close
             if(gamepad2.left_trigger >=0.1) {
-                clawLeft.setPosition(0.33);
-                clawRight.setPosition(0.25);
+                clawRight.setPosition(0.6);
+                clawLeft.setPosition(1);
+                //lawRight.setPosition(0.25);
             }
 
             //Claw   -   open
             if(gamepad2.right_trigger >=0.1) {
-                clawLeft.setPosition(0.10);
-                clawRight.setPosition(0.5);
+                clawLeft.setPosition(0.5);
+                clawRight.setPosition(1);
+            }
+            if(gamepad2.dpad_up) {
+                clawLift.setPosition(0.55);
+            }
+            if(gamepad2.dpad_down) {
+                clawLift.setPosition(0.53);
+                clawRight.setPosition(1);
+                clawLeft.setPosition(0.5);
             }
 /*
             // sample reset
