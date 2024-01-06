@@ -48,6 +48,8 @@ public class TeleOpMain3 extends LinearOpMode {
     private DriveControl_NanoTorjan driveControl;
     //private DriveControl driveControl;
 
+
+
     @Override
     public void runOpMode()  throws InterruptedException {
 
@@ -141,7 +143,7 @@ public class TeleOpMain3 extends LinearOpMode {
             if(gamepad2.y){
                 // 1 is the after launch position
                 planeLaunch.setPosition(1);
-                // after launched wait 2 seconds move back to ready position
+                // after launched wait 1.5 seconds move back to ready position
                 sleep(1500);
                 // 0.4 is the ready position
                 planeLaunch.setPosition(0.4);
@@ -158,8 +160,8 @@ public class TeleOpMain3 extends LinearOpMode {
                 clawLeft.setPosition(0.10);
                 clawRight.setPosition(0.5);
             }
-
-            // Move arm to ready pick up pixel position
+/*
+            // sample reset
             if(gamepad2.left_bumper ) {
 
                 clawLift.setPosition(1);
@@ -176,7 +178,7 @@ public class TeleOpMain3 extends LinearOpMode {
 
             }
 
-            // Move arm to ready place pixel position
+            // sample scoring
             if(gamepad2.right_bumper ) {
                 clawLift.setPosition(0.3);
                 sleep(2000);
@@ -185,6 +187,22 @@ public class TeleOpMain3 extends LinearOpMode {
                 sleep(2000);
                 clawLift.setPosition(1);
 
+            }
+ */
+             //automation to score pixel
+            if (gamepad2.b) {
+                armLift.setPosition(0.8);
+                sleep(1000);
+                clawLift.setPosition(1);
+            }
+            //automation to reset position
+            if (gamepad2.a) {
+                armLift.setPosition(0.5);
+                sleep(1500);
+                clawLift.setPosition(0.8);
+                armLift.setPosition(0);
+                sleep(750);
+                clawLift.setPosition(0.55);
             }
 
 
@@ -198,4 +216,6 @@ public class TeleOpMain3 extends LinearOpMode {
 //
 //        }
     }
+
+
 }
