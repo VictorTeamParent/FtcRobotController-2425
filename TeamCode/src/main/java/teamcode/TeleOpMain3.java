@@ -119,7 +119,9 @@ public class TeleOpMain3 extends LinearOpMode {
         double lspower = 0;
         boolean moveup = false;
         boolean moveup2 = false;
+        boolean moveup3 = false;
         boolean lsmove = false;
+        boolean lsmove2 = false;
         waitForStart();
         //while (!isStopRequested()) {
         while (opModeIsActive()) {
@@ -158,8 +160,9 @@ public class TeleOpMain3 extends LinearOpMode {
 
             //Claw contols  -  close
             if(gamepad2.left_trigger >=0.1) {
-                clawRight.setPosition(0.6);
                 clawLeft.setPosition(1);
+                clawRight.setPosition(0.6);
+
                 //lawRight.setPosition(0.25);
             }
 
@@ -169,42 +172,63 @@ public class TeleOpMain3 extends LinearOpMode {
                 clawRight.setPosition(1);
             }
             if(gamepad2.dpad_up) {
-                clawLift.setPosition(0.6);
+                clawLift.setPosition(0.8);
             }
-            if(gamepad2.dpad_down) {
-                clawLift.setPosition(0.545);
-                clawRight.setPosition(1);
-                clawLeft.setPosition(0.5);
+            if(gamepad2.dpad_down){
+                clawLift.setPosition(0.525);
             }
-/*
-            // sample reset
-            if(gamepad2.left_bumper ) {
+            if(gamepad2.dpad_left) {
+                lsRight.setPower(-1);
+                lsLeft.setPower(1);
+                sleep(250);
+                lsRight.setPower(0);
+                lsLeft.setPower(0);
 
-                clawLift.setPosition(1);
-                sleep(2000);
+                //end move up
 
-                clawLift.setPosition(0.5);
-                armLift.setPosition(0.5);
-                sleep(2000);
-                armLift.setPosition(0.3);
-                sleep(2000);
-
-                armLift.setPosition(0);
-                sleep(2000);
-
-            }
-
-            // sample scoring
-            if(gamepad2.right_bumper ) {
-                clawLift.setPosition(0.3);
-                sleep(2000);
-                clawLift.setPosition(0.5);
                 armLift.setPosition(0.8);
-                sleep(2000);
+                sleep(1000);
                 clawLift.setPosition(1);
 
+                lsRight.setPower(-1);
+                lsLeft.setPower(1);
+                sleep(1250);
+                lsRight.setPower(0);
+                lsLeft.setPower(0);
+                moveup3=true;
+                lsmove2=true;
             }
- */
+
+            if(gamepad2.dpad_right) {
+                armLift.setPosition(0.5);
+                sleep(1500);
+                clawLift.setPosition(0.8);
+
+
+                if (moveup3) {
+                    //reset linear slides only if it was up
+                    lsRight.setPower(1);
+                    lsLeft.setPower(-1);
+                    sleep(250);
+                    lsRight.setPower(0);
+                    lsLeft.setPower(0);
+                    moveup3 = false;
+
+                }
+                if (lsmove2) {
+                    lsRight.setPower(1);
+                    lsLeft.setPower(-1);
+                    sleep(1250);
+                    lsRight.setPower(0);
+                    lsLeft.setPower(0);
+                    lsmove2 = false;
+
+                }
+                clawLeft.setPosition(1);
+                clawRight.setPosition(0.6);
+                armLift.setPosition(0.1);
+                sleep(750);
+            }
 
              //automation to score pixel
             if (gamepad2.left_bumper) {
@@ -242,9 +266,10 @@ public class TeleOpMain3 extends LinearOpMode {
                 armLift.setPosition(0.5);
                 sleep(1500);
                 clawLift.setPosition(0.8);
-                armLift.setPosition(0);
+                clawLeft.setPosition(1);
+                clawRight.setPosition(0.6);
+                armLift.setPosition(0.1);
                 sleep(750);
-                clawLift.setPosition(0.55);
 
             }
             if (gamepad2.x) {
@@ -262,7 +287,7 @@ public class TeleOpMain3 extends LinearOpMode {
 
                 lsRight.setPower(-1);
                 lsLeft.setPower(1);
-                sleep(2500);
+                sleep(2100);
                 lsRight.setPower(0);
                 lsLeft.setPower(0);
                 moveup2=true;
@@ -287,15 +312,15 @@ public class TeleOpMain3 extends LinearOpMode {
                 if (lsmove) {
                     lsRight.setPower(1);
                     lsLeft.setPower(-1);
-                    sleep(2500);
+                    sleep(2100);
                     lsRight.setPower(0);
                     lsLeft.setPower(0);
                     lsmove=false;
                 }
-
-                armLift.setPosition(0);
+                clawLeft.setPosition(1);
+                clawRight.setPosition(0.6);
+                armLift.setPosition(0.1);
                 sleep(750);
-                clawLift.setPosition(0.55);
 
 
 
@@ -313,6 +338,8 @@ public class TeleOpMain3 extends LinearOpMode {
 //
 //
 //        }
+
+
     }
 
 
