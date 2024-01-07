@@ -262,7 +262,7 @@ public class TeleOpMain3 extends LinearOpMode {
 
                 lsRight.setPower(-1);
                 lsLeft.setPower(1);
-                sleep(3000);
+                sleep(2500);
                 lsRight.setPower(0);
                 lsLeft.setPower(0);
                 moveup2=true;
@@ -287,7 +287,7 @@ public class TeleOpMain3 extends LinearOpMode {
                 if (lsmove) {
                     lsRight.setPower(1);
                     lsLeft.setPower(-1);
-                    sleep(3000);
+                    sleep(2500);
                     lsRight.setPower(0);
                     lsLeft.setPower(0);
                     lsmove=false;
