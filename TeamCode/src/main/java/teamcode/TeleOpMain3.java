@@ -117,6 +117,9 @@ public class TeleOpMain3 extends LinearOpMode {
 
         //intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         double lspower = 0;
+        boolean moveup = false;
+        boolean moveup2 = false;
+        boolean lsmove = false;
         waitForStart();
         //while (!isStopRequested()) {
         while (opModeIsActive()) {
@@ -131,7 +134,7 @@ public class TeleOpMain3 extends LinearOpMode {
            telemetry.addData("Encoder Position", currentPosition);
 
             //lift power take from the second game pad
-            lspower= gamepad2.right_stick_y*0.2;
+            lspower= gamepad2.right_stick_y;
             lsRight.setPower(lspower);
             lsLeft.setPower(-lspower);
 
@@ -166,10 +169,10 @@ public class TeleOpMain3 extends LinearOpMode {
                 clawRight.setPosition(1);
             }
             if(gamepad2.dpad_up) {
-                clawLift.setPosition(0.55);
+                clawLift.setPosition(0.6);
             }
             if(gamepad2.dpad_down) {
-                clawLift.setPosition(0.53);
+                clawLift.setPosition(0.545);
                 clawRight.setPosition(1);
                 clawLeft.setPosition(0.5);
             }
@@ -202,20 +205,102 @@ public class TeleOpMain3 extends LinearOpMode {
 
             }
  */
+
              //automation to score pixel
-            if (gamepad2.b) {
+            if (gamepad2.left_bumper) {
+                //move up linear slides
+                lsRight.setPower(-1);
+                lsLeft.setPower(1);
+                sleep(250);
+                lsRight.setPower(0);
+                lsLeft.setPower(0);
+
+                //end move up
+
                 armLift.setPosition(0.8);
                 sleep(1000);
                 clawLift.setPosition(1);
+                moveup = true;
             }
             //automation to reset position
-            if (gamepad2.a) {
+            if (gamepad2.right_bumper) {
+
+
+                if(moveup )
+                {
+                    //reset linear slides only if it was up
+                    lsRight.setPower(1);
+                    lsLeft.setPower(-1);
+                    sleep(250);
+                    lsRight.setPower(0);
+                    lsLeft.setPower(0);
+
+
+                    moveup = false;
+                }
+
                 armLift.setPosition(0.5);
                 sleep(1500);
                 clawLift.setPosition(0.8);
                 armLift.setPosition(0);
                 sleep(750);
                 clawLift.setPosition(0.55);
+
+            }
+            if (gamepad2.x) {
+                lsRight.setPower(-1);
+                lsLeft.setPower(1);
+                sleep(250);
+                lsRight.setPower(0);
+                lsLeft.setPower(0);
+
+                //end move up
+
+                armLift.setPosition(0.8);
+                sleep(1000);
+                clawLift.setPosition(1);
+
+                lsRight.setPower(-1);
+                lsLeft.setPower(1);
+                sleep(3000);
+                lsRight.setPower(0);
+                lsLeft.setPower(0);
+                moveup2=true;
+                lsmove=true;
+            }
+            if(gamepad2.a){
+                armLift.setPosition(0.5);
+                sleep(1500);
+                clawLift.setPosition(0.8);
+
+
+                if(moveup2) {
+                    //reset linear slides only if it was up
+                    lsRight.setPower(1);
+                    lsLeft.setPower(-1);
+                    sleep(250);
+                    lsRight.setPower(0);
+                    lsLeft.setPower(0);
+                    moveup2=false;
+
+                }
+                if (lsmove) {
+                    lsRight.setPower(1);
+                    lsLeft.setPower(-1);
+                    sleep(3000);
+                    lsRight.setPower(0);
+                    lsLeft.setPower(0);
+                    lsmove=false;
+                }
+
+                armLift.setPosition(0);
+                sleep(750);
+                clawLift.setPosition(0.55);
+
+
+
+
+
             }
 
 

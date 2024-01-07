@@ -89,10 +89,15 @@ public class RobotParams
     public static final String HWNAME_WEBCAM2                   = "Webcam 2";
     public static final String HWNAME_BLINKIN                   = "blinkin";
     // Drive Base.
-    public static final String HWNAME_LFDRIVE_MOTOR             = "lfDriveMotor";
-    public static final String HWNAME_RFDRIVE_MOTOR             = "rfDriveMotor";
-    public static final String HWNAME_LBDRIVE_MOTOR             = "lbDriveMotor";
-    public static final String HWNAME_RBDRIVE_MOTOR             = "rbDriveMotor";
+    //public static final String HWNAME_LFDRIVE_MOTOR             = "lfDriveMotor";
+    public static final String HWNAME_LFDRIVE_MOTOR             = "frontLeft";
+    //public static final String HWNAME_RFDRIVE_MOTOR             = "rfDriveMotor";
+    public static final String HWNAME_RFDRIVE_MOTOR             = "frontRight";
+    //public static final String HWNAME_LBDRIVE_MOTOR             = "lbDriveMotor";
+
+    public static final String HWNAME_LBDRIVE_MOTOR             = "backLeft";
+    //public static final String HWNAME_RBDRIVE_MOTOR             = "rbDriveMotor";
+    public static final String HWNAME_RBDRIVE_MOTOR             = "backRight";
     public static final String HWNAME_LFSTEER_SERVO             = "lfSteerServo";
     public static final String HWNAME_RFSTEER_SERVO             = "rfSteerServo";
     public static final String HWNAME_LBSTEER_SERVO             = "lbSteerServo";
