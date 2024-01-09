@@ -122,7 +122,13 @@ public class TeleOpMain3 extends LinearOpMode {
         boolean moveup3 = false;
         boolean lsmove = false;
         boolean lsmove2 = false;
+        boolean clawopen = false;
+        boolean clawup = false;
         waitForStart();
+        //set closed claw and claw lift down
+        clawLeft.setPosition(1);
+        clawRight.setPosition(0.6);
+        clawLift.setPosition(0.173);
         //while (!isStopRequested()) {
         while (opModeIsActive()) {
 
@@ -131,7 +137,7 @@ public class TeleOpMain3 extends LinearOpMode {
 
            // Game Pad 2 controller for other motors
            // control intake motor
-           intake.setPower(gamepad2.left_stick_y);
+           intake.setPower(gamepad2.left_stick_y*0.5);
            int currentPosition = intake.getCurrentPosition();
            telemetry.addData("Encoder Position", currentPosition);
 
@@ -158,24 +164,39 @@ public class TeleOpMain3 extends LinearOpMode {
                 planeLaunch.setPosition(0.4);
             }
 
-            //Claw contols  -  close
-            if(gamepad2.left_trigger >=0.1) {
-                clawLeft.setPosition(1);
-                clawRight.setPosition(0.6);
+            //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
+            if(gamepad2.left_trigger >=0.1 ){
 
-                //lawRight.setPosition(0.25);
+                //if claw is closed then open it
+                if (clawopen==false) {
+                    clawLeft.setPosition(0.5);
+                    clawRight.setPosition(1);
+                    sleep(250);
+                }
+                //if claw is opened then close it
+                else {
+                    clawLeft.setPosition(1);
+                    clawRight.setPosition(0.6);
+                    sleep(250);
+                }
+                clawopen=!clawopen;
+
             }
 
-            //Claw   -   open
+            //Claw - move up and down, when its already up, move it down, when its already down, then move up
             if(gamepad2.right_trigger >=0.1) {
-                clawLeft.setPosition(0.5);
-                clawRight.setPosition(1);
-            }
-            if(gamepad2.dpad_up) {
-                clawLift.setPosition(0.8);
-            }
-            if(gamepad2.dpad_down){
-                clawLift.setPosition(0.525);
+               if (clawup){
+                   clawLift.setPosition(0.173);
+                   sleep(250);
+
+               }
+
+               else{
+                   clawLift.setPosition(0.525);
+                   sleep(250);
+
+               }
+               clawup=!clawup;
             }
             if(gamepad2.dpad_left) {
                 lsRight.setPower(-1);
@@ -226,8 +247,9 @@ public class TeleOpMain3 extends LinearOpMode {
                 }
                 clawLeft.setPosition(1);
                 clawRight.setPosition(0.6);
-                armLift.setPosition(0.1);
-                sleep(750);
+                armLift.setPosition(0.125);
+                clawopen=false;
+                clawup=true;
             }
 
              //automation to score pixel
@@ -268,8 +290,9 @@ public class TeleOpMain3 extends LinearOpMode {
                 clawLift.setPosition(0.8);
                 clawLeft.setPosition(1);
                 clawRight.setPosition(0.6);
-                armLift.setPosition(0.1);
-                sleep(750);
+                armLift.setPosition(0.125);
+                clawopen=false;
+                clawup=true;
 
             }
             if (gamepad2.x) {
@@ -319,8 +342,9 @@ public class TeleOpMain3 extends LinearOpMode {
                 }
                 clawLeft.setPosition(1);
                 clawRight.setPosition(0.6);
-                armLift.setPosition(0.1);
-                sleep(750);
+                armLift.setPosition(0.125);
+                clawopen=false;
+                clawup=true;
 
 
 

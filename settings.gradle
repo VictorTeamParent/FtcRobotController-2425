@@ -1,2 +1,6 @@
 include ':FtcRobotController'
 include ':TeamCode'
+//project(':easyopencv').projectDir = new File(rootDir, 'TeamCode/src/main/java/EasyOpenCV-master/EasyOpenCV-master/easyopencv/')
+//project(':examples').projectDir = new File(rootDir, 'TeamCode/src/main/java/EasyOpenCV-master/EasyOpenCV-master/examples/')
+//include ':easyopencv'
+include ':examples'
