@@ -198,6 +198,12 @@ public class TeleOpMain3 extends LinearOpMode {
                }
                clawup=!clawup;
             }
+            if(gamepad2.dpad_up){
+                armLift.setPosition(0.5);
+            }
+            if(gamepad2.dpad_down){
+                armLift.setPosition(0.125);
+            }
             if(gamepad2.dpad_left) {
                 lsRight.setPower(-1);
                 lsLeft.setPower(1);
