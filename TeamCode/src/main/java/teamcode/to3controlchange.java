@@ -13,10 +13,8 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-
-@TeleOp(name="TeleOpMain3", group="TeleOp")
-public class TeleOpMain3 extends LinearOpMode {
+@TeleOp(name="to3controlchange", group="TeleOp")
+public class to3controlchange extends LinearOpMode {
 
     private DcMotor intake = null;
     private DcMotor lsRight = null;
@@ -124,6 +122,10 @@ public class TeleOpMain3 extends LinearOpMode {
         boolean lsmove2 = false;
         boolean clawopen = false;
         boolean clawup = false;
+        boolean defaultscore=false;
+        boolean mediumscore=false;
+        boolean highscore=false;
+
         waitForStart();
         //set closed claw and claw lift down
         clawLeft.setPosition(1);
@@ -165,8 +167,8 @@ public class TeleOpMain3 extends LinearOpMode {
             }
 
             //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
-            if(gamepad2.left_trigger >=0.1 ){
-
+            if(gamepad2.right_bumper)
+            {
                 //if claw is closed then open it
                 if (clawopen==false) {
                     clawLeft.setPosition(0.5);
@@ -180,7 +182,6 @@ public class TeleOpMain3 extends LinearOpMode {
                     sleep(250);
                 }
                 clawopen=!clawopen;
-
             }
 
             //Claw - move up and down, when its already up, move it down, when its already down, then move up
@@ -188,188 +189,180 @@ public class TeleOpMain3 extends LinearOpMode {
                if (clawup){
                    clawLift.setPosition(0.173);
                    sleep(250);
-
                }
 
                else{
                    clawLift.setPosition(0.525);
                    sleep(250);
-
                }
                clawup=!clawup;
             }
-            if(gamepad2.dpad_up){
+            //make the arm lift so we can manually reset it
+            if(gamepad2.a){
                 armLift.setPosition(0.5);
             }
-            if(gamepad2.dpad_down){
+            //make the arm go back down to default position on the ground
+            if(gamepad2.x){
                 armLift.setPosition(0.125);
             }
-            if(gamepad2.dpad_left) {
-                lsRight.setPower(-1);
-                lsLeft.setPower(1);
-                sleep(250);
-                lsRight.setPower(0);
-                lsLeft.setPower(0);
-
-                //end move up
-
-                armLift.setPosition(0.8);
-                sleep(1000);
-                clawLift.setPosition(1);
-
-                lsRight.setPower(-1);
-                lsLeft.setPower(1);
-                sleep(1250);
-                lsRight.setPower(0);
-                lsLeft.setPower(0);
-
-                moveup3=true;
-                lsmove2=true;
-            }
-
-            if(gamepad2.dpad_right) {
-                armLift.setPosition(0.5);
-                sleep(1500);
-                clawLift.setPosition(0.8);
-
-
-                if (moveup3) {
-                    //reset linear slides only if it was up
-                    lsRight.setPower(1);
-                    lsLeft.setPower(-1);
+            if (gamepad2.dpad_up) {
+                if (defaultscore == false)
+                {
+                    //move up linear slides
+                    lsRight.setPower(-1);
+                    lsLeft.setPower(1);
                     sleep(250);
                     lsRight.setPower(0);
                     lsLeft.setPower(0);
-                    moveup3 = false;
-
+                    //end move up
+                    armLift.setPosition(0.8);
+                    sleep(500);
+                    clawLift.setPosition(1);
+                    moveup = true;
+                    sleep(250);
                 }
-                if (lsmove2) {
-                    lsRight.setPower(1);
-                    lsLeft.setPower(-1);
+                //automation to reset position
+                else if (defaultscore == true)
+                {
+                    if (moveup) {
+                        //reset linear slides only if it was up
+                        lsRight.setPower(1);
+                        lsLeft.setPower(-1);
+                        sleep(250);
+                        lsRight.setPower(0);
+                        lsLeft.setPower(0);
+                        moveup = false;
+                    }
+                    armLift.setPosition(0.5);
+                    sleep(1000);
+                    clawLift.setPosition(0.8);
+                    clawLeft.setPosition(1);
+                    clawRight.setPosition(0.6);
+                    armLift.setPosition(0.125);
+                    sleep(250);
+                    clawLift.setPosition(0.173);
+                    clawLeft.setPosition(0.5);
+                    clawRight.setPosition(1);
+                    clawup = false;
+                    clawopen = true;
+                    sleep(250);
+                }
+                defaultscore=!defaultscore;
+            }
+            if(gamepad2.dpad_right) {
+                if (mediumscore==false){
+                    lsRight.setPower(-1);
+                    lsLeft.setPower(1);
+                    sleep(250);
+                    lsRight.setPower(0);
+                    lsLeft.setPower(0);
+                    //end move up
+                    armLift.setPosition(0.8);
+                    sleep(1500);
+                    clawLift.setPosition(1);
+                    lsRight.setPower(-1);
+                    lsLeft.setPower(1);
                     sleep(1250);
                     lsRight.setPower(0);
                     lsLeft.setPower(0);
-                    lsmove2 = false;
-
+                    moveup3=true;
+                    lsmove2=true;
+                    sleep(250);
                 }
-                clawLeft.setPosition(1);
-                clawRight.setPosition(0.6);
-                armLift.setPosition(0.125);
-                clawLift.setPosition(0.173);
-                clawLeft.setPosition(0.5);
-                clawRight.setPosition(1);
-                clawup=false;
-                clawopen=true;
-            }
-
-             //automation to score pixel
-            if (gamepad2.left_bumper) {
-                //move up linear slides
-                lsRight.setPower(-1);
-                lsLeft.setPower(1);
-                sleep(250);
-                lsRight.setPower(0);
-                lsLeft.setPower(0);
-
-                //end move up
-
-                armLift.setPosition(0.8);
-                sleep(500);
-                clawLift.setPosition(1);
-                moveup = true;
-            }
-            //automation to reset position
-            if (gamepad2.right_bumper) {
-
-
-                if(moveup )
+                else if (mediumscore == true)
                 {
-                    //reset linear slides only if it was up
-                    lsRight.setPower(1);
-                    lsLeft.setPower(-1);
+                    armLift.setPosition(0.5);
+                    sleep(1500);
+                    clawLift.setPosition(0.8);
+                    if (moveup3) {
+                        //reset linear slides only if it was up
+                        lsRight.setPower(1);
+                        lsLeft.setPower(-1);
+                        sleep(250);
+                        lsRight.setPower(0);
+                        lsLeft.setPower(0);
+                        moveup3 = false;
+                    }
+                    if (lsmove2) {
+                        lsRight.setPower(1);
+                        lsLeft.setPower(-1);
+                        sleep(1250);
+                        lsRight.setPower(0);
+                        lsLeft.setPower(0);
+                        lsmove2 = false;
+
+                    }
+                    clawLeft.setPosition(1);
+                    clawRight.setPosition(0.6);
+                    armLift.setPosition(0.125);
+                    sleep(250);
+                    clawLift.setPosition(0.173);
+                    clawLeft.setPosition(0.5);
+                    clawRight.setPosition(1);
+                    clawup = false;
+                    clawopen = true;
+                    sleep(250);
+                }
+            mediumscore=!mediumscore;
+            }
+             //automation to score pixel
+            if (gamepad2.dpad_down) {
+                if (highscore==false){
+                    lsRight.setPower(-1);
+                    lsLeft.setPower(1);
                     sleep(250);
                     lsRight.setPower(0);
                     lsLeft.setPower(0);
-
-
-                    moveup = false;
-                }
-
-                armLift.setPosition(0.5);
-                sleep(500);
-                clawLift.setPosition(0.8);
-                clawLeft.setPosition(1);
-                clawRight.setPosition(0.6);
-                armLift.setPosition(0.125);
-                clawLift.setPosition(0.173);
-                clawLeft.setPosition(0.5);
-                clawRight.setPosition(1);
-                clawup=false;
-                clawopen=true;
-
-            }
-            if (gamepad2.x) {
-                lsRight.setPower(-1);
-                lsLeft.setPower(1);
-                sleep(250);
-                lsRight.setPower(0);
-                lsLeft.setPower(0);
-
-                //end move up
-
-                armLift.setPosition(0.8);
-                sleep(1000);
-                clawLift.setPosition(1);
-
-                //linear slide go up
-                lsRight.setPower(-1);
-                lsLeft.setPower(1);
-                sleep(1500);
-                lsRight.setPower(0);
-                lsLeft.setPower(0);
-                moveup2=true;
-                lsmove=true;
-            }
-            if(gamepad2.a){
-                armLift.setPosition(0.5);
-                sleep(500);
-                clawLift.setPosition(0.8);
-
-
-                if(moveup2) {
-                    //reset linear slides only if it was up
-                    lsRight.setPower(1);
-                    lsLeft.setPower(-1);
-                    sleep(250);
-                    lsRight.setPower(0);
-                    lsLeft.setPower(0);
-                    moveup2=false;
-
-                }
-                if (lsmove) {
-                    lsRight.setPower(1);
-                    lsLeft.setPower(-1);
+                    //end move up
+                    armLift.setPosition(0.8);
+                    sleep(1500);
+                    clawLift.setPosition(1);
+                    //linear slide go up
+                    lsRight.setPower(-1);
+                    lsLeft.setPower(1);
                     sleep(1500);
                     lsRight.setPower(0);
                     lsLeft.setPower(0);
-                    lsmove=false;
+                    moveup2 = true;
+                    lsmove = true;
+                    sleep(250);
                 }
-                clawLeft.setPosition(1);
-                clawRight.setPosition(0.6);
-                armLift.setPosition(0.125);
-                clawLift.setPosition(0.173);
-                clawLeft.setPosition(0.5);
-                clawRight.setPosition(1);
-                clawup=false;
-                clawopen=true;
-                clawopen=false;
-                clawup=true;
-
-
-
-
-
+                else if (highscore==true)
+                {
+                    armLift.setPosition(0.5);
+                    sleep(500);
+                    clawLift.setPosition(0.8);
+                    if (moveup2) {
+                        //reset linear slides only if it was up
+                        lsRight.setPower(1);
+                        lsLeft.setPower(-1);
+                        sleep(250);
+                        lsRight.setPower(0);
+                        lsLeft.setPower(0);
+                        moveup2 = false;
+                    }
+                    if (lsmove) {
+                        lsRight.setPower(1);
+                        lsLeft.setPower(-1);
+                        sleep(1500);
+                        lsRight.setPower(0);
+                        lsLeft.setPower(0);
+                        lsmove = false;
+                    }
+                    clawLeft.setPosition(1);
+                    clawRight.setPosition(0.6);
+                    armLift.setPosition(0.125);
+                    sleep(250);
+                    clawLift.setPosition(0.173);
+                    clawLeft.setPosition(0.5);
+                    clawRight.setPosition(1);
+                    clawup = false;
+                    clawopen = true;
+                    sleep(250);
+                }
+            highscore=!highscore;
             }
+
 
 
             telemetry.update();
