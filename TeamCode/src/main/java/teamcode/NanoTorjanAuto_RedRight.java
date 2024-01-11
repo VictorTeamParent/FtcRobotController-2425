@@ -27,23 +27,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import java.util.Locale;
-
-import TrcCommonLib.command.CmdPidDrive;
-import TrcCommonLib.command.CmdTimedDrive;
-import TrcCommonLib.trclib.TrcPose2D;
-import TrcCommonLib.trclib.TrcRobot;
-import TrcFtcLib.ftclib.FtcChoiceMenu;
-import TrcFtcLib.ftclib.FtcMatchInfo;
-import TrcFtcLib.ftclib.FtcMenu;
-import TrcFtcLib.ftclib.FtcOpMode;
-import TrcFtcLib.ftclib.FtcValueMenu;
-
 /**
  * This class contains the Autonomous Mode program.
  */
-@Autonomous(name="NanoTorjanAuto")
-public class NanoTorjanAuto extends LinearOpMode
+@Autonomous(name="Auto_RedRight")
+public class NanoTorjanAuto_RedRight extends LinearOpMode
 {
 //    private DcMotor frontLeft;
 //    private DcMotor frontRight;
@@ -134,7 +122,6 @@ public class NanoTorjanAuto extends LinearOpMode
     private Servo clawRight = null;
     private DcMotor lsRight = null;
     private DcMotor lsLeft = null;
-
     // Constants for encoder counts and wheel measurements
     static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
     static final double WHEEL_DIAMETER_MM = 96.0; // Wheel diameter in millimeters
@@ -156,6 +143,18 @@ public class NanoTorjanAuto extends LinearOpMode
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
         rearLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
         rearRightMotor = hardwareMap.get(DcMotor.class, "backRight");
+        lsRight = hardwareMap.dcMotor.get("lsRight");
+        lsLeft = hardwareMap.dcMotor.get("lsLeft");
+
+        //Servo Motors
+
+        // get 2 claw motors
+        clawLeft = hardwareMap.servo.get("clawLeft");
+        clawRight= hardwareMap.servo.get("clawRight");
+
+        // get 2 arm motors
+        clawLift = hardwareMap.servo.get("clawLift");
+        armLift= hardwareMap.servo.get("armLift");
 
         // Set motor directions (adjust as needed based on your robot configuration)
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -174,12 +173,17 @@ public class NanoTorjanAuto extends LinearOpMode
 
         //while(opModeIsActive()) {
             // Move the robot forward 12 inches
-            moveDistance(26, 0.3);
+            sleep(250);
+            clawLeft.setPosition(1);
+            clawRight.setPosition(0.6);
+            moveDistance(25, 0.3);
 
             // Pause for a brief moment (adjust as needed)
+
+
             sleep(1000); // milliseconds
 
-           moveDistance(-5, 0.3);
+           //moveDistance(-5, 0.3);
 
             // Perform a 90-degree right turn
             turnRight90D(1);
@@ -190,7 +194,45 @@ public class NanoTorjanAuto extends LinearOpMode
             // Perform a 90-degree right turn
             //turnLeft90D();
 
-             moveDistance(80, 0.4);
+             moveDistance(34, 0.4);
+             sleep(1000);
+            //move up linear slides
+            lsRight.setPower(-1);
+            lsLeft.setPower(1);
+            sleep(250);
+            lsRight.setPower(0);
+            lsLeft.setPower(0);
+            //end move up
+            armLift.setPosition(0.8);
+            sleep(500);
+            clawLift.setPosition(1);
+
+            sleep(2000);
+            clawLeft.setPosition(0.5);
+            clawRight.setPosition(1);
+            lsRight.setPower(1);
+            lsLeft.setPower(-1);
+            sleep(250);
+            lsRight.setPower(0);
+            lsLeft.setPower(0);
+            armLift.setPosition(0.5);
+            sleep(1000);
+            clawLift.setPosition(0.8);
+            clawLeft.setPosition(1);
+            clawRight.setPosition(0.6);
+            armLift.setPosition(0.125);
+            sleep(250);
+            clawLift.setPosition(0.173);
+            clawLeft.setPosition(0.5);
+            clawRight.setPosition(1);
+
+        sleep(250);
+        moveDistance(-10, 0.4);
+
+            sleep(250);
+            strafeRight(12, 1);
+
+
 
             // Stop the robot
             stopRobot();
@@ -298,7 +340,39 @@ public class NanoTorjanAuto extends LinearOpMode
         resetRobotPosition();
     }
 
+    private void strafeRight(double inches, double power) {
+        int targetPosition = (int) (inches * COUNTS_PER_INCH);
 
+        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition()+targetPosition);
+        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() -targetPosition);
+        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition()-targetPosition);
+        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition()+targetPosition);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rearLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rearRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(power);
+        rearLeftMotor.setPower(power);
+        rearRightMotor.setPower(power);
+
+        while (opModeIsActive() && frontLeftMotor.isBusy() && frontRightMotor.isBusy() &&
+                rearLeftMotor.isBusy() &&rearRightMotor.isBusy()) {
+            // Wait until motors reach target position
+        }
+
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        rearLeftMotor.setPower(0);
+        rearRightMotor.setPower(0);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     private int calculateTurnCounts() {
         // Calculate encoder counts needed for a 90-degree turn based on robot-specific measurements
         // Example calculation: Assume each motor needs to move half of the circumference of a circle with a 12-inch radius
