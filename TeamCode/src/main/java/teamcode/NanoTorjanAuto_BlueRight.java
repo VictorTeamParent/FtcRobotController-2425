@@ -30,8 +30,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * This class contains the Autonomous Mode program.
  */
-@Autonomous(name="Auto_RedRight")
-public class NanoTorjanAuto_RedRight extends LinearOpMode
+@Autonomous(name="Auto_BlueRight")
+public class NanoTorjanAuto_BlueRight extends LinearOpMode
 {
 //    private DcMotor frontLeft;
 //    private DcMotor frontRight;
@@ -186,7 +186,7 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
            //moveDistance(-5, 0.3);
 
             // Perform a 90-degree right turn
-            turnRight90D(1);
+            turnLeft90D(1);
 
             // Pause for a brief moment (adjust as needed)
             sleep(500); // milliseconds
@@ -194,8 +194,11 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
             // Perform a 90-degree right turn
             //turnLeft90D();
 
+             //move to the board
              moveDistance(34, 0.4);
              sleep(1000);
+
+
             //move up linear slides
             lsRight.setPower(-1);
             lsLeft.setPower(1);
@@ -226,9 +229,9 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
             clawLeft.setPosition(0.5);
             clawRight.setPosition(1);
 
-
+            //for parking
             sleep(250);
-            strafeRight(22, 1);
+            strafeLeft(22, 1);
 
             sleep(250);
             moveDistance(12, 0.3);
@@ -373,6 +376,41 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
         rearLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rearRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    private void strafeLeft(double inches, double power) {
+        int targetPosition = (int) (inches * COUNTS_PER_INCH);
+
+        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition()-targetPosition);
+        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() -targetPosition);
+        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition()+targetPosition);
+        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition()+targetPosition);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rearLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rearRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(power);
+        rearLeftMotor.setPower(power);
+        rearRightMotor.setPower(power);
+
+        while (opModeIsActive() && frontLeftMotor.isBusy() && frontRightMotor.isBusy() &&
+                rearLeftMotor.isBusy() &&rearRightMotor.isBusy()) {
+            // Wait until motors reach target position
+        }
+
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        rearLeftMotor.setPower(0);
+        rearRightMotor.setPower(0);
+
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
     private int calculateTurnCounts() {
         // Calculate encoder counts needed for a 90-degree turn based on robot-specific measurements
         // Example calculation: Assume each motor needs to move half of the circumference of a circle with a 12-inch radius
