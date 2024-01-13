@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 import teamcode.DriveControl_NanoTorjan;
 
@@ -30,7 +31,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
     private DcMotor backRight = null;
 
     //servo motors
-    private Servo planeLaunch = null;
+    private CRServo planeLaunch = null;
 
     //2 claws servo motors
     private Servo clawLeft = null;
@@ -64,7 +65,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
         intake = hardwareMap.dcMotor.get("intake");
 
         //Servo Motors
-        planeLaunch = hardwareMap.servo.get("planeLaunch");
+        planeLaunch = hardwareMap.crservo.get("planeLaunch");
 
         // get 2 claw motors
         clawLeft = hardwareMap.servo.get("clawLeft");
@@ -158,6 +159,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
             boolean mediumscore = false;
             boolean highscore = false;
 
+
             //waitForStart();
             //set closed claw and claw lift down
             clawLeft.setPosition(1);
@@ -182,11 +184,13 @@ public class TeleOpMain4_ms extends LinearOpMode {
                 //if(gamepad2.left_trigger >=0.1){
                 if (gamepad2.y) {
                     // 1 is the after launch position
-                    planeLaunch.setPosition(1);
+                    planeLaunch.setPower(1);
                     // after launched wait 1.5 seconds move back to ready position
-                    sleep(1500);
+                    sleep(1000);
                     // 0.4 is the ready position
-                    planeLaunch.setPosition(0.4);
+                    //planeLaunch.setPosition(0.4);
+                    //sleep(1000);
+                    planeLaunch.setPower(0);
                 }
 
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
@@ -200,7 +204,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
                     //if claw is opened then close it
                     else {
                         clawLeft.setPosition(1);
-                        clawRight.setPosition(0.6);
+                        clawRight.setPosition(0.5);
                         sleep(250);
                     }
                     clawopen = !clawopen;

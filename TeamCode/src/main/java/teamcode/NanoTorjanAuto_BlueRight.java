@@ -195,10 +195,10 @@ public class NanoTorjanAuto_BlueRight extends LinearOpMode
             //turnLeft90D();
 
              //move to the board
-             moveDistance(34, 0.4);
+             moveDistance(30, 0.4);
              sleep(1000);
-
-
+            moveDistance(4, 0.2);
+            sleep(1000);
             //move up linear slides
             lsRight.setPower(-1);
             lsLeft.setPower(1);
@@ -231,7 +231,7 @@ public class NanoTorjanAuto_BlueRight extends LinearOpMode
 
             //for parking
             sleep(250);
-            strafeLeft(22, 1);
+            strafeLeft(20, 1);
 
             sleep(250);
             moveDistance(12, 0.3);
@@ -380,10 +380,10 @@ public class NanoTorjanAuto_BlueRight extends LinearOpMode
     private void strafeLeft(double inches, double power) {
         int targetPosition = (int) (inches * COUNTS_PER_INCH);
 
-        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition()-targetPosition);
-        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() -targetPosition);
-        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition()+targetPosition);
-        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition()+targetPosition);
+        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition()+targetPosition);
+        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() +targetPosition);
+        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition()-targetPosition);
+        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition()-targetPosition);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

@@ -194,8 +194,10 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
             // Perform a 90-degree right turn
             //turnLeft90D();
 
-             moveDistance(34, 0.4);
+             moveDistance(30, 0.4);
              sleep(1000);
+        moveDistance(4, 0.2);
+        sleep(1000);
             //move up linear slides
             lsRight.setPower(-1);
             lsLeft.setPower(1);
@@ -278,7 +280,7 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
 
 
     private void turnLeft90D(double power) {
-        int turnCounts = calculateTurnCounts();
+        int turnCounts = calculateTurnCountsLeft();
 
         // Set target positions for motors to perform a 90-degree right turn
         frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + turnCounts);
@@ -311,7 +313,7 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
 
 
     private void turnRight90D(double power) {
-        int turnCounts = calculateTurnCounts();
+        int turnCounts = calculateTurnCountsRight();
 
         // Set target positions for motors to perform a 90-degree right turn
         frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() - turnCounts);
@@ -373,10 +375,19 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
         rearLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rearRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    private int calculateTurnCounts() {
+    private int calculateTurnCountsLeft() {
         // Calculate encoder counts needed for a 90-degree turn based on robot-specific measurements
         // Example calculation: Assume each motor needs to move half of the circumference of a circle with a 12-inch radius
         double robotWidth = 28; // This value represents half the distance between the wheels
+        double wheelCircumference = Math.PI * robotWidth;
+        double countsPerInch = COUNTS_PER_INCH; // Use your previously calculated value
+        return (int) ((wheelCircumference / 4.0) * countsPerInch); // 90-degree turn for each wheel
+    }
+
+    private int calculateTurnCountsRight() {
+        // Calculate encoder counts needed for a 90-degree turn based on robot-specific measurements
+        // Example calculation: Assume each motor needs to move half of the circumference of a circle with a 12-inch radius
+        double robotWidth = 27.5; // This value represents half the distance between the wheels
         double wheelCircumference = Math.PI * robotWidth;
         double countsPerInch = COUNTS_PER_INCH; // Use your previously calculated value
         return (int) ((wheelCircumference / 4.0) * countsPerInch); // 90-degree turn for each wheel
