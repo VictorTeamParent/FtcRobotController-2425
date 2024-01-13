@@ -1,5 +1,5 @@
 //package org.firstinspires.ftc.teamcode;
-package teamcode.vision;
+package teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
@@ -109,10 +109,11 @@ public class TeleOpMain4_ms extends LinearOpMode {
         Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
 
-        //Start 2 more threads
+        //Start 2  threads
         baseControlThread.start();
         armControlThread.start();
 
+        // This is the 3rd thread
         //The following  loop is just to keep this main thread running.
         // Add above 2 threads basicall we have 3 threads running
         while (opModeIsActive()) {
