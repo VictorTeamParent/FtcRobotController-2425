@@ -22,6 +22,7 @@
 
 package teamcode;
 
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -136,6 +137,8 @@ public class NanoTorjanAuto_BlueRight extends LinearOpMode
     private int rearLeftMotorCounts = 0;
     private int rearRightMotorCounts = 0;
 
+    private teamcode.OpenCVExt.RedConeLocDetection ConeLocDetector;
+
     @Override
     public void runOpMode() {
         // Initialize motors
@@ -168,14 +171,12 @@ public class NanoTorjanAuto_BlueRight extends LinearOpMode
 
         waitForStart();
 
-        //moveBackward(3);
-        //sleep(500); // milliseconds
 
-        //while(opModeIsActive()) {
-            // Move the robot forward 12 inches
             sleep(250);
             clawLeft.setPosition(1);
             clawRight.setPosition(0.6);
+
+            // Move the robot forward 25 inches
             moveDistance(25, 0.3);
 
             // Pause for a brief moment (adjust as needed)

@@ -8,17 +8,14 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-import teamcode.SkystoneDeterminationExample;
+//import teamcode.SkystoneDeterminationExample;
 
 
-
-public class RedConeLocDetection extends OpenCvPipeline
-{
+public class RedConeLocDetection extends OpenCvPipeline {
     /*
      * An enum to define the skystone position
      */
-    public enum SkystonePosition
-    {
+    public enum RedConePosition {
         LEFT,
         CENTER,
         RIGHT
@@ -30,12 +27,15 @@ public class RedConeLocDetection extends OpenCvPipeline
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
+    static final Scalar RED = new Scalar(255, 0, 0);
+
     /*
      * The core values which define the location and size of the sample regions
+     * The following is design for size 320 x 240 resolution
      */
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(109,98);
-    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(181,200);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(253,98);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(89, 120);
+    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(263, 120);
 
     //        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(55,49);
 //        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(92,49);
@@ -88,21 +88,19 @@ public class RedConeLocDetection extends OpenCvPipeline
     int avg1, avg2, avg3;
 
     // Volatile since accessed by OpMode thread w/o synchronization
-    private volatile SkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition position = SkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
+    private volatile RedConePosition position = RedConePosition.LEFT;
 
     /*
      * This function takes the RGB frame, converts to YCrCb,
      * and extracts the Cb channel to the 'Cb' variable
      */
-    void inputToCb(Mat input)
-    {
+    void inputToCb(Mat input) {
         Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
         Core.extractChannel(YCrCb, Cb, 2);
     }
 
     @Override
-    public void init(Mat firstFrame)
-    {
+    public void init(Mat firstFrame) {
         /*
          * We need to call this in order to make sure the 'Cb'
          * object is initialized, so that the submats we make
@@ -125,8 +123,7 @@ public class RedConeLocDetection extends OpenCvPipeline
     }
 
     @Override
-    public Mat processFrame(Mat input)
-    {
+    public Mat processFrame(Mat input) {
         /*
          * Overview of what we're doing:
          *
@@ -222,9 +219,9 @@ public class RedConeLocDetection extends OpenCvPipeline
          * Now that we found the max, we actually need to go and
          * figure out which sample region that value was from
          */
-        if(max == avg1) // Was it from region 1?
+        if (max == avg1) // Was it from region 1?
         {
-            position = SkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // Record our analysis
+            position = RedConePosition.LEFT; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -236,10 +233,9 @@ public class RedConeLocDetection extends OpenCvPipeline
                     region1_pointB, // Second point which defines the rectangle
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
-        }
-        else if(max == avg2) // Was it from region 2?
+        } else if (max == avg2) // Was it from region 2?
         {
-            position = SkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.CENTER; // Record our analysis
+            position = RedConePosition.CENTER; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -251,10 +247,9 @@ public class RedConeLocDetection extends OpenCvPipeline
                     region2_pointB, // Second point which defines the rectangle
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
-        }
-        else if(max == avg3) // Was it from region 3?
+        } else if (max == avg3) // Was it from region 3?
         {
-            position = SkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.RIGHT; // Record our analysis
+            position = RedConePosition.RIGHT; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -279,8 +274,7 @@ public class RedConeLocDetection extends OpenCvPipeline
     /*
      * Call this from the OpMode thread to obtain the latest analysis
      */
-    public SkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition getAnalysis()
-    {
+    public RedConePosition getPosition() {
         return position;
     }
 }

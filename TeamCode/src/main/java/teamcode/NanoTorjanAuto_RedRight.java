@@ -172,61 +172,61 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
         //sleep(500); // milliseconds
 
         //while(opModeIsActive()) {
-            // Move the robot forward 12 inches
-            sleep(250);
-            clawLeft.setPosition(1);
-            clawRight.setPosition(0.6);
-            moveDistance(25, 0.3);
+        // Move the robot forward 12 inches
+        sleep(250);
+        clawLeft.setPosition(1);
+        clawRight.setPosition(0.5);
+        moveDistance(25, 0.3);
 
-            // Pause for a brief moment (adjust as needed)
+        // Pause for a brief moment (adjust as needed)
 
 
-            sleep(1000); // milliseconds
+        sleep(1000); // milliseconds
 
-           //moveDistance(-5, 0.3);
+        //moveDistance(-5, 0.3);
 
-            // Perform a 90-degree right turn
-            turnRight90D(1);
+        // Perform a 90-degree right turn
+        turnRight90D(1);
 
-            // Pause for a brief moment (adjust as needed)
-            sleep(500); // milliseconds
+        // Pause for a brief moment (adjust as needed)
+        sleep(500); // milliseconds
 
-            // Perform a 90-degree right turn
-            //turnLeft90D();
+        // Perform a 90-degree right turn
+        //turnLeft90D();
 
-             moveDistance(30, 0.4);
-             sleep(1000);
+        moveDistance(30, 0.4);
+        sleep(1000);
         moveDistance(4, 0.2);
         sleep(1000);
-            //move up linear slides
-            lsRight.setPower(-1);
-            lsLeft.setPower(1);
-            sleep(250);
-            lsRight.setPower(0);
-            lsLeft.setPower(0);
-            //end move up
-            armLift.setPosition(0.8);
-            sleep(500);
-            clawLift.setPosition(1);
+        //move up linear slides
+        lsRight.setPower(-1);
+        lsLeft.setPower(1);
+        sleep(250);
+        lsRight.setPower(0);
+        lsLeft.setPower(0);
+        //end move up
+        armLift.setPosition(0.8);
+        sleep(500);
+        clawLift.setPosition(1);
 
-            sleep(2000);
-            clawLeft.setPosition(0.5);
-            clawRight.setPosition(1);
-            lsRight.setPower(1);
-            lsLeft.setPower(-1);
-            sleep(250);
-            lsRight.setPower(0);
-            lsLeft.setPower(0);
-            armLift.setPosition(0.5);
-            sleep(1000);
-            clawLift.setPosition(0.8);
-            clawLeft.setPosition(1);
-            clawRight.setPosition(0.6);
-            armLift.setPosition(0.125);
-            sleep(250);
-            clawLift.setPosition(0.173);
-            clawLeft.setPosition(0.5);
-            clawRight.setPosition(1);
+        sleep(2000);
+        clawLeft.setPosition(0.5);
+        clawRight.setPosition(1);
+        lsRight.setPower(1);
+        lsLeft.setPower(-1);
+        sleep(250);
+        lsRight.setPower(0);
+        lsLeft.setPower(0);
+        armLift.setPosition(0.5);
+        sleep(1000);
+        clawLift.setPosition(0.8);
+        clawLeft.setPosition(1);
+        clawRight.setPosition(0.6);
+        armLift.setPosition(0.125);
+        sleep(250);
+        clawLift.setPosition(0.173);
+        clawLeft.setPosition(0.5);
+        clawRight.setPosition(1);
 
 
             sleep(250);
@@ -237,7 +237,7 @@ public class NanoTorjanAuto_RedRight extends LinearOpMode
 
 
         // Stop the robot
-            stopRobot();
+        stopRobot();
         //}
     }
 
