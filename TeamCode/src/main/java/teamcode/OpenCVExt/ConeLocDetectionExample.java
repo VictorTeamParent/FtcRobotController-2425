@@ -11,7 +11,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 //import teamcode.SkystoneDeterminationExample;
 
 
-public class RedConeLocDetection extends OpenCvPipeline {
+public class ConeLocDetectionExample extends OpenCvPipeline {
     /*
      * An enum to define the skystone position
      */
@@ -33,15 +33,15 @@ public class RedConeLocDetection extends OpenCvPipeline {
      * The core values which define the location and size of the sample regions
      * The following is design for size 320 x 240 resolution
      */
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(10, 125);
-   // static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(175, 150);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(89, 120);
+    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(263, 120);
 
     //        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(55,49);
 //        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(92,49);
 //        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(126,49);
-    static final int REGION_WIDTH = 70;
-    static final int REGION_HEIGHT = 50;
+    static final int REGION_WIDTH = 20;
+    static final int REGION_HEIGHT = 20;
 
     /*
      * Points which actually define the sample region rectangles, derived from above values
@@ -65,13 +65,13 @@ public class RedConeLocDetection extends OpenCvPipeline {
             REGION1_TOPLEFT_ANCHOR_POINT.y);
     Point region1_pointB = new Point(
             REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-            REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT-5);
-//    Point region2_pointA = new Point(
-//            REGION2_TOPLEFT_ANCHOR_POINT.x,
-//            REGION2_TOPLEFT_ANCHOR_POINT.y);
-//    Point region2_pointB = new Point(
-//            REGION2_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-//            REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+            REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+    Point region2_pointA = new Point(
+            REGION2_TOPLEFT_ANCHOR_POINT.x,
+            REGION2_TOPLEFT_ANCHOR_POINT.y);
+    Point region2_pointB = new Point(
+            REGION2_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+            REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
     Point region3_pointA = new Point(
             REGION3_TOPLEFT_ANCHOR_POINT.x,
             REGION3_TOPLEFT_ANCHOR_POINT.y);
@@ -85,7 +85,7 @@ public class RedConeLocDetection extends OpenCvPipeline {
     Mat region1_Cb, region2_Cb, region3_Cb;
     Mat YCrCb = new Mat();
     Mat Cb = new Mat();
-    int avg1,  avg3;
+    int avg1, avg2, avg3;
 
     // Volatile since accessed by OpMode thread w/o synchronization
     private volatile RedConePosition position = RedConePosition.LEFT;
@@ -94,42 +94,36 @@ public class RedConeLocDetection extends OpenCvPipeline {
      * This function takes the RGB frame, converts to YCrCb,
      * and extracts the Cb channel to the 'Cb' variable
      */
-//    void inputToCb(Mat input) {
-//        Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
-//        Core.extractChannel(YCrCb, Cb, 2);
-//    }
+    void inputToCb(Mat input) {
+        Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
+        Core.extractChannel(YCrCb, Cb, 2);
+    }
 
- //   @Override
-//    public void init(Mat firstFrame) {
-//        /*
-//         * We need to call this in order to make sure the 'Cb'
-//         * object is initialized, so that the submats we make
-//         * will still be linked to it on subsequent frames. (If
-//         * the object were to only be initialized in processFrame,
-//         * then the submats would become delinked because the backing
-//         * buffer would be re-allocated the first time a real frame
-//         * was crunched)
-//         */
-//       // inputToCb(firstFrame);
-//
-//        /*
-//         * Submats are a persistent reference to a region of the parent
-//         * buffer. Any changes to the child affect the parent, and the
-//         * reverse also holds true.
-//         */
-////        region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
-////        //region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
-////        region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
-//
-//
-//    }
+    @Override
+    public void init(Mat firstFrame) {
+        /*
+         * We need to call this in order to make sure the 'Cb'
+         * object is initialized, so that the submats we make
+         * will still be linked to it on subsequent frames. (If
+         * the object were to only be initialized in processFrame,
+         * then the submats would become delinked because the backing
+         * buffer would be re-allocated the first time a real frame
+         * was crunched)
+         */
+        inputToCb(firstFrame);
+
+        /*
+         * Submats are a persistent reference to a region of the parent
+         * buffer. Any changes to the child affect the parent, and the
+         * reverse also holds true.
+         */
+        region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
+        region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
+        region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
+    }
 
     @Override
     public Mat processFrame(Mat input) {
-
-        region1_Cb = input.submat(new Rect(region1_pointA, region1_pointB));
-//        //region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
-        region3_Cb = input.submat(new Rect(region3_pointA, region3_pointB));
         /*
          * Overview of what we're doing:
          *
@@ -168,7 +162,7 @@ public class RedConeLocDetection extends OpenCvPipeline {
         /*
          * Get the Cb channel of the input frame after conversion to YCrCb
          */
-        //inputToCb(input);
+        inputToCb(input);
 
         /*
          * Compute the average pixel value of each submat region. We're
@@ -177,15 +171,9 @@ public class RedConeLocDetection extends OpenCvPipeline {
          * pixel value of the 3-channel image, and referenced the value
          * at index 2 here.
          */
-        Scalar sumColorsRg1 = Core.sumElems(region1_Cb);
-        Scalar sumColorsRg3 = Core.sumElems(region3_Cb);
-
-        double maxColorR1 = Math.max(sumColorsRg1.val[0], Math.max(sumColorsRg1.val[1], sumColorsRg1.val[2]));
-        double maxColorR3 = Math.max(sumColorsRg3.val[0], Math.max(sumColorsRg3.val[1], sumColorsRg3.val[2]));
-//        avg1 = (int) Core.mean(region1_Cb).val[0];
-//        //avg2 = (int) Core.mean(region2_Cb).val[0];
-//        avg3 = (int) Core.mean(region3_Cb).val[0];
-
+        avg1 = (int) Core.mean(region1_Cb).val[0];
+        avg2 = (int) Core.mean(region2_Cb).val[0];
+        avg3 = (int) Core.mean(region3_Cb).val[0];
 
         /*
          * Draw a rectangle showing sample region 1 on the screen.
@@ -202,12 +190,12 @@ public class RedConeLocDetection extends OpenCvPipeline {
          * Draw a rectangle showing sample region 2 on the screen.
          * Simply a visual aid. Serves no functional purpose.
          */
-//        Imgproc.rectangle(
-//                input, // Buffer to draw on
-//                region2_pointA, // First point which defines the rectangle
-//                region2_pointB, // Second point which defines the rectangle
-//                BLUE, // The color the rectangle is drawn in
-//                2); // Thickness of the rectangle lines
+        Imgproc.rectangle(
+                input, // Buffer to draw on
+                region2_pointA, // First point which defines the rectangle
+                region2_pointB, // Second point which defines the rectangle
+                BLUE, // The color the rectangle is drawn in
+                2); // Thickness of the rectangle lines
 
         /*
          * Draw a rectangle showing sample region 3 on the screen.
@@ -224,19 +212,16 @@ public class RedConeLocDetection extends OpenCvPipeline {
         /*
          * Find the max of the 3 averages
          */
-//        int maxOneTwo = Math.max(avg1, avg2);
-//        int max = Math.max(avg1, avg3);
+        int maxOneTwo = Math.max(avg1, avg2);
+        int max = Math.max(maxOneTwo, avg3);
         //telemetry.addData("Realtime analysis max value", max);
         /*
          * Now that we found the max, we actually need to go and
          * figure out which sample region that value was from
          */
-        //if (max == avg1) // Was it from region 1?
-        //Center ragin detected RED
-
-        if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
+        if (max == avg1) // Was it from region 1?
         {
-            position = RedConePosition.CENTER; // Record our analysis
+            position = RedConePosition.LEFT; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -248,22 +233,21 @@ public class RedConeLocDetection extends OpenCvPipeline {
                     region1_pointB, // Second point which defines the rectangle
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
-//        } else if (max == avg2) // Was it from region 2?
-//        {
-//            position = RedConePosition.CENTER; // Record our analysis
-//
-//            /*
-//             * Draw a solid rectangle on top of the chosen region.
-//             * Simply a visual aid. Serves no functional purpose.
-//             */
-//            Imgproc.rectangle(
-//                    input, // Buffer to draw on
-//                    region2_pointA, // First point which defines the rectangle
-//                    region2_pointB, // Second point which defines the rectangle
-//                    GREEN, // The color the rectangle is drawn in
-//                    -1); // Negative thickness means solid fill
-        } //else if (max == avg3) // Was it from region 3?
-        else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
+        } else if (max == avg2) // Was it from region 2?
+        {
+            position = RedConePosition.CENTER; // Record our analysis
+
+            /*
+             * Draw a solid rectangle on top of the chosen region.
+             * Simply a visual aid. Serves no functional purpose.
+             */
+            Imgproc.rectangle(
+                    input, // Buffer to draw on
+                    region2_pointA, // First point which defines the rectangle
+                    region2_pointB, // Second point which defines the rectangle
+                    GREEN, // The color the rectangle is drawn in
+                    -1); // Negative thickness means solid fill
+        } else if (max == avg3) // Was it from region 3?
         {
             position = RedConePosition.RIGHT; // Record our analysis
 
@@ -278,8 +262,6 @@ public class RedConeLocDetection extends OpenCvPipeline {
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
         }
-        else
-            position = RedConePosition.LEFT; // Record our analysis
 
         /*
          * Render the 'input' buffer to the viewport. But note this is not

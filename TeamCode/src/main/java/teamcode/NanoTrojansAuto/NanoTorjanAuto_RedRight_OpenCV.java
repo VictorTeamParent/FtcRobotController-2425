@@ -151,8 +151,8 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 
             if (pipeline.getPosition() == RedConeLocDetection.RedConePosition.CENTER) {
 
-                moveDistance(10, 0.3);
-
+               // moveDistance(10, 0.3);
+                telemetry.addLine("Move forward 10 inches");
 //            // Move the robot forward 12 inches
 //            sleep(250);
 //            clawLeft.setPosition(1);
