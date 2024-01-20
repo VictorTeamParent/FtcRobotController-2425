@@ -1,4 +1,4 @@
-//package org.firstinspires.ftc.teamcode;
+//package teamcode;
 package teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import teamcode.drive.SampleMecanumDrive;
 
 @TeleOp(name = "MyTeleopMainRightBlue")
 public class MyTeleopMainRightBlue extends LinearOpMode {

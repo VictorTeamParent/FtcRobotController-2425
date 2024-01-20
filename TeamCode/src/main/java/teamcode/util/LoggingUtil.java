@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package teamcode.util;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 

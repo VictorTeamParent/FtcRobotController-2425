@@ -1,4 +1,4 @@
-//package org.firstinspires.ftc.teamcode;
+//package teamcode;
 package teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import teamcode.drive.SampleMecanumDrive;
 
 @TeleOp(name="TeleOpMain3", group="TeleOp")
 public class TeleOpMain3 extends LinearOpMode {
