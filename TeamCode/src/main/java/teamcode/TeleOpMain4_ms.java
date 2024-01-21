@@ -41,7 +41,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
     private Servo clawLift = null;
     private Servo armLift = null;
 
-    private CRServo hang = null;
+    private CRServo robotLift = null;
 
 
     private final double driveAdjuster = 1;
@@ -69,6 +69,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
 
         //Servo Motors
         planeLaunch = hardwareMap.crservo.get("planeLaunch");
+        robotLift = hardwareMap.crservo.get("robotLift");
 
         // get 2 claw motors
         clawLeft = hardwareMap.servo.get("clawLeft");
