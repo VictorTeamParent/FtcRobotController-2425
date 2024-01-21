@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,14 +13,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
-import com.qualcomm.robotcore.hardware.CRServo;
 
-import teamcode.DriveControl_NanoTorjan;
-
-@TeleOp(name = "TeleOpMain4_ms", group = "TeleOp")
+@TeleOp(name = "TeleOpMain4_ms_susu", group = "TeleOp")
 
 
-public class TeleOpMain4_ms extends LinearOpMode {
+public class TeleOpMain4_ms_susu extends LinearOpMode {
 
     private DcMotor intake = null;
     private DcMotor lsRight = null;
@@ -40,10 +38,6 @@ public class TeleOpMain4_ms extends LinearOpMode {
     //2 arms servo motors
     private Servo clawLift = null;
     private Servo armLift = null;
-    private CRServo robotLift = null;
-
-    private CRServo robotLift = null;
-
 
     private final double driveAdjuster = 1;
 
@@ -70,10 +64,6 @@ public class TeleOpMain4_ms extends LinearOpMode {
 
         //Servo Motors
         planeLaunch = hardwareMap.crservo.get("planeLaunch");
-        robotLift = hardwareMap.crservo.get("robotLift");
-
-        //hang
-        robotLift = hardwareMap.crservo.get("robotLift");
 
         // get 2 claw motors
         clawLeft = hardwareMap.servo.get("clawLeft");
@@ -82,7 +72,6 @@ public class TeleOpMain4_ms extends LinearOpMode {
         // get 2 arm motors
         clawLift = hardwareMap.servo.get("clawLift");
         armLift = hardwareMap.servo.get("armLift");
-
 
         // huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
@@ -144,36 +133,6 @@ public class TeleOpMain4_ms extends LinearOpMode {
                 // Motor control logic for motors 1 and 2
                 //Call Robot base movement algorithem to drive the base
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-                if (gamepad1.x) {
-                    // 1 is the after launch position
-                    planeLaunch.setPower(1);
-                    // after launched wait 1.5 seconds move back to ready position
-                    sleep(1000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-                    planeLaunch.setPower(0);
-                }
-                if(gamepad1.left_bumper){
-                    robotLift.setPower(1);
-                    // after launched wait 1.5 seconds move back to ready position
-                    sleep(1000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-                    robotLift.setPower(0);
-
-
-                }
-                if(gamepad1.right_bumper){
-                    robotLift.setPower(1);
-                    // after launched wait 1.5 seconds move back to ready position
-                    sleep(1000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-                    robotLift.setPower(0);
-                }
 
 
             }
@@ -197,8 +156,6 @@ public class TeleOpMain4_ms extends LinearOpMode {
             boolean defaultscore = false;
             boolean mediumscore = false;
             boolean highscore = false;
-            boolean hang = false;
-            boolean hangcount = false;
 
 
             //waitForStart();
@@ -223,16 +180,16 @@ public class TeleOpMain4_ms extends LinearOpMode {
 
                 //Plane launcher
                 //if(gamepad2.left_trigger >=0.1){
-//                if (gamepad2.y) {
-//                    // 1 is the after launch position
-//                    planeLaunch.setPower(1);
-//                    // after launched wait 1.5 seconds move back to ready position
-//                    sleep(1000);
-//                    // 0.4 is the ready position
-//                    //planeLaunch.setPosition(0.4);
-//                    //sleep(1000);
-//                    planeLaunch.setPower(0);
-//                }
+                if (gamepad2.y) {
+                    // 1 is the after launch position
+                    planeLaunch.setPower(1);
+                    // after launched wait 1.5 seconds move back to ready position
+                    sleep(1000);
+                    // 0.4 is the ready position
+                    //planeLaunch.setPosition(0.4);
+                    //sleep(1000);
+                    planeLaunch.setPower(0);
+                }
 
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
                 if (gamepad2.right_bumper) {
@@ -270,23 +227,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
                 if (gamepad2.x) {
                     armLift.setPosition(0.125);
                 }
-//                if(gamepad2.dpad_left){
-//                    robotLift.setPower(-1);
-//                    sleep(5000);
-//                    robotLift.setPower(0);
-//                    sleep(250);
-//
-//
-////                    hang=!hang;
-//
-//                }
-//                if(gamepad2.left_bumper){
-//                    robotLift.setPower(1);
-//                    sleep(5000);
-//                    robotLift.setPower(0);
-//                    sleep(250);
-//                }
-                if (gamepad2.dpad_up) {
+                if (gamepad2.dpad_down) {
                     if (defaultscore == false) {
                         //move up linear slides
                         lsRight.setPower(-1);
@@ -383,7 +324,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
                     mediumscore = !mediumscore;
                 }
                 //automation to score pixel
-                if (gamepad2.dpad_down) {
+                if (gamepad2.dpad_up) {
                     if (highscore == false) {
                         lsRight.setPower(-1);
                         lsLeft.setPower(1);
