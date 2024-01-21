@@ -41,6 +41,9 @@ public class TeleOpMain4_ms extends LinearOpMode {
     private Servo clawLift = null;
     private Servo armLift = null;
 
+    private CRServo hang = null;
+
+
     private final double driveAdjuster = 1;
 
     // the following are for huskylen

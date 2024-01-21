@@ -37,8 +37,16 @@ import org.openftc.easyopencv.OpenCvWebcam;
 //import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //import org.firstinspires.ftc.robotcore.external.hardware.camera.switchable.SwitchableCamera;
 import teamcode.OpenCVExt.RedConeLocDetection;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.path.Path;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
+import teamcode.drive.SampleMecanumDrive;
 
+import org.firstinspires.ftc.teamcode.PoseStorage;
+
+import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 /**
  * This class contains the Autonomous Mode program.
  */
@@ -73,6 +81,8 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
     private int rearRightMotorCounts = 0;
     private RedConeLocDetection RedConeLocDetector;
 
+
+
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize motors
@@ -80,18 +90,18 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
         rearLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
         rearRightMotor = hardwareMap.get(DcMotor.class, "backRight");
-//        lsRight = hardwareMap.dcMotor.get("lsRight");
-//        lsLeft = hardwareMap.dcMotor.get("lsLeft");
-//
-//        //Servo Motors
-//
-//        // get 2 claw motors
-//        clawLeft = hardwareMap.servo.get("clawLeft");
-//        clawRight= hardwareMap.servo.get("clawRight");
-//
-//        // get 2 arm motors
-//        clawLift = hardwareMap.servo.get("clawLift");
-//        armLift= hardwareMap.servo.get("armLift");
+        lsRight = hardwareMap.dcMotor.get("lsRight");
+        lsLeft = hardwareMap.dcMotor.get("lsLeft");
+
+        //Servo Motors
+
+        // get 2 claw motors
+        clawLeft = hardwareMap.servo.get("clawLeft");
+        clawRight= hardwareMap.servo.get("clawRight");
+
+        // get 2 arm motors
+        clawLift = hardwareMap.servo.get("clawLift");
+        armLift= hardwareMap.servo.get("armLift");
 
         // Set motor directions (adjust as needed based on your robot configuration)
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -140,6 +150,7 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 
         //RedConeLocDetector = new RedConeLocDetection();
         waitForStart();
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         while (opModeIsActive()) {
             telemetry.addData("Analysis", pipeline.getPosition());
@@ -151,8 +162,31 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 
             if (pipeline.getPosition() == RedConeLocDetection.RedConePosition.CENTER) {
 
+                Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
+                        .lineToLinearHeading(new Pose2d(24, 24, Math.toRadians(90)))
+                        .build();
+
+                Trajectory trajectoryForward = drive.trajectoryBuilder(new Pose2d())
+                        .forward(20)
+                        .build();
+                //drive.followTrajectory(trajectoryForward);
+                drive.followTrajectory(trajectory);
+
                // moveDistance(10, 0.3);
                 telemetry.addLine("Move forward 10 inches");
+
+//               drive.setPoseEstimate(new Pose2d(10, 10, Math.toRadians(90)));
+//
+//                drive.setPoseEstimate(PoseStorage.currentPose);
+//                PoseStorage.currentPose = drive.getPoseEstimate();
+//
+//               Trajectory myTrajectory = drive.trajectoryBuilder(PoseStorage.currentPose)
+//                    .strafeTo(new Vector2d(8,65))
+//                    .build();
+//
+//                drive.followTrajectory(myTrajectory);
+                telemetry.addLine("Finish run");
+
 //            // Move the robot forward 12 inches
 //            sleep(250);
 //            clawLeft.setPosition(1);
@@ -217,12 +251,17 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 //            moveDistance(12, 0.3);
 //
 //
-//        // Stop the robot
+//          // Stop the robot
              stopRobot();
             }
         }
     }
 
+       private void move()
+       {
+
+
+       }
         private void setRunMode (DcMotor.RunMode mode){
             frontLeftMotor.setMode(mode);
             frontRightMotor.setMode(mode);

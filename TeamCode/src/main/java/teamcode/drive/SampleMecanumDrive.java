@@ -59,6 +59,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public static double LATERAL_MULTIPLIER = 1;
 
+    //Victor : set straft 60 inches  but reported 17, just set that value here
+    //public static double LATERAL_MULTIPLIER = 17/60;
+
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
@@ -99,17 +102,29 @@ public class SampleMecanumDrive extends MecanumDrive {
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
 
-        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
-        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+        //victor the following code is not straft let's swith front and back wheels on one side
+//        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
+//        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+        frontLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+        backLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
+
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
 
+
         //Victor: add the following 2 lines to reverse onside of the motors.
+        //        the following works for all tunning before straft
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
 
-        motors = Arrays.asList(frontLeft, backLeft, backRight, frontRight);
 
+        //frontRight.setDirection(DcMotor.Direction.REVERSE);
+        //backRight.setDirection(DcMotor.Direction.REVERSE);
+
+        //frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        //backLeft.setDirection(DcMotor.Direction.REVERSE);
+        //motors = Arrays.asList(frontLeft, backLeft, backRight, frontRight);
+        motors = Arrays.asList(frontLeft, backLeft, backRight,  frontRight);
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);

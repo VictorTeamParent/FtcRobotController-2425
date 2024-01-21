@@ -53,10 +53,7 @@ public class MyTeleopMainRightBlue extends LinearOpMode {
 
         // Set your initial pose to x: 10, y: 10, facing 90 degrees
 
-
-
         waitForStart();
-
 
         // Retrieve your pose
         while (!isStopRequested()){
