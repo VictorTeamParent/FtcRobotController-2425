@@ -11,11 +11,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 //import teamcode.SkystoneDeterminationExample;
 
 
-public class RedConeLocDetection extends OpenCvPipeline {
+public class RSideConeLocDetection extends OpenCvPipeline {
     /*
      * An enum to define the skystone position
      */
-    public enum RedConePosition {
+    public enum RSideConePosition {
         LEFT,
         CENTER,
         RIGHT
@@ -88,7 +88,7 @@ public class RedConeLocDetection extends OpenCvPipeline {
     int avg1,  avg3;
 
     // Volatile since accessed by OpMode thread w/o synchronization
-    private volatile RedConePosition position = RedConePosition.LEFT;
+    private volatile RSideConePosition position = RSideConePosition.LEFT;
 
     /*
      * This function takes the RGB frame, converts to YCrCb,
@@ -236,7 +236,7 @@ public class RedConeLocDetection extends OpenCvPipeline {
 
         if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
         {
-            position = RedConePosition.CENTER; // Record our analysis
+            position = RSideConePosition.CENTER; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -250,7 +250,7 @@ public class RedConeLocDetection extends OpenCvPipeline {
                     -1); // Negative thickness means solid fill
 //        } else if (max == avg2) // Was it from region 2?
 //        {
-//            position = RedConePosition.CENTER; // Record our analysis
+//            position = RSideConePosition.CENTER; // Record our analysis
 //
 //            /*
 //             * Draw a solid rectangle on top of the chosen region.
@@ -265,7 +265,7 @@ public class RedConeLocDetection extends OpenCvPipeline {
         } //else if (max == avg3) // Was it from region 3?
         else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
         {
-            position = RedConePosition.RIGHT; // Record our analysis
+            position = RSideConePosition.RIGHT; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -279,7 +279,7 @@ public class RedConeLocDetection extends OpenCvPipeline {
                     -1); // Negative thickness means solid fill
         }
         else
-            position = RedConePosition.LEFT; // Record our analysis
+            position = RSideConePosition.LEFT; // Record our analysis
 
         /*
          * Render the 'input' buffer to the viewport. But note this is not
@@ -292,7 +292,7 @@ public class RedConeLocDetection extends OpenCvPipeline {
     /*
      * Call this from the OpMode thread to obtain the latest analysis
      */
-    public RedConePosition getPosition() {
+    public RSideConePosition getPosition() {
         return position;
     }
 }
