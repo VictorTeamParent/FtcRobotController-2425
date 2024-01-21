@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,14 +13,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
-import com.qualcomm.robotcore.hardware.CRServo;
 
-import teamcode.DriveControl_NanoTorjan;
-
-@TeleOp(name = "TeleOpMain4_ms", group = "TeleOp")
+@TeleOp(name = "TeleOpMain4_ms_parnav", group = "TeleOp")
 
 
-public class TeleOpMain4_ms extends LinearOpMode {
+public class TeleOpMain4_ms_parnav extends LinearOpMode {
 
     private DcMotor intake = null;
     private DcMotor lsRight = null;
@@ -40,7 +38,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
     //2 arms servo motors
     private Servo clawLift = null;
     private Servo armLift = null;
-    private CRServo robotLift = null;
+    private Servo robotLift = null;
 
     private final double driveAdjuster = 1;
 
@@ -68,9 +66,6 @@ public class TeleOpMain4_ms extends LinearOpMode {
         //Servo Motors
         planeLaunch = hardwareMap.crservo.get("planeLaunch");
 
-        //hang
-        robotLift = hardwareMap.crservo.get("robotLift");
-
         // get 2 claw motors
         clawLeft = hardwareMap.servo.get("clawLeft");
         clawRight = hardwareMap.servo.get("clawRight");
@@ -79,6 +74,8 @@ public class TeleOpMain4_ms extends LinearOpMode {
         clawLift = hardwareMap.servo.get("clawLift");
         armLift = hardwareMap.servo.get("armLift");
 
+        //hang
+        robotLift = hardwareMap.servo.get("robotLift");
 
         // huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
@@ -140,7 +137,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
                 // Motor control logic for motors 1 and 2
                 //Call Robot base movement algorithem to drive the base
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-                if (gamepad1.x) {
+                if (gamepad1.y) {
                     // 1 is the after launch position
                     planeLaunch.setPower(1);
                     // after launched wait 1.5 seconds move back to ready position
@@ -151,24 +148,18 @@ public class TeleOpMain4_ms extends LinearOpMode {
                     planeLaunch.setPower(0);
                 }
                 if(gamepad1.left_bumper){
-                    robotLift.setPower(1);
-                    // after launched wait 1.5 seconds move back to ready position
-                    sleep(2000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-                    robotLift.setPower(0);
+                    robotLift.setPosition(1);
+//                    sleep(2500);
+//                    robotLift.setPower(0);
+                    sleep(250);
 
 
                 }
                 if(gamepad1.right_bumper){
-                    robotLift.setPower(1);
-                    // after launched wait 1.5 seconds move back to ready position
-                    sleep(2000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-                    robotLift.setPower(0);
+                    robotLift.setPosition(-1);
+//                    sleep(2500);
+//                    robotLift.setPower(0);
+                    sleep(250);
                 }
 
 
