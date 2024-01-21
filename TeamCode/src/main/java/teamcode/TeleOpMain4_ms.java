@@ -153,7 +153,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
                 if(gamepad1.left_bumper){
                     robotLift.setPower(1);
                     // after launched wait 1.5 seconds move back to ready position
-                    sleep(2000);
+                    sleep(1000);
                     // 0.4 is the ready position
                     //planeLaunch.setPosition(0.4);
                     //sleep(1000);
@@ -164,7 +164,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
                 if(gamepad1.right_bumper){
                     robotLift.setPower(1);
                     // after launched wait 1.5 seconds move back to ready position
-                    sleep(2000);
+                    sleep(1000);
                     // 0.4 is the ready position
                     //planeLaunch.setPosition(0.4);
                     //sleep(1000);
