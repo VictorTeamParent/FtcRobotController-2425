@@ -80,8 +80,6 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
     private int frontRightMotorCounts = 0;
     private int rearLeftMotorCounts = 0;
     private int rearRightMotorCounts = 0;
-    private RSideConeLocDetection RSideConeLocDetector;
-
 
 
     @Override
@@ -149,34 +147,12 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
             }
         });
 
-//        frontLeftMotor.setPower(1);
-//        frontRightMotor.setPower(1);
-//        rearLeftMotor.setPower(1);
-//        rearRightMotor.setPower(1);
-        //RedConeLocDetector = new RedConeLocDetection();
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-//        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
-//                .forward(25)
-//                .build();
-
-
-
-//
-//        Pose2d startPose = new Pose2d(0, 0, 0);
-//        TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
-//                .forward(25)
-//                .turn(Math.toRadians(90))
-//                .forward(30)
-//                .strafeRight(Math.toRadians(12))
-//
-//                .build();
-//        drive.followTrajectorySequence(trajSeq);
-
         waitForStart();
-//        drive.followTrajectory(trajectory);
         boolean stop = false;
+
         while (opModeIsActive() && !stop) {
             telemetry.addData("Analysis", pipeline.getPosition());
             telemetry.update();

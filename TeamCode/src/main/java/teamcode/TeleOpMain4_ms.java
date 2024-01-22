@@ -73,7 +73,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
         robotLift = hardwareMap.crservo.get("robotLift");
 
         //hang
-        robotLift = hardwareMap.crservo.get("robotLift");
+
 
         // get 2 claw motors
         clawLeft = hardwareMap.servo.get("clawLeft");
@@ -144,24 +144,16 @@ public class TeleOpMain4_ms extends LinearOpMode {
                 // Motor control logic for motors 1 and 2
                 //Call Robot base movement algorithem to drive the base
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-                if (gamepad1.x) {
-                    // 1 is the after launch position
-                    planeLaunch.setPower(1);
-                    // after launched wait 1.5 seconds move back to ready position
-                    sleep(1000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-                    planeLaunch.setPower(0);
-                }
+
                 if(gamepad1.left_bumper){
                     robotLift.setPower(1);
+
                     // after launched wait 1.5 seconds move back to ready position
 //                    sleep(1000);
                     // 0.4 is the ready position
                     //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-//                    robotLift.setPower(0);
+                    sleep(1000);
+                    robotLift.setPower(0);
 
 
                 }
@@ -171,8 +163,8 @@ public class TeleOpMain4_ms extends LinearOpMode {
 //                    sleep(1000);
                     // 0.4 is the ready position
                     //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-//                    robotLift.setPower(0);
+                    sleep(1000);
+                    robotLift.setPower(0);
                 }
 
 
@@ -235,6 +227,16 @@ public class TeleOpMain4_ms extends LinearOpMode {
 //                }
 
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
+                if (gamepad2.left_bumper) {
+                    // 1 is the after launch position
+                    planeLaunch.setPower(1);
+                    // after launched wait 1.5 seconds move back to ready position
+                    sleep(1000);
+                    // 0.4 is the ready position
+                    //planeLaunch.setPosition(0.4);
+                    //sleep(1000);
+                    planeLaunch.setPower(0);
+                }
                 if (gamepad2.right_bumper) {
                     //if claw is closed then open it
                     if (clawopen == false) {

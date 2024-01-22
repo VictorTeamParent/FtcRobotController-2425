@@ -31,8 +31,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * This class contains the Autonomous Mode program.
  */
-@Autonomous(name = "Auto_Encoder_Test")
-public class Auto_Encoder_Test_pranav extends LinearOpMode {
+@Autonomous(name = "Auto_Encoder_Full_Test")
+public class Auto_Encoder_Full_Test extends LinearOpMode {
 
 
     private DcMotor frontLeftMotor;
@@ -75,7 +75,7 @@ public class Auto_Encoder_Test_pranav extends LinearOpMode {
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
 
-            Run2seconds(3, 0.3);
+            Run2seconds( 0.3);
             //strafeRight(48, 1);
 
 
@@ -95,20 +95,39 @@ public class Auto_Encoder_Test_pranav extends LinearOpMode {
 
     private void Run2seconds(double power) {
 
-
+        telemetry.addLine("Front Right running");
         frontRightMotor.setPower(power);
-        sleep(2500);
+        sleep(3000);
         frontRightMotor.setPower(0);
+
+        telemetry.addLine("Front Left running");
         frontLeftMotor.setPower(power);
-        sleep(2500);
+        sleep(3000);
         frontLeftMotor.setPower(0);
+
+        telemetry.addLine("Rear Right running");
         rearRightMotor.setPower(power);
-        sleep(2500);
+        sleep(3000);
         rearRightMotor.setPower(0);
+
+
+        telemetry.addLine("Rear Left running");
         rearLeftMotor.setPower(power);
-        sleep(2500);
+        sleep(3000);
         rearLeftMotor.setPower(0);
 
+        telemetry.addLine("Front Right and Left running");
+        frontRightMotor.setPower(power);
+        frontLeftMotor.setPower(power);
+        rearLeftMotor.setPower(power);
+        rearRightMotor.setPower(power);
+        sleep(3000);
+
+
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        rearLeftMotor.setPower(0);
+        rearRightMotor.setPower(0);
 
 
     }

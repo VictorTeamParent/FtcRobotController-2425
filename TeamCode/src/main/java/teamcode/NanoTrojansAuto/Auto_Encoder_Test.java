@@ -75,7 +75,7 @@ public class Auto_Encoder_Test extends LinearOpMode {
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
 
-            Run2seconds(3, 0.3);
+            Run2seconds( 0.3);
             //strafeRight(48, 1);
 
 
@@ -93,11 +93,11 @@ public class Auto_Encoder_Test extends LinearOpMode {
     }
 
 
-    private void Run2seconds(double inches, double power) {
+    private void Run2seconds(double power) {
 
 
-        frontRightMotor.setPower(power);
-        frontLeftMotor.setPower(power);
+        frontRightMotor.setPower(-power);
+        frontLeftMotor.setPower(-power);
         rearRightMotor.setPower(power);
         rearLeftMotor.setPower(power);
 
