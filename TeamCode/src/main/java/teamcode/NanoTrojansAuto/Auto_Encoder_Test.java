@@ -22,48 +22,23 @@
 
 package teamcode.NanoTrojansAuto;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvSwitchableWebcam;
-import org.openftc.easyopencv.OpenCvWebcam;
-
-import teamcode.OpenCVExt.RedConeLocDetection;
 //import teamcode.drive.SampleMecanumDrive;
-import teamcode.trajectorysequence.TrajectorySequence;
+
 
 /**
  * This class contains the Autonomous Mode program.
  */
-@Autonomous(name = "Auto_Strafe_test")
-public class NanoTorjanAuto_StrafeTest extends LinearOpMode {
+@Autonomous(name = "Auto_Encoder_Test")
+public class Auto_Encoder_Test extends LinearOpMode {
+
 
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor rearLeftMotor;
     private DcMotor rearRightMotor;
-    private Servo clawLift = null;
-    private Servo armLift = null;
-    private Servo clawLeft = null;
-    private Servo clawRight = null;
-    private DcMotor lsRight = null;
-    private DcMotor lsLeft = null;
-    private int frontLeftMotorCounts = 0;
-
-
-    //The following are for single camera
-    private int frontRightMotorCounts = 0;
-    private int rearLeftMotorCounts = 0;
-    private int rearRightMotorCounts = 0;
-    private RedConeLocDetection RedConeLocDetector;
-
 
 
     @Override
@@ -71,29 +46,26 @@ public class NanoTorjanAuto_StrafeTest extends LinearOpMode {
         // Initialize motors
         frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
-
-
         rearLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
         rearRightMotor = hardwareMap.get(DcMotor.class, "backRight");
-
-        lsRight = hardwareMap.dcMotor.get("lsRight");
-        lsLeft = hardwareMap.dcMotor.get("lsLeft");
-
-        //Servo Motors
-
-        // get 2 claw motors
-        clawLeft = hardwareMap.servo.get("clawLeft");
-        clawRight= hardwareMap.servo.get("clawRight");
-
-        // get 2 arm motors
-        clawLift = hardwareMap.servo.get("clawLift");
-        armLift= hardwareMap.servo.get("armLift");
 
         // Set motor directions (adjust as needed based on your robot configuration)
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         rearLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         rearRightMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        // Set motor modes
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        /**
+         * NOTE: Many comments have been omitted from this sample for the
+         * sake of conciseness. If you're just starting out with EasyOpenCv,
+         * you should take a look at {@link InternalCamera1Example} or its
+         * webcam counterpart, {@link WebcamExample} first.
+         */
+
 
         waitForStart();
 //        drive.followTrajectory(trajectory);
@@ -103,17 +75,29 @@ public class NanoTorjanAuto_StrafeTest extends LinearOpMode {
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
 
-            Run2seconds (3, 0.2);
-                stop = true;
-            }
+            Run2seconds(3, 0.3);
+            //strafeRight(48, 1);
 
+
+            stop = true;
         }
 
-    private void Run2seconds ( double inches, double power){
+    }
 
 
-        frontRightMotor.setPower(-power);
-        frontLeftMotor.setPower(-power);
+    private void setRunMode(DcMotor.RunMode mode) {
+        frontLeftMotor.setMode(mode);
+        frontRightMotor.setMode(mode);
+        rearLeftMotor.setMode(mode);
+        rearRightMotor.setMode(mode);
+    }
+
+
+    private void Run2seconds(double inches, double power) {
+
+
+        frontRightMotor.setPower(power);
+        frontLeftMotor.setPower(power);
         rearRightMotor.setPower(power);
         rearLeftMotor.setPower(power);
 
@@ -129,4 +113,4 @@ public class NanoTorjanAuto_StrafeTest extends LinearOpMode {
     }
 
 
-    }
+}

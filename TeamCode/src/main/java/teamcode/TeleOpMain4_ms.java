@@ -42,7 +42,7 @@ public class TeleOpMain4_ms extends LinearOpMode {
     private Servo armLift = null;
     private CRServo robotLift = null;
 
-    private CRServo robotLift = null;
+
 
 
     private final double driveAdjuster = 1;
