@@ -138,13 +138,13 @@ public class TeleOpMain5_mt extends LinearOpMode {
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
         clawLeft.setPosition(1);
-        clawRight.setPosition(0.5);
+        clawRight.setPosition(0);
     }
     private void openClaw()
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
-        clawLeft.setPosition(0.5);
-        clawRight.setPosition(1);
+        clawLeft.setPosition(0.25);
+        clawRight.setPosition(0.8);
     }
     private void hangSpin()
     {
@@ -171,14 +171,16 @@ public class TeleOpMain5_mt extends LinearOpMode {
     private void clawDown()
     {
         //these follow the same concept as the claw, except it only needs to move one servo.
-        clawLift.setPosition(0.173);
-        sleep(250);
+        clawLift.setPosition(0.525);
     }
     private void clawUp()
     {
         //same thing for this except the position is different.
-        clawLift.setPosition(0.525);
-        sleep(250);
+        clawLift.setPosition(0.8);
+    }
+    private void clawFull()
+    {
+        clawLift.setPosition(1);
     }
     private void armUp()
     {
@@ -190,12 +192,24 @@ public class TeleOpMain5_mt extends LinearOpMode {
         //same thing as armUp but with a different position.
         armLift.setPosition(0.125);
     }
+    private void armFull()
+    {
+        armLift.setPosition(0.8);
+    }
     private void smallls()
     {
         //since this is a motor, it uses power, this works the same as robotlift but one of the powers are negative because one of the motors is facing the opposite way.
         //since this is the small linear slide lift, we only wait 250 milliseconds which is equivilant to a quarter of a second; then we just turn off the motors.
         lsRight.setPower(-1);
         lsLeft.setPower(1);
+        sleep(250);
+        lsRight.setPower(0);
+        lsLeft.setPower(0);
+    }
+    private void reversesmallls()
+    {
+        lsRight.setPower(1);
+        lsLeft.setPower(-1);
         sleep(250);
         lsRight.setPower(0);
         lsLeft.setPower(0);
@@ -209,11 +223,27 @@ public class TeleOpMain5_mt extends LinearOpMode {
         lsRight.setPower(0);
         lsLeft.setPower(0);
     }
+    private void reversemediumls()
+    {
+        lsRight.setPower(1);
+        lsLeft.setPower(-1);
+        sleep(1250);
+        lsRight.setPower(0);
+        lsLeft.setPower(0);
+    }
 
     private void highls()
     {
         //same as mediumls but let motor run for even longer.
         //this is only raising it from medium by a little bit because we wont go any higher than that within the time limit.
+        lsRight.setPower(-1);
+        lsLeft.setPower(1);
+        sleep(2000);
+        lsRight.setPower(0);
+        lsLeft.setPower(0);
+    }
+    private void reversehighls()
+    {
         lsRight.setPower(1);
         lsLeft.setPower(-1);
         sleep(2000);
@@ -235,25 +265,13 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
                 if(gamepad1.left_bumper){
-                    robotLift.setPower(1);
-
-                    // after launched wait 1.5 seconds move back to ready position
-//                    sleep(1000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    sleep(1000);
-                    robotLift.setPower(0);
+                    hangSpin();
 
 
                 }
                 if(gamepad1.right_bumper){
-                    robotLift.setPower(-1);
-                    // after launched wait 1.5 seconds move back to ready position
-//                    sleep(1000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    sleep(1000);
-                    robotLift.setPower(0);
+                    reversehangSpin();
+
                 }
 
 
@@ -284,9 +302,9 @@ public class TeleOpMain5_mt extends LinearOpMode {
 
             //waitForStart();
             //set closed claw and claw lift down
-            clawLeft.setPosition(1);
-            clawRight.setPosition(0.6);
-            clawLift.setPosition(0.173);
+            clawLeft.setPosition(0.25);
+            clawRight.setPosition(0.8);
+            clawLift.setPosition(0.525);
             //while (!isStopRequested()) {
             while (!Thread.interrupted() && opModeIsActive()) {
 
@@ -317,26 +335,18 @@ public class TeleOpMain5_mt extends LinearOpMode {
 
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
                 if (gamepad2.left_bumper) {
-                    // 1 is the after launch position
-                    planeLaunch.setPower(1);
-                    // after launched wait 1.5 seconds move back to ready position
-                    sleep(1000);
-                    // 0.4 is the ready position
-                    //planeLaunch.setPosition(0.4);
-                    //sleep(1000);
-                    planeLaunch.setPower(0);
+                    planeLaunch();
                 }
                 if (gamepad2.right_bumper) {
                     //if claw is closed then open it
                     if (clawopen == false) {
-                        clawLeft.setPosition(0.5);
-                        clawRight.setPosition(1);
+                        openClaw();
                         sleep(250);
+
                     }
                     //if claw is opened then close it
                     else {
-                        clawLeft.setPosition(1);
-                        clawRight.setPosition(0.5);
+                        closeClaw();
                         sleep(250);
                     }
                     clawopen = !clawopen;
@@ -345,34 +355,30 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 //Claw - move up and down, when its already up, move it down, when its already down, then move up
                 if (gamepad2.right_trigger >= 0.1) {
                     if (clawup) {
-                        clawLift.setPosition(0.173);
+                        clawDown();
                         sleep(250);
                     } else {
-                        clawLift.setPosition(0.525);
+                        clawFull();
                         sleep(250);
                     }
                     clawup = !clawup;
                 }
                 //make the arm lift so we can manually reset it
                 if (gamepad2.a) {
-                    armLift.setPosition(0.5);
+                    armUp();
                 }
                 //make the arm go back down to default position on the ground
                 if (gamepad2.x) {
-                    armLift.setPosition(0.125);
+                    armDown();
                 }
                 if (gamepad2.dpad_up) {
                     if (defaultscore == false) {
                         //move up linear slides
-                        lsRight.setPower(-1);
-                        lsLeft.setPower(1);
-                        sleep(250);
-                        lsRight.setPower(0);
-                        lsLeft.setPower(0);
+                        smallls();
                         //end move up
-                        armLift.setPosition(0.8);
+                        armFull();
                         sleep(500);
-                        clawLift.setPosition(1);
+                        clawUp();
                         moveup = true;
                         sleep(250);
                     }
@@ -380,23 +386,17 @@ public class TeleOpMain5_mt extends LinearOpMode {
                     else if (defaultscore == true) {
                         if (moveup) {
                             //reset linear slides only if it was up
-                            lsRight.setPower(1);
-                            lsLeft.setPower(-1);
-                            sleep(250);
-                            lsRight.setPower(0);
-                            lsLeft.setPower(0);
+                            reversesmallls();
                             moveup = false;
                         }
-                        armLift.setPosition(0.5);
+                        armUp();
                         sleep(1000);
-                        clawLift.setPosition(0.8);
-                        clawLeft.setPosition(1);
-                        clawRight.setPosition(0.6);
-                        armLift.setPosition(0.125);
+                        clawUp();
+                        clawFull();
+                        closeClaw();
                         sleep(250);
-                        clawLift.setPosition(0.173);
-                        clawLeft.setPosition(0.5);
-                        clawRight.setPosition(1);
+                        clawDown();
+                        openClaw();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
@@ -405,52 +405,34 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 }
                 if (gamepad2.dpad_right) {
                     if (mediumscore == false) {
-                        lsRight.setPower(-1);
-                        lsLeft.setPower(1);
-                        sleep(250);
-                        lsRight.setPower(0);
-                        lsLeft.setPower(0);
+                        smallls();
                         //end move up
-                        armLift.setPosition(0.8);
+                        armFull();
                         sleep(1500);
-                        clawLift.setPosition(1);
-                        lsRight.setPower(-1);
-                        lsLeft.setPower(1);
-                        sleep(1250);
-                        lsRight.setPower(0);
-                        lsLeft.setPower(0);
+                        clawFull();
+                        mediumls();
                         moveup3 = true;
                         lsmove2 = true;
                         sleep(250);
                     } else if (mediumscore == true) {
-                        armLift.setPosition(0.5);
+                        armUp();
                         sleep(1500);
-                        clawLift.setPosition(0.8);
+                        clawUp();
                         if (moveup3) {
                             //reset linear slides only if it was up
-                            lsRight.setPower(1);
-                            lsLeft.setPower(-1);
-                            sleep(250);
-                            lsRight.setPower(0);
-                            lsLeft.setPower(0);
+                            reversesmallls();
                             moveup3 = false;
                         }
                         if (lsmove2) {
-                            lsRight.setPower(1);
-                            lsLeft.setPower(-1);
-                            sleep(1250);
-                            lsRight.setPower(0);
-                            lsLeft.setPower(0);
+                            reversemediumls();
                             lsmove2 = false;
 
                         }
-                        clawLeft.setPosition(1);
-                        clawRight.setPosition(0.6);
-                        armLift.setPosition(0.125);
+                        closeClaw();
+                        armDown();
                         sleep(250);
-                        clawLift.setPosition(0.173);
-                        clawLeft.setPosition(0.5);
-                        clawRight.setPosition(1);
+                        clawDown();
+                        openClaw();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
@@ -460,52 +442,34 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 //automation to score pixel
                 if (gamepad2.dpad_down) {
                     if (highscore == false) {
-                        lsRight.setPower(-1);
-                        lsLeft.setPower(1);
-                        sleep(250);
-                        lsRight.setPower(0);
-                        lsLeft.setPower(0);
+                        smallls();
                         //end move up
-                        armLift.setPosition(0.8);
+                        armFull();
                         sleep(1500);
-                        clawLift.setPosition(1);
+                        clawFull();
                         //linear slide go up
-                        lsRight.setPower(-1);
-                        lsLeft.setPower(1);
-                        sleep(2000);
-                        lsRight.setPower(0);
-                        lsLeft.setPower(0);
+                        highls();
                         moveup2 = true;
                         lsmove = true;
                         sleep(250);
                     } else if (highscore == true) {
-                        armLift.setPosition(0.5);
+                        armUp();
                         sleep(500);
-                        clawLift.setPosition(0.8);
+                        clawUp();
                         if (moveup2) {
                             //reset linear slides only if it was up
-                            lsRight.setPower(1);
-                            lsLeft.setPower(-1);
-                            sleep(250);
-                            lsRight.setPower(0);
-                            lsLeft.setPower(0);
+                            reversesmallls();
                             moveup2 = false;
                         }
                         if (lsmove) {
-                            lsRight.setPower(1);
-                            lsLeft.setPower(-1);
-                            sleep(2000);
-                            lsRight.setPower(0);
-                            lsLeft.setPower(0);
+                            reversehighls();
                             lsmove = false;
                         }
-                        clawLeft.setPosition(1);
-                        clawRight.setPosition(0.6);
-                        armLift.setPosition(0.125);
+                        closeClaw();
+                        armDown();
                         sleep(250);
-                        clawLift.setPosition(0.173);
-                        clawLeft.setPosition(0.5);
-                        clawRight.setPosition(1);
+                        clawDown();
+                        openClaw();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
