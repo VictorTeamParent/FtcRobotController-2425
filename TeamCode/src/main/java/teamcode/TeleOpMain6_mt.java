@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,14 +13,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
-import com.qualcomm.robotcore.hardware.CRServo;
 
-import teamcode.DriveControl_NanoTorjan;
-
-@TeleOp(name = "TeleOpMain5_mt", group = "TeleOp")
+@TeleOp(name = "TeleOpMain6_mt", group = "TeleOp")
 
 
-public class TeleOpMain5_mt extends LinearOpMode {
+public class TeleOpMain6_mt extends LinearOpMode {
 
     private DcMotor intake = null;
     private DcMotor lsRight = null;
@@ -57,6 +55,7 @@ public class TeleOpMain5_mt extends LinearOpMode {
     private DriveControl_NanoTorjan driveControl;
     //private DriveControl driveControl;
 
+    private controls_NanoTrojans g2control;
     @Override
     public void runOpMode()  throws InterruptedException {
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
@@ -114,7 +113,8 @@ public class TeleOpMain5_mt extends LinearOpMode {
 
         driveControl = new DriveControl_NanoTorjan(frontLeft, frontRight, backLeft, backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
-
+        g2control=new controls_NanoTrojans(intake, lsRight, lsLeft, planeLaunch,
+                                          clawLeft, clawRight, clawLift, armLift, robotLift);
 
         Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
@@ -134,128 +134,9 @@ public class TeleOpMain5_mt extends LinearOpMode {
 
         }
     }
-    private void closeClaw()
-    {
-        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
-        clawLeft.setPosition(1);
-        clawRight.setPosition(0);
-    }
-    private void openClaw()
-    {
-        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
-        clawLeft.setPosition(0.15);
-        clawRight.setPosition(0.8);
-    }
-    private void hangSpin()
-    {
-        //since this servo is continuous, we have to use set power like motors; then sleep 1000 milliseconds which is equal to one second before turning the servo off.
-        //you can also hold down the button to continuously turn the servo instead of pressing multiple times.
-        robotLift.setPower(1);
-        sleep(1000);
-        robotLift.setPower(0);
-    }
-    private void reversehangSpin()
-    {
-        // this is the same as the hang spin except reversing the servo so it goes the other way so that we can unload the tension.
-        robotLift.setPower(-1);
-        sleep(1000);
-        robotLift.setPower(0);
-    }
-    private void planeLaunch()
-    {
-        //plane launch also uses a continuous servo so it has the same concept as the hang mechanism, it basically just turns the servo for a second and then turns it off.
-        planeLaunch.setPower(1);
-        sleep(1000);
-        planeLaunch.setPower(0);
-    }
-    private void clawDown()
-    {
-        //these follow the same concept as the claw, except it only needs to move one servo.
-        clawLift.setPosition(0.525);
-    }
-    private void clawUp()
-    {
-        //same thing for this except the position is different.
-        clawLift.setPosition(0.8);
-    }
-    private void clawFull()
-    {
-        clawLift.setPosition(1);
-    }
-    private void armUp()
-    {
-        //same concept as clawUp, just on the arm.
-        armLift.setPosition(0.5);
-    }
-    private void armDown()
-    {
-        //same thing as armUp but with a different position.
-        armLift.setPosition(0.125);
-    }
-    private void armFull()
-    {
-        armLift.setPosition(0.8);
-    }
-    private void smallls()
-    {
-        //since this is a motor, it uses power, this works the same as robotlift but one of the powers are negative because one of the motors is facing the opposite way.
-        //since this is the small linear slide lift, we only wait 250 milliseconds which is equivilant to a quarter of a second; then we just turn off the motors.
-        lsRight.setPower(-1);
-        lsLeft.setPower(1);
-        sleep(250);
-        lsRight.setPower(0);
-        lsLeft.setPower(0);
-    }
-    private void reversesmallls()
-    {
-        lsRight.setPower(1);
-        lsLeft.setPower(-1);
-        sleep(250);
-        lsRight.setPower(0);
-        lsLeft.setPower(0);
-    }
-    private void mediumls()
-    {
-        //same as smallls but let the motor run for longer.
-        lsRight.setPower(-1);
-        lsLeft.setPower(1);
-        sleep(1250);
-        lsRight.setPower(0);
-        lsLeft.setPower(0);
-    }
-    private void reversemediumls()
-    {
-        lsRight.setPower(1);
-        lsLeft.setPower(-1);
-        sleep(1250);
-        lsRight.setPower(0);
-        lsLeft.setPower(0);
-    }
 
-    private void highls()
-    {
-        //same as mediumls but let motor run for even longer.
-        //this is only raising it from medium by a little bit because we wont go any higher than that within the time limit.
-        lsRight.setPower(-1);
-        lsLeft.setPower(1);
-        sleep(2000);
-        lsRight.setPower(0);
-        lsLeft.setPower(0);
-    }
-    private void reversehighls()
-    {
-        lsRight.setPower(1);
-        lsLeft.setPower(-1);
-        sleep(2000);
-        lsRight.setPower(0);
-        lsLeft.setPower(0);
-    }
-
-
-
-
-    // This is the class to control the base of the robot to move arround, this normally is
-    // controlled by one person
+    // This is the thread class to control the base of the robot to move arround, this normally is
+    // controlled by another person seperated from the base control person
     private class baseControl implements Runnable {
         @Override
         public void run() {
@@ -265,24 +146,21 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
                 if(gamepad1.left_bumper){
-                    hangSpin();
+                    g2control.hangSpin();
                     sleep(1000);
-
-
-
+                    g2control.hangSpinstop();
                 }
                 if(gamepad1.right_bumper){
-                    reversehangSpin();
-
+                    g2control.reversehangSpin();
+                    sleep(1000);
+                    g2control.reversehangSpinstop();
 
                 }
-
-
             }
         }
     }//end of class baseControl
 
-    // This is the class to control arms , claws
+    // This is the thread class to control arms , claws
     private class armControl implements Runnable {
         @Override
         public void run() {
@@ -302,12 +180,10 @@ public class TeleOpMain5_mt extends LinearOpMode {
             boolean hang = false;
             boolean hangcount = false;
 
-
             //waitForStart();
             //set closed claw and claw lift down
-            clawLeft.setPosition(0.25);
-            clawRight.setPosition(0.8);
-            clawLift.setPosition(0.525);
+            g2control.closeClaw();
+            g2control.clawDown();
             //while (!isStopRequested()) {
             while (!Thread.interrupted() && opModeIsActive()) {
 
@@ -316,40 +192,21 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 lsRight.setPower(lspower);
                 lsLeft.setPower(-lspower);
 
-
-                /* HuskyLens.Block[] blocks = huskyLens.blocks();
-                   telemetry.addData("Block count", blocks.length);
-                   for (int i = 0; i < blocks.length; i++) {
-                       telemetry.addData("Block", blocks[i].toString());
-                } */
-
-                //Plane launcher
-                //if(gamepad2.left_trigger >=0.1){
-//                if (gamepad2.y) {
-//                    // 1 is the after launch position
-//                    planeLaunch.setPower(1);
-//                    // after launched wait 1.5 seconds move back to ready position
-//                    sleep(1000);
-//                    // 0.4 is the ready position
-//                    //planeLaunch.setPosition(0.4);
-//                    //sleep(1000);
-//                    planeLaunch.setPower(0);
-//                }
-
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
                 if (gamepad2.left_bumper) {
-                    planeLaunch();
+                    g2control.planeLaunch();
+                    sleep(1000);
+                    g2control.planeLaunchstop();
                 }
                 if (gamepad2.right_bumper) {
                     //if claw is closed then open it
                     if (clawopen == false) {
-                        openClaw();
+                        g2control.openClaw();
                         sleep(250);
-
                     }
                     //if claw is opened then close it
                     else {
-                        closeClaw();
+                        g2control.closeClaw();
                         sleep(250);
                     }
                     clawopen = !clawopen;
@@ -358,30 +215,32 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 //Claw - move up and down, when its already up, move it down, when its already down, then move up
                 if (gamepad2.right_trigger >= 0.1) {
                     if (clawup) {
-                        clawDown();
+                        g2control.clawDown();
                         sleep(250);
                     } else {
-                        clawFull();
+                        g2control.clawFull();
                         sleep(250);
                     }
                     clawup = !clawup;
                 }
                 //make the arm lift so we can manually reset it
                 if (gamepad2.a) {
-                    armUp();
+                    g2control.armUp();
                 }
                 //make the arm go back down to default position on the ground
                 if (gamepad2.x) {
-                    armDown();
+                    g2control.armDown();
                 }
                 if (gamepad2.dpad_up) {
                     if (defaultscore == false) {
                         //move up linear slides
-                        smallls();
+                        g2control.smallls();
+                        sleep(250);
+                        g2control.smalllsstop();
                         //end move up
-                        armFull();
+                        g2control.armFull();
                         sleep(500);
-                        clawUp();
+                        g2control.clawUp();
                         moveup = true;
                         sleep(250);
                     }
@@ -389,17 +248,19 @@ public class TeleOpMain5_mt extends LinearOpMode {
                     else if (defaultscore == true) {
                         if (moveup) {
                             //reset linear slides only if it was up
-                            reversesmallls();
+                            g2control.reversesmallls();
+                            sleep(250);
+                            g2control.reversesmalllsstop();
                             moveup = false;
                         }
-                        armUp();
+                        g2control.armUp();
                         sleep(1000);
-                        clawUp();
-                        clawFull();
-                        closeClaw();
+                        g2control.clawUp();
+                        g2control.closeClaw();
+                        g2control.armDown();
                         sleep(250);
-                        clawDown();
-                        openClaw();
+                        g2control.clawDown();
+                        g2control.openClaw();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
@@ -408,34 +269,42 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 }
                 if (gamepad2.dpad_right) {
                     if (mediumscore == false) {
-                        smallls();
+                        g2control.smallls();
+                        sleep(250);
+                        g2control.smalllsstop();
                         //end move up
-                        armFull();
+                        g2control.armFull();
                         sleep(1500);
-                        clawFull();
-                        mediumls();
+                        g2control.clawFull();
+                        g2control.mediumls();
+                        sleep(1250);
+                        g2control.mediumlsstop();
                         moveup3 = true;
                         lsmove2 = true;
                         sleep(250);
                     } else if (mediumscore == true) {
-                        armUp();
+                        g2control.armUp();
                         sleep(1500);
-                        clawUp();
+                        g2control.clawUp();
                         if (moveup3) {
                             //reset linear slides only if it was up
-                            reversesmallls();
+                            g2control.reversesmallls();
+                            sleep(250);
+                            g2control.reversesmalllsstop();
                             moveup3 = false;
                         }
                         if (lsmove2) {
-                            reversemediumls();
+                            g2control.reversemediumls();
+                            sleep(1250);
+                            g2control.reversemediumlsstop();
                             lsmove2 = false;
 
                         }
-                        closeClaw();
-                        armDown();
+                        g2control.closeClaw();
+                        g2control.armDown();
                         sleep(250);
-                        clawDown();
-                        openClaw();
+                        g2control.clawDown();
+                        g2control.openClaw();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
@@ -445,34 +314,42 @@ public class TeleOpMain5_mt extends LinearOpMode {
                 //automation to score pixel
                 if (gamepad2.dpad_down) {
                     if (highscore == false) {
-                        smallls();
+                        g2control.smallls();
+                        sleep(250);
+                        g2control.smalllsstop();
                         //end move up
-                        armFull();
+                        g2control.armFull();
                         sleep(1500);
-                        clawFull();
+                        g2control.clawFull();
                         //linear slide go up
-                        highls();
+                        g2control.highls();
+                        sleep(2000);
+                        g2control.highlsstop();
                         moveup2 = true;
                         lsmove = true;
                         sleep(250);
                     } else if (highscore == true) {
-                        armUp();
+                        g2control.armUp();
                         sleep(500);
-                        clawUp();
+                        g2control.clawUp();
                         if (moveup2) {
                             //reset linear slides only if it was up
-                            reversesmallls();
+                            g2control.reversesmallls();
+                            sleep(250);
+                            g2control.reversesmalllsstop();
                             moveup2 = false;
                         }
                         if (lsmove) {
-                            reversehighls();
+                            g2control.reversehighls();
+                            sleep(2000);
+                            g2control.reversehighlsstop();
                             lsmove = false;
                         }
-                        closeClaw();
-                        armDown();
+                        g2control.closeClaw();
+                        g2control.armDown();
                         sleep(250);
-                        clawDown();
-                        openClaw();
+                        g2control.clawDown();
+                        g2control.openClaw();
                         clawup = false;
                         clawopen = true;
                         sleep(250);

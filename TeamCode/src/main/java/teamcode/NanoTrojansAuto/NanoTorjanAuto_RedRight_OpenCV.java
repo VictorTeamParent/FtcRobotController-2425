@@ -22,8 +22,10 @@
 
 package teamcode.NanoTrojansAuto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -43,6 +45,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
+import teamcode.controls_NanoTrojans;
 import teamcode.drive.DriveConstants;
 import teamcode.drive.SampleMecanumDrive;
 import teamcode.trajectorysequence.TrajectorySequence;
@@ -57,6 +60,7 @@ import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 /**
  * This class contains the Autonomous Mode program.
  */
+@Config
 @Autonomous(name = "Auto_RedClose_OpenCV")
 public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 
@@ -79,6 +83,9 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
     private Servo clawRight = null;
     private DcMotor lsRight = null;
     private DcMotor lsLeft = null;
+    private DcMotor intake = null;
+    private CRServo planeLaunch = null;
+    private CRServo robotLift = null;
     private int frontLeftMotorCounts = 0;
 
 
@@ -86,7 +93,10 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
     private int frontRightMotorCounts = 0;
     private int rearLeftMotorCounts = 0;
     private int rearRightMotorCounts = 0;
+    private controls_NanoTrojans g2control;
 
+
+    public static double parkingLongStrafe = 30;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -97,8 +107,14 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         rearRightMotor = hardwareMap.get(DcMotor.class, "backRight");
         lsRight = hardwareMap.dcMotor.get("lsRight");
         lsLeft = hardwareMap.dcMotor.get("lsLeft");
+        intake = hardwareMap.dcMotor.get("intake");
 
         //Servo Motors
+        planeLaunch = hardwareMap.crservo.get("planeLaunch");
+        robotLift = hardwareMap.crservo.get("robotLift");
+
+        //hang
+
 
         // get 2 claw motors
         clawLeft = hardwareMap.servo.get("clawLeft");
@@ -107,6 +123,8 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         // get 2 arm motors
         clawLift = hardwareMap.servo.get("clawLift");
         armLift = hardwareMap.servo.get("armLift");
+
+
 
         // Set motor directions (adjust as needed based on your robot configuration)
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -125,6 +143,8 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new RSideConeLocDetection();
         webcam.setPipeline(pipeline);
+        g2control=new controls_NanoTrojans(intake, lsRight, lsLeft, planeLaunch,
+                clawLeft, clawRight, clawLift, armLift, robotLift);
 
         /*
          *  Create a thread for camera, so it will watch for us
@@ -152,77 +172,51 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         while (opModeIsActive() && !stop) {
             telemetry.addData("Analysis", pipeline.getPosition());
             telemetry.update();
+            g2control.closeClaw();
+            g2control.clawDown();
 
             // Don't burn CPU cycles busy-looping in this sample
             //sleep(1000);
 
-            if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
+            if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.LEFT) {
+                //strafeLeft(18, 1);
+                sleep(1000);
+                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
+                        .forward(33)
+                        .turn(Math.toRadians(-90))
+                        .forward(8)
+                        .back(10)
+                        .turn(Math.toRadians(90))
+                        .turn(Math.toRadians(90))
+                        .forward(37)
+                        .build();
+                drive.followTrajectorySequence(trajSeq);
+                doRestStuff();
+                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .strafeRight(35)
+                        .build();
+                drive.followTrajectorySequence(trajSeq2);
 
+                stop = true;
+
+            } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
 
                 /*
                  *  push the pixel to the middle line and back a little bit and
                  */
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(28)
+                        .forward(35)
                         .back(8)    //Going throught the middle door to booard
-                        .turn(Math.toRadians(90), 2.5, 2.5)
-                        .forward(28)
+                        .turn(Math.toRadians(90))
+                        .forward(35)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
-
-
-                //****************************
-                // Move up liner slids to low position
-                moveUpLSLow();
-
-                //********************************
-                // Lift Arm
-                //liftArm();
-
-                //***********************
-                //Jason please organize doRestStuff methods
-                // seperate close claw, open claw etc to different functions
-                //doRestStuff();
-
-                //*********************
-                //Straft and park
-
-                //sleep(250);
+                doRestStuff();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(12)
+                        .strafeRight(35)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
-                stop = true;
 
-            } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.LEFT) {
-                //strafeLeft(18, 1);
-                sleep(1000);
-                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(28)
-                        .turn(Math.toRadians(-90), 2.5, 2.5)
-                        .forward(5)
-                        .back(10)
-                        .turn(Math.toRadians(180))
-                        .forward(34)
-                        .strafeRight(12)
-                        .build();
-                drive.followTrajectorySequence(trajSeq);
-                //****************************
-                // Move up liner slids to low position
-                //moveUpLSLow();
-
-                //********************************
-                // Lift Arm
-                //liftArm();
-
-                //***********************
-                //Jason please organize doRestStuff methods
-                // seperate close claw, open claw etc to different functions
-               // doRestStuff();
-
-                //*********************
-                //Straft and park
-                sleep(250);
                 stop = true;
 
             } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.RIGHT) {
@@ -231,36 +225,24 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
                         .strafeRight(18)
                         .forward(25)
                         .back(10)
-                        .turn(Math.toRadians(90), 2.5, 2.5)
+                        .turn(Math.toRadians(90))
                         .forward(40)
-                        .strafeRight(12)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
-
-                //****************************
-                // Move up liner slids to low position
-                //moveUpLSLow();
-
-                //********************************
-                // Lift Arm
-                //liftArm();
-
-                //***********************
-                //Jason please organize doRestStuff methods
-                // seperate close claw, open claw etc to different functions
-                //doRestStuff();
-
-                //*********************
-                //Straft and park
-                sleep(250);
+                doRestStuff();
+                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .strafeRight(35)
+                        .build();
+                drive.followTrajectorySequence(trajSeq2);
 
                 stop = true;
             }
-
-
         }
     }
 
+    /*
+     * move up liner slides
+     */
     private void moveUpLSLow() {
         //move up linear slides
         lsRight.setPower(-1);
@@ -273,32 +255,39 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
     }
 
     private void liftArm() {
-        armLift.setPosition(0.8);
+//        armLift.setPosition(0.8);
     }
 
     private void doRestStuff() {
         //************************
         // Lift claw and setup position
+        g2control.smallls();
+        sleep(250);
+        g2control.smalllsstop();
+        //end move up
+        g2control.armFull();
         sleep(500);
-        clawLift.setPosition(1);
-        sleep(2000);
-        clawLeft.setPosition(0.5);
-        clawRight.setPosition(1);
-        lsRight.setPower(1);
-        lsLeft.setPower(-1);
-        sleep(250);
-        lsRight.setPower(0);
-        lsLeft.setPower(0);
-        armLift.setPosition(0.5);
+        g2control.clawUp();
         sleep(1000);
-        clawLift.setPosition(0.8);
-        clawLeft.setPosition(1);
-        clawRight.setPosition(0.6);
-        armLift.setPosition(0.125);
+        g2control.openClaw();
+        sleep(3000);
+
+        g2control.reversesmallls();
         sleep(250);
-        clawLift.setPosition(0.173);
-        clawLeft.setPosition(0.5);
-        clawRight.setPosition(1);
+        g2control.reversesmalllsstop();
+
+
+        clawLeft.setPosition(1); //interchangable
+        clawRight.setPosition(0);
+
+        g2control.armUp();
+        sleep(1000);
+        g2control.clawUp();
+        g2control.closeClaw();
+        g2control.armDown();
+        sleep(250);
+        g2control.clawDown();
+        g2control.openClaw();
 
     }
 
