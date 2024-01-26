@@ -15,10 +15,11 @@ public class LSideConeLocDetection extends OpenCvPipeline {
     /*
      * An enum to define the skystone position
      */
-    public enum RedConePosition {
+    public enum LSideConePosition {
         LEFT,
         CENTER,
-        RIGHT
+        RIGHT,
+        OTHER
     }
 
     /*
@@ -34,12 +35,8 @@ public class LSideConeLocDetection extends OpenCvPipeline {
      * The following is design for size 320 x 240 resolution
      */
     static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(35, 75);
-   // static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
     static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(225, 100);
 
-    //        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(55,49);
-//        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(92,49);
-//        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(126,49);
     static final int REGION_WIDTH = 70;
     static final int REGION_HEIGHT = 50;
 
@@ -66,12 +63,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
     Point region1_pointB = new Point(
             REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
             REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT-5);
-//    Point region2_pointA = new Point(
-//            REGION2_TOPLEFT_ANCHOR_POINT.x,
-//            REGION2_TOPLEFT_ANCHOR_POINT.y);
-//    Point region2_pointB = new Point(
-//            REGION2_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-//            REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+
     Point region3_pointA = new Point(
             REGION3_TOPLEFT_ANCHOR_POINT.x,
             REGION3_TOPLEFT_ANCHOR_POINT.y);
@@ -88,104 +80,19 @@ public class LSideConeLocDetection extends OpenCvPipeline {
     int avg1,  avg3;
 
     // Volatile since accessed by OpMode thread w/o synchronization
-    private volatile RedConePosition position = RedConePosition.LEFT;
+    private volatile LSideConePosition position = LSideConePosition.OTHER;
 
-    /*
-     * This function takes the RGB frame, converts to YCrCb,
-     * and extracts the Cb channel to the 'Cb' variable
-     */
-//    void inputToCb(Mat input) {
-//        Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
-//        Core.extractChannel(YCrCb, Cb, 2);
-//    }
-
- //   @Override
-//    public void init(Mat firstFrame) {
-//        /*
-//         * We need to call this in order to make sure the 'Cb'
-//         * object is initialized, so that the submats we make
-//         * will still be linked to it on subsequent frames. (If
-//         * the object were to only be initialized in processFrame,
-//         * then the submats would become delinked because the backing
-//         * buffer would be re-allocated the first time a real frame
-//         * was crunched)
-//         */
-//       // inputToCb(firstFrame);
-//
-//        /*
-//         * Submats are a persistent reference to a region of the parent
-//         * buffer. Any changes to the child affect the parent, and the
-//         * reverse also holds true.
-//         */
-////        region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
-////        //region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
-////        region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
-//
-//
-//    }
-
-    @Override
+     @Override
     public Mat processFrame(Mat input) {
 
         region1_Cb = input.submat(new Rect(region1_pointA, region1_pointB));
-//        //region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
         region3_Cb = input.submat(new Rect(region3_pointA, region3_pointB));
-        /*
-         * Overview of what we're doing:
-         *
-         * We first convert to YCrCb color space, from RGB color space.
-         * Why do we do this? Well, in the RGB color space, chroma and
-         * luma are intertwined. In YCrCb, chroma and luma are separated.
-         * YCrCb is a 3-channel color space, just like RGB. YCrCb's 3 channels
-         * are Y, the luma channel (which essentially just a B&W image), the
-         * Cr channel, which records the difference from red, and the Cb channel,
-         * which records the difference from blue. Because chroma and luma are
-         * not related in YCrCb, vision code written to look for certain values
-         * in the Cr/Cb channels will not be severely affected by differing
-         * light intensity, since that difference would most likely just be
-         * reflected in the Y channel.
-         *
-         * After we've converted to YCrCb, we extract just the 2nd channel, the
-         * Cb channel. We do this because stones are bright yellow and contrast
-         * STRONGLY on the Cb channel against everything else, including SkyStones
-         * (because SkyStones have a black label).
-         *
-         * We then take the average pixel value of 3 different regions on that Cb
-         * channel, one positioned over each stone. The brightest of the 3 regions
-         * is where we assume the SkyStone to be, since the normal stones show up
-         * extremely darkly.
-         *
-         * We also draw rectangles on the screen showing where the sample regions
-         * are, as well as drawing a solid rectangle over top the sample region
-         * we believe is on top of the SkyStone.
-         *
-         * In order for this whole process to work correctly, each sample region
-         * should be positioned in the center of each of the first 3 stones, and
-         * be small enough such that only the stone is sampled, and not any of the
-         * surroundings.
-         */
 
-        /*
-         * Get the Cb channel of the input frame after conversion to YCrCb
-         */
-        //inputToCb(input);
-
-        /*
-         * Compute the average pixel value of each submat region. We're
-         * taking the average of a single channel buffer, so the value
-         * we need is at index 0. We could have also taken the average
-         * pixel value of the 3-channel image, and referenced the value
-         * at index 2 here.
-         */
         Scalar sumColorsRg1 = Core.sumElems(region1_Cb);
         Scalar sumColorsRg3 = Core.sumElems(region3_Cb);
 
         double maxColorR1 = Math.max(sumColorsRg1.val[0], Math.max(sumColorsRg1.val[1], sumColorsRg1.val[2]));
         double maxColorR3 = Math.max(sumColorsRg3.val[0], Math.max(sumColorsRg3.val[1], sumColorsRg3.val[2]));
-//        avg1 = (int) Core.mean(region1_Cb).val[0];
-//        //avg2 = (int) Core.mean(region2_Cb).val[0];
-//        avg3 = (int) Core.mean(region3_Cb).val[0];
-
 
         /*
          * Draw a rectangle showing sample region 1 on the screen.
@@ -198,18 +105,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                 BLUE, // The color the rectangle is drawn in
                 2); // Thickness of the rectangle lines
 
-        /*
-         * Draw a rectangle showing sample region 2 on the screen.
-         * Simply a visual aid. Serves no functional purpose.
-         */
-//        Imgproc.rectangle(
-//                input, // Buffer to draw on
-//                region2_pointA, // First point which defines the rectangle
-//                region2_pointB, // Second point which defines the rectangle
-//                BLUE, // The color the rectangle is drawn in
-//                2); // Thickness of the rectangle lines
-
-        /*
+         /*
          * Draw a rectangle showing sample region 3 on the screen.
          * Simply a visual aid. Serves no functional purpose.
          */
@@ -221,22 +117,9 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                 2); // Thickness of the rectangle lines
 
 
-        /*
-         * Find the max of the 3 averages
-         */
-//        int maxOneTwo = Math.max(avg1, avg2);
-//        int max = Math.max(avg1, avg3);
-        //telemetry.addData("Realtime analysis max value", max);
-        /*
-         * Now that we found the max, we actually need to go and
-         * figure out which sample region that value was from
-         */
-        //if (max == avg1) // Was it from region 1?
-        //Center ragin detected RED
-
         if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
         {
-            position = RedConePosition.CENTER; // Record our analysis
+            position = LSideConePosition.CENTER; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -248,24 +131,10 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                     region1_pointB, // Second point which defines the rectangle
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
-//        } else if (max == avg2) // Was it from region 2?
-//        {
-//            position = RedConePosition.CENTER; // Record our analysis
-//
-//            /*
-//             * Draw a solid rectangle on top of the chosen region.
-//             * Simply a visual aid. Serves no functional purpose.
-//             */
-//            Imgproc.rectangle(
-//                    input, // Buffer to draw on
-//                    region2_pointA, // First point which defines the rectangle
-//                    region2_pointB, // Second point which defines the rectangle
-//                    GREEN, // The color the rectangle is drawn in
-//                    -1); // Negative thickness means solid fill
         } //else if (max == avg3) // Was it from region 3?
         else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
         {
-            position = RedConePosition.RIGHT; // Record our analysis
+            position = LSideConePosition.RIGHT; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -279,7 +148,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                     -1); // Negative thickness means solid fill
         }
         else
-            position = RedConePosition.LEFT; // Record our analysis
+            position = LSideConePosition.LEFT; // Record our analysis
 
         /*
          * Render the 'input' buffer to the viewport. But note this is not
@@ -292,7 +161,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
     /*
      * Call this from the OpMode thread to obtain the latest analysis
      */
-    public RedConePosition getPosition() {
+    public LSideConePosition getPosition() {
         return position;
     }
 }
