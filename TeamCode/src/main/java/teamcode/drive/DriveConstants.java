@@ -37,7 +37,7 @@ public class DriveConstants {
     //public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
     //            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
     // Now we remove the last parameter and input f value from the tunning
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 5, 12.721254006410254);
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 10, 13.221254006410254);
     //            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
     /*
@@ -69,8 +69,8 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 46.116988808671444;
-    public static double MAX_ACCEL = 46.116988808671444;
+    public static double MAX_VEL = 43.916988808671444;
+    public static double MAX_ACCEL = 43.916988808671444;
 
     //public static double MAX_ANG_VEL = 0.2199115037918091;
     public static double MAX_ANG_VEL = 3.4;  //about 195 degree

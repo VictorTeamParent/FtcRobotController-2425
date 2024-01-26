@@ -9,7 +9,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import teamcode.OpenCVExt.RedConeLocDetection;
+import teamcode.OpenCVExt.RSideConeLocDetection;
 
 
 /**
@@ -19,7 +19,7 @@ import teamcode.OpenCVExt.RedConeLocDetection;
 public class NanoTorjanAuto_OpenCV_Example extends LinearOpMode {
 
     OpenCvWebcam webcam;
-    RedConeLocDetection pipeline;
+    RSideConeLocDetection pipeline;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,7 +27,7 @@ public class NanoTorjanAuto_OpenCV_Example extends LinearOpMode {
         // the following is for one camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new RedConeLocDetection();
+        pipeline = new RSideConeLocDetection();
         webcam.setPipeline(pipeline);
 
 
@@ -61,7 +61,7 @@ public class NanoTorjanAuto_OpenCV_Example extends LinearOpMode {
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
 
-            if (pipeline.getPosition() == RedConeLocDetection.RedConePosition.CENTER) {
+            if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
 
                 // moveDistance(10, 0.3);
                 telemetry.addLine("Move forward 10 inches");
