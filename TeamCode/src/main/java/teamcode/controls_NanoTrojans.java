@@ -45,13 +45,13 @@ public class controls_NanoTrojans  {
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
         clawLeft.setPosition(1);
-        clawRight.setPosition(0);
+        clawRight.setPosition(0.5);
     }
     public void openClaw()
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
-        clawLeft.setPosition(0.15);
-        clawRight.setPosition(0.8);
+        clawLeft.setPosition(0.5);
+        clawRight.setPosition(1);
     }
     public void hangSpin()
     {
@@ -84,7 +84,7 @@ public class controls_NanoTrojans  {
     public void clawDown()
     {
         //these follow the same concept as the claw, except it only needs to move one servo.
-        clawLift.setPosition(0.525);
+        clawLift.setPosition(0.61);
     }
     public void clawUp()
     {
@@ -98,7 +98,7 @@ public class controls_NanoTrojans  {
     public void armUp()
     {
         //same concept as clawUp, just on the arm.
-        armLift.setPosition(0.5);
+        armLift.setPosition(0.7);
     }
     public void armDown()
     {

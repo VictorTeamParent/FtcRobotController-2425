@@ -14,10 +14,10 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name = "TeleOpMain6_mt", group = "TeleOp")
+@TeleOp(name = "TeleOpMain6_mt_su", group = "TeleOp")
 
 
-public class TeleOpMain6_mt extends LinearOpMode {
+public class TeleOpMain6_mt_su extends LinearOpMode {
 
     private DcMotor intake = null;
     private DcMotor lsRight = null;
@@ -172,8 +172,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
             boolean moveup3 = false;
             boolean lsmove = false;
             boolean lsmove2 = false;
-            boolean clawopen = true;
-            boolean clawup = true;
+            boolean clawopen = false;
+            boolean clawup = false;
             boolean defaultscore = false;
             boolean mediumscore = false;
             boolean highscore = false;
@@ -182,6 +182,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
             waitForStart();
             //set closed claw and claw lift down
+            g2control.closeClaw();
+            g2control.clawDown();
             //while (!isStopRequested()) {
             while (!Thread.interrupted() && opModeIsActive()) {
 
@@ -200,7 +202,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     //if claw is closed then open it
                     if (clawopen == false) {
                         g2control.openClaw();
-                        sleep(250);
+                        sleep(1000);
                     }
                     //if claw is opened then close it
                     else {
