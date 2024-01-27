@@ -77,9 +77,7 @@ public class RSideConeLocDetection extends OpenCvPipeline {
      * Working variables
      */
     Mat region1_Cb, region3_Cb;
-    Mat YCrCb = new Mat();
-    Mat Cb = new Mat();
-    int avg1,  avg3;
+
 
     // Volatile since accessed by OpMode thread w/o synchronization
     private volatile RSideConePosition position = RSideConePosition.OTHER;

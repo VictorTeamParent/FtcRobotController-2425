@@ -13,11 +13,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 //import teamcode.SkystoneDeterminationExample;
 
 
-public class LSideConeLocDetection extends OpenCvPipeline {
+public class LSideConeLocDetectionTest extends OpenCvPipeline {
     /*
      * An enum to define the skystone position
      */
-    public enum LSideConePosition {
+    public enum LSideConePositionTest {
         LEFT,
         CENTER,
         RIGHT,
@@ -89,7 +89,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
 
 
     // Volatile since accessed by OpMode thread w/o synchronization
-    private volatile LSideConePosition position = LSideConePosition.OTHER;
+    private volatile LSideConePositionTest position = LSideConePositionTest.OTHER;
 
      @Override
     public Mat processFrame(Mat input) {
@@ -133,7 +133,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
          //if (BlueColorDetection.containsBlueColor(region1_Cb) || RedColorDetection.containsRedColor(region1_Cb))
 
         {
-            position = LSideConePosition.CENTER; // Record our analysis
+            position = LSideConePositionTest.CENTER; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -149,7 +149,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
          else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
          //else if (BlueColorDetection.containsBlueColor(region3_Cb) || RedColorDetection.containsRedColor(region3_Cb))
          {
-            position = LSideConePosition.LEFT; // Record our analysis
+            position = LSideConePositionTest.LEFT; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -163,7 +163,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                     -1); // Negative thickness means solid fill
         }
         else
-            position = LSideConePosition.RIGHT; // Record our analysis
+            position = LSideConePositionTest.RIGHT; // Record our analysis
 
         /*
          * Render the 'input' buffer to the viewport. But note this is not
@@ -176,7 +176,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
     /*
      * Call this from the OpMode thread to obtain the latest analysis
      */
-    public LSideConePosition getPosition() {
+    public LSideConePositionTest getPosition() {
         return position;
     }
 }

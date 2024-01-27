@@ -164,14 +164,12 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
          *  create an instacne for MecanumDrive car
          */
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-        waitForStart();
         boolean stop = false;
 
+        waitForStart();
 
         while (opModeIsActive() && !stop) {
-            telemetry.addData("Analysis", pipeline.getPosition());
-            telemetry.update();
+
             g2control.closeClaw();
             g2control.clawUp();
 
@@ -180,8 +178,8 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 
             if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.LEFT) {
                 //strafeLeft(18, 1);
-
-
+                telemetry.addLine("Detected Cone at Left");
+                telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(33)
                         .turn(Math.toRadians(-90))
@@ -202,7 +200,8 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
                 stop = true;
 
             } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
-
+                telemetry.addLine("Detected Cone at Center");
+                telemetry.update();
                  /*
                  *  push the pixel to the middle line and back a little bit and
                  */
@@ -223,6 +222,9 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
                 stop = true;
 
             } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.RIGHT) {
+                telemetry.addLine("Detected Cone at Right");
+                telemetry.update();
+
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeRight(17)
                         .forward(25)
@@ -241,24 +243,6 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
                 stop = true;
             }
         }
-    }
-
-    /*
-     * move up liner slides
-     */
-    private void moveUpLSLow() {
-        //move up linear slides
-        lsRight.setPower(-1);
-        lsLeft.setPower(1);
-        sleep(250);
-        lsRight.setPower(0);
-        lsLeft.setPower(0);
-        //end move up
-
-    }
-
-    private void liftArm() {
-//        armLift.setPosition(0.8);
     }
 
     private void doRestStuff() {

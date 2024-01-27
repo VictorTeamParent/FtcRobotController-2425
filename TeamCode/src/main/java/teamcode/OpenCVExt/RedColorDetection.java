@@ -15,8 +15,11 @@ public class RedColorDetection {
         Imgproc.cvtColor(inputImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 
         // Define the range of red color in HSV
-        Scalar lowerRed = new Scalar(0, 100, 100);
-        Scalar upperRed = new Scalar(10, 255, 255);
+//        Scalar lowerRed = new Scalar(0, 100, 100);
+//        Scalar upperRed = new Scalar(10, 255, 255);
+
+        Scalar lowerRed = new Scalar(245, 0, 0);
+        Scalar upperRed = new Scalar(255, 10, 10);
 
         // Threshold the image to detect red color
         Mat redMask = new Mat();
@@ -26,7 +29,7 @@ public class RedColorDetection {
         int nonZeroCount = Core.countNonZero(redMask);
 
         // Set a threshold for the number of red pixels to consider as red presence
-        int threshold = 300; // Adjust as needed
+        int threshold = 100; // Adjust as needed
 
         // Return true if the number of red pixels exceeds the threshold
         return nonZeroCount > threshold;
