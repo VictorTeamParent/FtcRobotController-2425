@@ -176,7 +176,11 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
             // Don't burn CPU cycles busy-looping in this sample
             //sleep(1000);
 
-            if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.LEFT) {
+            position = pipeline.getPosition();
+            telemetry.addData("Red Close Got position", position);
+            telemetry.update();
+
+            if (position == RSideConeLocDetection.RSideConePosition.LEFT) {
                 //strafeLeft(18, 1);
                 telemetry.addLine("Detected Cone at Left");
                 telemetry.update();
@@ -199,7 +203,7 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 
                 stop = true;
 
-            } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
+            } else if (position == RSideConeLocDetection.RSideConePosition.CENTER) {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                  /*
@@ -221,7 +225,7 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 
                 stop = true;
 
-            } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.RIGHT) {
+            } else if (position == RSideConeLocDetection.RSideConePosition.RIGHT) {
                 telemetry.addLine("Detected Cone at Right");
                 telemetry.update();
 
@@ -255,13 +259,14 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         g2control.armFull();
         sleep(500);
         g2control.clawUp();
+        g2control.reversesmallls();
+        sleep(250);
+        g2control.reversesmalllsstop();
         sleep(4000);
         g2control.openClaw();
         sleep(3000);
 
-        g2control.reversesmallls();
-        sleep(250);
-        g2control.reversesmalllsstop();
+
 
 
         clawLeft.setPosition(1); //interchangable

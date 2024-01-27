@@ -18,7 +18,7 @@ import teamcode.OpenCVExt.LSideConeLocDetectionTest;
 @Autonomous(name = "Auto_RedRight_OpenCV_example2Test")
 public class NanoTorjanAuto_OpenCV_Example2Test extends LinearOpMode {
 
-    OpenCvWebcam webcam2;
+    OpenCvWebcam webcam;
     LSideConeLocDetectionTest pipeline;
 
     @Override
@@ -26,19 +26,19 @@ public class NanoTorjanAuto_OpenCV_Example2Test extends LinearOpMode {
 
         // the following is for one camera
         int cameraMonitorViewId2 = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam2 = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId2);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId2);
         pipeline = new LSideConeLocDetectionTest();
-        webcam2.setPipeline(pipeline);
+        webcam.setPipeline(pipeline);
 
 
         /*
          * Start camera thread and setup camera resolutions. This resolution should be the same as what was set in the
          * location detection algorithm
          */
-        webcam2.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam2.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -55,7 +55,16 @@ public class NanoTorjanAuto_OpenCV_Example2Test extends LinearOpMode {
          * This is actually a thread
          */
         while (opModeIsActive()) {
+            telemetry.addData("Frame Count", webcam.getFrameCount());
+            telemetry.addData("FPS", String.format("%.2f", webcam.getFps()));
+            telemetry.addData("Total frame time ms", webcam.getTotalFrameTimeMs());
+            telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
+            telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
+            telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
+
             telemetry.addData("Analysis", pipeline.getPosition());
+            telemetry.addData("Red Pix Detected", pipeline.redPixDetect());
+            telemetry.addData("Blue Pix Detected", pipeline.bluePixDetect());
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample

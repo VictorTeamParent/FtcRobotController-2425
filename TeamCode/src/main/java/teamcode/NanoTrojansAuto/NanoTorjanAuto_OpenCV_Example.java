@@ -9,6 +9,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import teamcode.OpenCVExt.BlueColorDetection;
 import teamcode.OpenCVExt.RSideConeLocDetection;
 
 
@@ -55,18 +56,24 @@ public class NanoTorjanAuto_OpenCV_Example extends LinearOpMode {
          * This is actually a thread
          */
         while (opModeIsActive()) {
-            telemetry.addData("Analysis", pipeline.getPosition());
-            telemetry.update();
+
+
 
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
 
-//            if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
-//
-//                // moveDistance(10, 0.3);
-//                telemetry.addLine("Move forward 10 inches");
-//
-//            }
+
+            telemetry.addData("Frame Count", webcam.getFrameCount());
+            telemetry.addData("FPS", String.format("%.2f", webcam.getFps()));
+            telemetry.addData("Total frame time ms", webcam.getTotalFrameTimeMs());
+            telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
+            telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
+            telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
+
+            telemetry.addData("Analysis", pipeline.getPosition());
+
+            telemetry.update();
+
         }
     }
 

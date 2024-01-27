@@ -84,7 +84,7 @@ public class controls_NanoTrojans  {
     public void clawDown()
     {
         //these follow the same concept as the claw, except it only needs to move one servo.
-        clawLift.setPosition(0.61);
+        clawLift.setPosition(0.625);
     }
     public void clawUp()
     {

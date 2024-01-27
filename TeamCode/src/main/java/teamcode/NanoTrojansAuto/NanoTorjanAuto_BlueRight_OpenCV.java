@@ -154,17 +154,19 @@ public class NanoTorjanAuto_BlueRight_OpenCV extends LinearOpMode {
 
 
         while (opModeIsActive() && !stop) {
-            telemetry.addData("Analysis", pipeline2.getPosition());
-            telemetry.update();
+//            telemetry.addData("Analysis", pipeline2.getPosition());
+//            telemetry.update();
             g2control.closeClaw();
             g2control.clawUp();
 
             // Don't burn CPU cycles busy-looping in this sample
             //sleep(1000);
-
-            if (pipeline2.getPosition() == LSideConeLocDetection.LSideConePosition.LEFT) {
-                telemetry.addData("Analysis", pipeline2.getPosition());
-                telemetry.update();
+            position = pipeline2.getPosition();
+            telemetry.addData("Blue Close Got position", position);
+            telemetry.update();
+            if (position == LSideConeLocDetection.LSideConePosition.LEFT) {
+//                telemetry.addData("Analysis", pipeline2.getPosition());
+//                telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeLeft(13)
                         .forward(25)
@@ -181,9 +183,9 @@ public class NanoTorjanAuto_BlueRight_OpenCV extends LinearOpMode {
                 drive.followTrajectorySequence(trajSeq2);
 
                 stop = true;
-            } else if (pipeline2.getPosition() == LSideConeLocDetection.LSideConePosition.CENTER) {
-                telemetry.addData("Analysis", pipeline2.getPosition());
-                telemetry.update();
+            } else if (position == LSideConeLocDetection.LSideConePosition.CENTER) {
+//                telemetry.addData("Analysis", pipeline2.getPosition());
+//                telemetry.update();
                  /*
                  *  push the pixel to the middle line and back a little bit and
                  */
@@ -192,7 +194,7 @@ public class NanoTorjanAuto_BlueRight_OpenCV extends LinearOpMode {
                         .back(8)    //Going throught the middle door to booard
                         .turn(Math.toRadians(-90))
                         .forward(38)
-                        .strafeRight(7)
+                        .strafeRight(3)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 doRestStuff();
@@ -203,9 +205,9 @@ public class NanoTorjanAuto_BlueRight_OpenCV extends LinearOpMode {
 
                 stop = true;
 
-            } else if (pipeline2.getPosition() == LSideConeLocDetection.LSideConePosition.RIGHT) {
-                telemetry.addData("Analysis", pipeline2.getPosition());
-                telemetry.update();
+            } else if (position == LSideConeLocDetection.LSideConePosition.RIGHT) {
+//                telemetry.addData("Analysis", pipeline2.getPosition());
+//                telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(33)
                         .turn(Math.toRadians(90))

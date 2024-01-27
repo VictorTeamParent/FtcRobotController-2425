@@ -19,7 +19,7 @@ import teamcode.OpenCVExt.RedConeLocDetection;
 @Autonomous(name = "Auto_RedRight_OpenCV_example2")
 public class NanoTorjanAuto_OpenCV_Example2 extends LinearOpMode {
 
-    OpenCvWebcam webcam2;
+    OpenCvWebcam webcam;
     LSideConeLocDetection pipeline;
 
     @Override
@@ -27,19 +27,19 @@ public class NanoTorjanAuto_OpenCV_Example2 extends LinearOpMode {
 
         // the following is for one camera
         int cameraMonitorViewId2 = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam2 = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId2);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId2);
         pipeline = new LSideConeLocDetection();
-        webcam2.setPipeline(pipeline);
+        webcam.setPipeline(pipeline);
 
 
         /*
          * Start camera thread and setup camera resolutions. This resolution should be the same as what was set in the
          * location detection algorithm
          */
-        webcam2.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam2.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -56,18 +56,20 @@ public class NanoTorjanAuto_OpenCV_Example2 extends LinearOpMode {
          * This is actually a thread
          */
         while (opModeIsActive()) {
-            telemetry.addData("Analysis", pipeline.getPosition());
-            telemetry.update();
+
 
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
 
-            if (pipeline.getPosition() == LSideConeLocDetection.LSideConePosition.CENTER) {
+            telemetry.addData("Frame Count", webcam.getFrameCount());
+            telemetry.addData("FPS", String.format("%.2f", webcam.getFps()));
+            telemetry.addData("Total frame time ms", webcam.getTotalFrameTimeMs());
+            telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
+            telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
+            telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
 
-                // moveDistance(10, 0.3);
-                telemetry.addLine("Move forward 10 inches");
-
-            }
+            telemetry.addData("Analysis", pipeline.getPosition());
+            telemetry.update();
         }
     }
 

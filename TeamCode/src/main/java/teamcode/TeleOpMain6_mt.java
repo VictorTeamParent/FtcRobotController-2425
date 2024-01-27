@@ -229,6 +229,12 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 if (gamepad2.x) {
                     g2control.armDown();
                 }
+                if(gamepad2.left_trigger>=0.1){
+                    g2control.closeClaw();
+                    g2control.clawDown();
+                    sleep(500);
+                    g2control.openClaw();
+                }
                 if (gamepad2.dpad_up) {
                     if (defaultscore == false) {
                         //move up linear slides
@@ -259,8 +265,6 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                         g2control.clawDown();
                         g2control.openClaw();
-                        sleep(500);
-                        g2control.clawUp();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
@@ -305,8 +309,6 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                         g2control.clawDown();
                         g2control.openClaw();
-                        sleep(500);
-                        g2control.clawUp();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
@@ -352,8 +354,6 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                         g2control.clawDown();
                         g2control.openClaw();
-                        sleep(500);
-                        g2control.clawUp();
                         clawup = false;
                         clawopen = true;
                         sleep(250);

@@ -90,6 +90,8 @@ public class LSideConeLocDetectionTest extends OpenCvPipeline {
 
     // Volatile since accessed by OpMode thread w/o synchronization
     private volatile LSideConePositionTest position = LSideConePositionTest.OTHER;
+    private volatile int redPixCnt = 0;
+    private volatile int bluePixCnt = 0;
 
      @Override
     public Mat processFrame(Mat input) {
@@ -127,12 +129,14 @@ public class LSideConeLocDetectionTest extends OpenCvPipeline {
                 2); // Thickness of the rectangle lines
 
 
-       if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
+      // if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
          //if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
          //    if(rgbValues1[0] > 200)
-         //if (BlueColorDetection.containsBlueColor(region1_Cb) || RedColorDetection.containsRedColor(region1_Cb))
+           if (BlueColorDetection.containsBlueColor(region1_Cb) )//|| RedColorDetection.containsRedColor(region1_Cb))
 
         {
+            bluePixCnt = BlueColorDetection.bluePixCount(input);
+            redPixCnt = RedColorDetection.redPixCount(input);
             position = LSideConePositionTest.CENTER; // Record our analysis
 
             /*
@@ -146,9 +150,11 @@ public class LSideConeLocDetectionTest extends OpenCvPipeline {
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
         } //else if (max == avg3) // Was it from region 3?
-         else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
-         //else if (BlueColorDetection.containsBlueColor(region3_Cb) || RedColorDetection.containsRedColor(region3_Cb))
+        // else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
+         else if (BlueColorDetection.containsBlueColor(region3_Cb) )//|| RedColorDetection.containsRedColor(region3_Cb))
          {
+             bluePixCnt = BlueColorDetection.bluePixCount(input);
+             redPixCnt = RedColorDetection.redPixCount(input);
             position = LSideConePositionTest.LEFT; // Record our analysis
 
             /*
@@ -179,4 +185,8 @@ public class LSideConeLocDetectionTest extends OpenCvPipeline {
     public LSideConePositionTest getPosition() {
         return position;
     }
+
+    public int redPixDetect(){return redPixCnt;}
+
+    public int bluePixDetect(){return bluePixCnt;}
 }
