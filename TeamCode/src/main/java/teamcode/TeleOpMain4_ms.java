@@ -16,7 +16,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 import teamcode.DriveControl_NanoTorjan;
 
-@TeleOp(name = "TeleOpMain4_ms", group = "TeleOp")
+
+//@TeleOp(name = "TeleOpMain4_ms", group = "TeleOp")
 
 
 public class TeleOpMain4_ms extends LinearOpMode {

@@ -61,12 +61,12 @@ public class NanoTorjanAuto_OpenCV_Example extends LinearOpMode {
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
 
-            if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
-
-                // moveDistance(10, 0.3);
-                telemetry.addLine("Move forward 10 inches");
-
-            }
+//            if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
+//
+//                // moveDistance(10, 0.3);
+//                telemetry.addLine("Move forward 10 inches");
+//
+//            }
         }
     }
 

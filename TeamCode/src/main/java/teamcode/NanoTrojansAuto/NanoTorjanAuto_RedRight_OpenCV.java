@@ -72,7 +72,7 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
     static final double COUNTS_PER_INCH = COUNTS_PER_MM * 25.4; // Counts per inch
     OpenCvWebcam webcam;
     RSideConeLocDetection pipeline;
-    RSideConeLocDetection.RSideConePosition position = RSideConeLocDetection.RSideConePosition.LEFT;
+    RSideConeLocDetection.RSideConePosition position = RSideConeLocDetection.RSideConePosition.OTHER;
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor rearLeftMotor;
@@ -172,16 +172,15 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         while (opModeIsActive() && !stop) {
             telemetry.addData("Analysis", pipeline.getPosition());
             telemetry.update();
-
+            g2control.closeClaw();
+            g2control.clawUp();
 
             // Don't burn CPU cycles busy-looping in this sample
             //sleep(1000);
 
             if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.LEFT) {
                 //strafeLeft(18, 1);
-                g2control.closeClaw();
-                sleep(500);
-                g2control.clawUp();
+
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(33)
@@ -190,7 +189,8 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
                         .back(10)
                         .turn(Math.toRadians(90))
                         .turn(Math.toRadians(90))
-                        .forward(37)
+                        .forward(36)
+                        .strafeLeft(2)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 doRestStuff();
@@ -203,18 +203,15 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
 
             } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.CENTER) {
 
-                g2control.closeClaw();
-
-                sleep(500);
-                g2control.clawUp();
-                /*
+                 /*
                  *  push the pixel to the middle line and back a little bit and
                  */
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(35)
                         .back(8)    //Going throught the middle door to booard
                         .turn(Math.toRadians(90))
-                        .forward(35)
+                        .forward(39)
+                        .strafeLeft(2)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 doRestStuff();
@@ -226,20 +223,18 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
                 stop = true;
 
             } else if (pipeline.getPosition() == RSideConeLocDetection.RSideConePosition.RIGHT) {
-                g2control.closeClaw();
-                sleep(500);
-                g2control.clawUp();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(18)
+                        .strafeRight(17)
                         .forward(25)
                         .back(10)
                         .turn(Math.toRadians(90))
-                        .forward(40)
+                        .forward(28)
+                        .strafeLeft(12)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 doRestStuff();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(35)
+                        .strafeRight(32)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
 
@@ -276,7 +271,7 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         g2control.armFull();
         sleep(500);
         g2control.clawUp();
-        sleep(5000);
+        sleep(4000);
         g2control.openClaw();
         sleep(3000);
 
@@ -291,12 +286,13 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         g2control.armUp();
         sleep(1000);
         g2control.clawUp();
+        sleep(1000);
         g2control.closeClaw();
         g2control.armDown();
         sleep(250);
         g2control.clawUp();
         sleep(1000);
-        g2control.openClaw();
+        //g2control.openClaw();
 
     }
 

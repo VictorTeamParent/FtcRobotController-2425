@@ -98,7 +98,7 @@ public class controls_NanoTrojans  {
     public void armUp()
     {
         //same concept as clawUp, just on the arm.
-        armLift.setPosition(0.7);
+        armLift.setPosition(0.5);
     }
     public void armDown()
     {

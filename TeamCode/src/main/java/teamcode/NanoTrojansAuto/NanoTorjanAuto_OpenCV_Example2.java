@@ -19,27 +19,27 @@ import teamcode.OpenCVExt.RedConeLocDetection;
 @Autonomous(name = "Auto_RedRight_OpenCV_example2")
 public class NanoTorjanAuto_OpenCV_Example2 extends LinearOpMode {
 
-    OpenCvWebcam webcam;
+    OpenCvWebcam webcam2;
     LSideConeLocDetection pipeline;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         // the following is for one camera
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        int cameraMonitorViewId2 = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam2 = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId2);
         pipeline = new LSideConeLocDetection();
-        webcam.setPipeline(pipeline);
+        webcam2.setPipeline(pipeline);
 
 
         /*
          * Start camera thread and setup camera resolutions. This resolution should be the same as what was set in the
          * location detection algorithm
          */
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        webcam2.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                webcam2.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override

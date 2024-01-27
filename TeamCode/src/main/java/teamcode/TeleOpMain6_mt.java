@@ -259,6 +259,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                         g2control.clawDown();
                         g2control.openClaw();
+                        sleep(500);
+                        g2control.clawUp();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
@@ -303,6 +305,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                         g2control.clawDown();
                         g2control.openClaw();
+                        sleep(500);
+                        g2control.clawUp();
                         clawup = false;
                         clawopen = true;
                         sleep(250);
@@ -348,6 +352,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                         g2control.clawDown();
                         g2control.openClaw();
+                        sleep(500);
+                        g2control.clawUp();
                         clawup = false;
                         clawopen = true;
                         sleep(250);

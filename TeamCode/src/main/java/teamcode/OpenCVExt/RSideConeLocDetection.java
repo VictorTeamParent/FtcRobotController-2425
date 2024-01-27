@@ -34,10 +34,13 @@ public class RSideConeLocDetection extends OpenCvPipeline {
      * The core values which define the location and size of the sample regions
      * The following is design for size 320 x 240 resolution
      */
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(35, 75);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(225, 100);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(65, 75);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(205, 75);
 
-    static final int REGION_WIDTH = 70;
+//    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(70, 0);
+//    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(225, 0);
+
+    static final int REGION_WIDTH = 65;
     static final int REGION_HEIGHT = 50;
 
     /*

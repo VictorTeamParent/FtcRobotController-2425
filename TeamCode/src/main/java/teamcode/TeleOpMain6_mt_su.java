@@ -130,7 +130,7 @@ public class TeleOpMain6_mt_su extends LinearOpMode {
             //put some code here for more actions on the control thread
             // Game Pad 2 controller for other motors
             // control intake motor
-            intake.setPower(gamepad2.left_stick_y * 0.5);
+            intake.setPower(gamepad2.right_stick_y * 0.5);
 
         }
     }
@@ -188,7 +188,7 @@ public class TeleOpMain6_mt_su extends LinearOpMode {
             while (!Thread.interrupted() && opModeIsActive()) {
 
                 //lift power take from the second game pad
-                lspower = gamepad2.right_stick_y;
+                lspower = gamepad2.left_stick_y;
                 lsRight.setPower(lspower);
                 lsLeft.setPower(-lspower);
 

@@ -8,6 +8,8 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+
+
 //import teamcode.SkystoneDeterminationExample;
 
 
@@ -34,10 +36,19 @@ public class LSideConeLocDetection extends OpenCvPipeline {
      * The core values which define the location and size of the sample regions
      * The following is design for size 320 x 240 resolution
      */
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(35, 75);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(225, 100);
 
-    static final int REGION_WIDTH = 70;
+    //blue center
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(110, 75);
+//    //blue Left
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(0, 85);
+
+
+//    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(120, 0);
+//    //blue Left
+//    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(0, 0);
+
+
+    static final int REGION_WIDTH = 65;
     static final int REGION_HEIGHT = 50;
 
     /*
@@ -94,6 +105,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
         double maxColorR1 = Math.max(sumColorsRg1.val[0], Math.max(sumColorsRg1.val[1], sumColorsRg1.val[2]));
         double maxColorR3 = Math.max(sumColorsRg3.val[0], Math.max(sumColorsRg3.val[1], sumColorsRg3.val[2]));
 
+
         /*
          * Draw a rectangle showing sample region 1 on the screen.
          * Simply a visual aid. Serves no functional purpose.
@@ -117,7 +129,11 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                 2); // Thickness of the rectangle lines
 
 
-        if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
+       if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
+         //if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
+         //    if(rgbValues1[0] > 200)
+         //if (BlueColorDetection.containsBlueColor(region1_Cb) || RedColorDetection.containsRedColor(region1_Cb))
+
         {
             position = LSideConePosition.CENTER; // Record our analysis
 
@@ -132,9 +148,10 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
         } //else if (max == avg3) // Was it from region 3?
-        else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
-        {
-            position = LSideConePosition.RIGHT; // Record our analysis
+         else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
+         //else if (BlueColorDetection.containsBlueColor(region3_Cb) || RedColorDetection.containsRedColor(region3_Cb))
+         {
+            position = LSideConePosition.LEFT; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -148,7 +165,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                     -1); // Negative thickness means solid fill
         }
         else
-            position = LSideConePosition.LEFT; // Record our analysis
+            position = LSideConePosition.RIGHT; // Record our analysis
 
         /*
          * Render the 'input' buffer to the viewport. But note this is not
