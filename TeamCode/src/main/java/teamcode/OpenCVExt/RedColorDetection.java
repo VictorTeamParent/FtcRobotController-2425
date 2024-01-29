@@ -18,8 +18,8 @@ public class RedColorDetection {
 //        Scalar lowerRed = new Scalar(0, 100, 100);
 //        Scalar upperRed = new Scalar(10, 255, 255);
 
-        Scalar lowerRed = new Scalar(254, 100, 100);
-        Scalar upperRed = new Scalar(255, 255, 255);
+        Scalar lowerRed = new Scalar(100, 50, 50);
+        Scalar upperRed = new Scalar(150, 255, 255);
 
         // Threshold the image to detect red color
         Mat redMask = new Mat();
@@ -44,8 +44,8 @@ public class RedColorDetection {
 //        Scalar lowerRed = new Scalar(0, 100, 100);
 //        Scalar upperRed = new Scalar(10, 255, 255);
 
-        Scalar lowerRed = new Scalar(254, 100, 100);
-        Scalar upperRed = new Scalar(255, 255, 255);
+        Scalar lowerRed = new Scalar(100, 50, 50);
+        Scalar upperRed = new Scalar(150, 255, 255);
 
         // Threshold the image to detect red color
         Mat redMask = new Mat();

@@ -47,11 +47,37 @@ public class controls_NanoTrojans  {
         clawLeft.setPosition(1);
         clawRight.setPosition(0.5);
     }
+    public void closeLeftClaw()
+    {
+        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
+        clawLeft.setPosition(1);
+
+    }
+
+    public void closeRightClaw()
+    {
+        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
+
+        clawRight.setPosition(0.5);
+    }
     public void openClaw()
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
         clawLeft.setPosition(0.5);
         clawRight.setPosition(1);
+    }
+
+    public void openLeftClaw()
+    {
+        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
+        clawLeft.setPosition(0.5);
+    }
+
+    public void openRightClaw()
+    {
+        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
+        clawRight.setPosition(1);
+
     }
     public void hangSpin()
     {
@@ -84,12 +110,20 @@ public class controls_NanoTrojans  {
     public void clawDown()
     {
         //these follow the same concept as the claw, except it only needs to move one servo.
-        clawLift.setPosition(0.625);
+//        clawLift.setPosition(0.625);
+        clawLift.setPosition(0.4);
+    }
+
+    public void clawDownParallel()
+    {
+        //The claw need to be parallel to ground to release pixel
+        clawLift.setPosition(0.4);
     }
     public void clawUp()
     {
         //same thing for this except the position is different.
-        clawLift.setPosition(0.8);
+//        clawLift.setPosition(0.8);
+        clawLift.setPosition(1);
     }
     public void clawFull()
     {
@@ -98,7 +132,8 @@ public class controls_NanoTrojans  {
     public void armUp()
     {
         //same concept as clawUp, just on the arm.
-        armLift.setPosition(0.5);
+//        armLift.setPosition(0.5);
+        armLift.setPosition(0);
     }
     public void armDown()
     {

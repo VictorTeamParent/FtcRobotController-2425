@@ -14,8 +14,8 @@ public class BlueColorDetection {
         Imgproc.cvtColor(inputImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 
         // Define the range of blue color in HSV
-        Scalar lowerBlue = new Scalar(100, 100, 250);
-        Scalar upperBlue = new Scalar(255, 255, 255);
+        Scalar lowerBlue = new Scalar(160, 50, 50);
+        Scalar upperBlue = new Scalar(180, 255, 255);
 
         // Threshold the image to detect blue color
         Mat blueMask = new Mat();
@@ -37,8 +37,8 @@ public class BlueColorDetection {
         Imgproc.cvtColor(inputImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 
         // Define the range of blue color in HSV
-        Scalar lowerBlue = new Scalar(100, 100, 200);
-        Scalar upperBlue = new Scalar(255, 255, 255);
+         Scalar lowerBlue = new Scalar(160, 50, 50);
+         Scalar upperBlue = new Scalar(180, 255, 255);
 
         // Threshold the image to detect blue color
         Mat blueMask = new Mat();

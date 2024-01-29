@@ -116,6 +116,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
         g2control=new controls_NanoTrojans(intake, lsRight, lsLeft, planeLaunch,
                                           clawLeft, clawRight, clawLift, armLift, robotLift);
 
+        waitForStart();
         Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
 
@@ -140,6 +141,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
     private class baseControl implements Runnable {
         @Override
         public void run() {
+            waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
                 // Motor control logic for motors 1 and 2
                 //Call Robot base movement algorithem to drive the base
@@ -220,6 +222,9 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                     }
                     clawup = !clawup;
+                }
+                if(gamepad2.left_bumper){
+
                 }
                 //make the arm lift so we can manually reset it
                 if (gamepad2.a) {

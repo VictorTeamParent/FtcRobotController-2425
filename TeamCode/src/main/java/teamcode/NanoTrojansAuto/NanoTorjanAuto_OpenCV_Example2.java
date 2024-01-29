@@ -10,7 +10,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 import teamcode.OpenCVExt.LSideConeLocDetection;
-import teamcode.OpenCVExt.RedConeLocDetection;
 
 
 /**
@@ -27,7 +26,7 @@ public class NanoTorjanAuto_OpenCV_Example2 extends LinearOpMode {
 
         // the following is for one camera
         int cameraMonitorViewId2 = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId2);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId2);
         pipeline = new LSideConeLocDetection();
         webcam.setPipeline(pipeline);
 
