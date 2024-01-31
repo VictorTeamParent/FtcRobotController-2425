@@ -65,7 +65,7 @@ public class TeleOpMain6_mt_su extends LinearOpMode {
 
         lsRight = hardwareMap.dcMotor.get("lsRight");
         lsLeft = hardwareMap.dcMotor.get("lsLeft");
-        intake = hardwareMap.dcMotor.get("intake");
+        //intake = hardwareMap.dcMotor.get("intake");
 
         //Servo Motors
         planeLaunch = hardwareMap.crservo.get("planeLaunch");
@@ -113,7 +113,7 @@ public class TeleOpMain6_mt_su extends LinearOpMode {
 
         driveControl = new DriveControl_NanoTorjan(frontLeft, frontRight, backLeft, backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
-        g2control=new controls_NanoTrojans(intake, lsRight, lsLeft, planeLaunch,
+        g2control=new controls_NanoTrojans(lsRight, lsLeft, planeLaunch,
                                           clawLeft, clawRight, clawLift, armLift, robotLift);
 
         waitForStart();

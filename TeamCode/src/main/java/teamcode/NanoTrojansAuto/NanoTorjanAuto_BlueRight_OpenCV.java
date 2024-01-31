@@ -69,7 +69,7 @@ public class NanoTorjanAuto_BlueRight_OpenCV extends LinearOpMode {
     private Servo clawRight = null;
     private DcMotor lsRight = null;
     private DcMotor lsLeft = null;
-    private DcMotor intake = null;
+    //private DcMotor intake = null;
     private CRServo planeLaunch = null;
     private CRServo robotLift = null;
     private int frontLeftMotorCounts = 0;
@@ -93,7 +93,7 @@ public class NanoTorjanAuto_BlueRight_OpenCV extends LinearOpMode {
         rearRightMotor = hardwareMap.get(DcMotor.class, "backRight");
         lsRight = hardwareMap.dcMotor.get("lsRight");
         lsLeft = hardwareMap.dcMotor.get("lsLeft");
-        intake = hardwareMap.dcMotor.get("intake");
+        //intake = hardwareMap.dcMotor.get("intake");
 
         //Servo Motors
         planeLaunch = hardwareMap.crservo.get("planeLaunch");
@@ -129,7 +129,7 @@ public class NanoTorjanAuto_BlueRight_OpenCV extends LinearOpMode {
         webcam2 = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId2);
         pipeline2 = new LSideConeLocDetection();
         webcam2.setPipeline(pipeline2);
-        g2control=new controls_NanoTrojans(intake, lsRight, lsLeft, planeLaunch,
+        g2control=new controls_NanoTrojans( lsRight, lsLeft, planeLaunch,
                 clawLeft, clawRight, clawLift, armLift, robotLift);
 
         /*

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 
 public class controls_NanoTrojans  {
-    private DcMotor intake = null;
+    //private DcMotor intake = null;
     private DcMotor lsRight = null;
     private DcMotor lsLeft = null;
 
@@ -28,10 +28,10 @@ public class controls_NanoTrojans  {
     private Servo clawLift = null;
     private Servo armLift = null;
     private CRServo robotLift = null;
-    public controls_NanoTrojans(DcMotor intak, DcMotor lsR, DcMotor lsL, CRServo planeL,
+    public controls_NanoTrojans( DcMotor lsR, DcMotor lsL, CRServo planeL,
                                      Servo clawL, Servo clawR, Servo clawLi, Servo armL, CRServo robotL)
     {
-        intake= intak;
+        //intake= intak;
         lsRight=lsR;
         lsLeft=lsL;
         planeLaunch=planeL;
@@ -114,12 +114,7 @@ public class controls_NanoTrojans  {
         clawLift.setPosition(0.4);
     }
 
-    public void clawDownParallel()
-    {
-        //The claw need to be parallel to ground to release pixel
-        clawLift.setPosition(0.4);
-    }
-    public void clawUp()
+      public void clawUp()
     {
         //same thing for this except the position is different.
 //        clawLift.setPosition(0.8);
@@ -132,17 +127,17 @@ public class controls_NanoTrojans  {
     public void armUp()
     {
         //same concept as clawUp, just on the arm.
-//        armLift.setPosition(0.5);
-        armLift.setPosition(0);
+        armLift.setPosition(0.25);
+//        armLift.setPosition(0);
     }
     public void armDown()
     {
         //same thing as armUp but with a different position.
-        armLift.setPosition(0.125);
+        armLift.setPosition(0.085);
     }
     public void armFull()
     {
-        armLift.setPosition(0.8);
+        armLift.setPosition(1);
     }
     public void smallls()
     {

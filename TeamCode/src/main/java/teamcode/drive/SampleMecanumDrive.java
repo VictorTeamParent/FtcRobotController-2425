@@ -57,7 +57,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = 1;
+    public static double LATERAL_MULTIPLIER = 1.38;
 
     //Victor : set straft 60 inches  but reported 17, just set that value here
     //public static double LATERAL_MULTIPLIER = 17/60;
@@ -103,8 +103,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         imu.initialize(parameters);
 
         //victor the following code is not straft let's swith front and back wheels on one side
-//        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
-//        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+
         frontLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         backLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
 

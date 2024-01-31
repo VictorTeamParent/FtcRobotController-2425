@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TeleOpMain6_mt extends LinearOpMode {
 
-    private DcMotor intake = null;
+    //private DcMotor intake = null;
     private DcMotor lsRight = null;
     private DcMotor lsLeft = null;
 
@@ -65,7 +65,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
         lsRight = hardwareMap.dcMotor.get("lsRight");
         lsLeft = hardwareMap.dcMotor.get("lsLeft");
-        intake = hardwareMap.dcMotor.get("intake");
+        //intake = hardwareMap.dcMotor.get("intake");
 
         //Servo Motors
         planeLaunch = hardwareMap.crservo.get("planeLaunch");
@@ -113,7 +113,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
         driveControl = new DriveControl_NanoTorjan(frontLeft, frontRight, backLeft, backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
-        g2control=new controls_NanoTrojans(intake, lsRight, lsLeft, planeLaunch,
+        g2control=new controls_NanoTrojans(lsRight, lsLeft, planeLaunch,
                                           clawLeft, clawRight, clawLift, armLift, robotLift);
 
         waitForStart();
@@ -131,7 +131,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
             //put some code here for more actions on the control thread
             // Game Pad 2 controller for other motors
             // control intake motor
-            intake.setPower(gamepad2.left_stick_y * 0.5);
+            //intake.setPower(gamepad2.left_stick_y * 0.5);
 
         }
     }
@@ -181,6 +181,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
             boolean highscore = false;
             boolean hang = false;
             boolean hangcount = false;
+            boolean leftclawopen = false;
+            boolean rightclawopen = false;
 
             waitForStart();
             //set closed claw and claw lift down
@@ -194,11 +196,32 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
                 if (gamepad2.left_bumper) {
+                    if (leftclawopen) {
+                        g2control.closeLeftClaw();
+                        sleep(250);
+                    }
+                    else {
+                        g2control.openLeftClaw();
+                        sleep(250);
+                    }
+
+                }
+                if (gamepad2.y){
                     g2control.planeLaunch();
                     sleep(1000);
                     g2control.planeLaunchstop();
                 }
-                if (gamepad2.right_bumper) {
+                if (gamepad2.right_bumper){
+                    if(rightclawopen){
+                        g2control.closeRightClaw();
+                        sleep(250);
+                    }
+                    else{
+                        g2control.openRightClaw();
+                        sleep(250);
+                    }
+                }
+                if (gamepad2.left_trigger>=0.1) {
                     //if claw is closed then open it
                     if (clawopen == false) {
                         g2control.openClaw();
@@ -210,6 +233,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                     }
                     clawopen = !clawopen;
+                    rightclawopen= !rightclawopen;
+                    leftclawopen = !leftclawopen;
                 }
 
                 //Claw - move up and down, when its already up, move it down, when its already down, then move up
@@ -224,6 +249,9 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     clawup = !clawup;
                 }
                 if(gamepad2.left_bumper){
+                    g2control.planeLaunch();
+                    sleep(1000);
+                    g2control.planeLaunchstop();
 
                 }
                 //make the arm lift so we can manually reset it
@@ -233,12 +261,6 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 //make the arm go back down to default position on the ground
                 if (gamepad2.x) {
                     g2control.armDown();
-                }
-                if(gamepad2.left_trigger>=0.1){
-                    g2control.closeClaw();
-                    g2control.clawDown();
-                    sleep(500);
-                    g2control.openClaw();
                 }
                 if (gamepad2.dpad_up) {
                     if (defaultscore == false) {
@@ -272,6 +294,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         g2control.openClaw();
                         clawup = false;
                         clawopen = true;
+                        rightclawopen= true;
+                        leftclawopen = true;
                         sleep(250);
                     }
                     defaultscore = !defaultscore;
@@ -316,6 +340,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         g2control.openClaw();
                         clawup = false;
                         clawopen = true;
+                        rightclawopen= true;
+                        leftclawopen = true;
                         sleep(250);
                     }
                     mediumscore = !mediumscore;
@@ -361,6 +387,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         g2control.openClaw();
                         clawup = false;
                         clawopen = true;
+                        rightclawopen= true;
+                        leftclawopen = true;
                         sleep(250);
                     }
                     highscore = !highscore;

@@ -23,6 +23,7 @@
 package teamcode.NanoTrojansAuto;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -33,36 +34,19 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvSwitchableWebcam;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-//import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-//import org.firstinspires.ftc.robotcore.external.hardware.camera.switchable.SwitchableCamera;
 import teamcode.OpenCVExt.RSideConeLocDetection;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.path.Path;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-
 import teamcode.controls_NanoTrojans;
-import teamcode.drive.DriveConstants;
 import teamcode.drive.SampleMecanumDrive;
 import teamcode.trajectorysequence.TrajectorySequence;
-
-import com.acmerobotics.roadrunner.path.heading.TangentInterpolator;
-
-
-import org.firstinspires.ftc.teamcode.PoseStorage;
-
-import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 
 /**
  * This class contains the Autonomous Mode program.
  */
 @Config
 @Autonomous(name = "Auto_RedClose_OpenCV")
-public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
+public class NanoTorjanAuto_RedClose_OpenCV extends LinearOpMode {
 
     // Constants for encoder counts and wheel measurements
     static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
@@ -83,7 +67,7 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
     private Servo clawRight = null;
     private DcMotor lsRight = null;
     private DcMotor lsLeft = null;
-    private DcMotor intake = null;
+    //private DcMotor intake = null;
     private CRServo planeLaunch = null;
     private CRServo robotLift = null;
     private int frontLeftMotorCounts = 0;
@@ -107,7 +91,7 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         rearRightMotor = hardwareMap.get(DcMotor.class, "backRight");
         lsRight = hardwareMap.dcMotor.get("lsRight");
         lsLeft = hardwareMap.dcMotor.get("lsLeft");
-        intake = hardwareMap.dcMotor.get("intake");
+        //intake = hardwareMap.dcMotor.get("intake");
 
         //Servo Motors
         planeLaunch = hardwareMap.crservo.get("planeLaunch");
@@ -143,7 +127,7 @@ public class NanoTorjanAuto_RedRight_OpenCV extends LinearOpMode {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new RSideConeLocDetection();
         webcam.setPipeline(pipeline);
-        g2control=new controls_NanoTrojans(intake, lsRight, lsLeft, planeLaunch,
+        g2control=new controls_NanoTrojans( lsRight, lsLeft, planeLaunch,
                 clawLeft, clawRight, clawLift, armLift, robotLift);
 
         /*

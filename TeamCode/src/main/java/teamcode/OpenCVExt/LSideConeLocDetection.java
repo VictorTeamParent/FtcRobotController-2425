@@ -34,8 +34,8 @@ public class LSideConeLocDetection extends OpenCvPipeline {
      * The core values which define the location and size of the sample regions
      * The following is design for size 320 x 240 resolution
      */
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(65, 75);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(205, 75);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0, 73);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(195, 55);
 
 //    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(70, 0);
 //    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(225, 0);
@@ -123,7 +123,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
 
         if(sumColorsRg1.val[0] == maxColorR1 || sumColorsRg1.val[2] == maxColorR1)
         {
-            position = LSideConePosition.CENTER; // Record our analysis
+            position = LSideConePosition.LEFT; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -138,7 +138,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
        } //else if (max == avg3) // Was it from region 3?
         else if (sumColorsRg3.val[0] == maxColorR3 || sumColorsRg3.val[2] == maxColorR3)
         {
-            position = LSideConePosition.RIGHT; // Record our analysis
+            position = LSideConePosition.CENTER; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -152,7 +152,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
                     -1); // Negative thickness means solid fill
         }
         else
-            position = LSideConePosition.LEFT; // Record our analysis
+            position = LSideConePosition.RIGHT; // Record our analysis
 
         /*
          * Render the 'input' buffer to the viewport. But note this is not

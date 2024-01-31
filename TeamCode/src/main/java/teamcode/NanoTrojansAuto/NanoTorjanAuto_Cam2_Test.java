@@ -15,8 +15,8 @@ import teamcode.OpenCVExt.LSideConeLocDetection;
 /**
  * This class contains the Autonomous Mode program.
  */
-@Autonomous(name = "Auto_RedRight_OpenCV_example2")
-public class NanoTorjanAuto_OpenCV_Example2 extends LinearOpMode {
+@Autonomous(name = "Auto_Cam2_Test")
+public class NanoTorjanAuto_Cam2_Test extends LinearOpMode {
 
     OpenCvWebcam webcam;
     LSideConeLocDetection pipeline;

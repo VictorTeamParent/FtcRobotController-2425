@@ -9,15 +9,14 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import teamcode.OpenCVExt.BlueColorDetection;
 import teamcode.OpenCVExt.RSideConeLocDetection;
 
 
 /**
  * This class contains the Autonomous Mode program.
  */
-@Autonomous(name = "Auto_RedRight_OpenCV_example")
-public class NanoTorjanAuto_OpenCV_Example extends LinearOpMode {
+@Autonomous(name = "Auto_Cam1_Test")
+public class NanoTorjanAuto_Cam1_Test extends LinearOpMode {
 
     OpenCvWebcam webcam;
     RSideConeLocDetection pipeline;

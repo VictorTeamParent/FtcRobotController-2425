@@ -37,7 +37,7 @@ public class DriveConstants {
     //public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
     //            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
     // Now we remove the last parameter and input f value from the tunning
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 10, 13.221254006410254);
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(20, 0, 8, 12.51254006410254);
     //            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
     /*
@@ -51,7 +51,7 @@ public class DriveConstants {
     public static double WHEEL_RADIUS = 1.88976; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
     //public static double TRACK_WIDTH = 15.246;   //16.34; // in
-    public static double TRACK_WIDTH = 16.45;   //16.5; // in
+    public static double TRACK_WIDTH = 16.1;   //16.5; // in
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
      * the built-in velocity PID, *these values are fine as is*. However, if you do not have drive
@@ -69,8 +69,8 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 43.916988808671444;
-    public static double MAX_ACCEL = 43.916988808671444;
+    public static double MAX_VEL = 47.71698880867144;
+    public static double MAX_ACCEL = 47.71698880867144;
 
     //public static double MAX_ANG_VEL = 0.2199115037918091;
     public static double MAX_ANG_VEL = Math.toRadians(180);
