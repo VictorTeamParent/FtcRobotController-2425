@@ -165,47 +165,94 @@ public class NanoTorjanAuto_RedClose_OpenCV extends LinearOpMode {
             telemetry.update();
 
             if (position == RSideConeLocDetection.RSideConePosition.LEFT) {
-                //strafeLeft(18, 1);
                 telemetry.addLine("Detected Cone at Left");
                 telemetry.update();
+
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(33)
-                        .turn(Math.toRadians(-90))
-                        .forward(8)
-                        .back(10)
+                        .forward(28)
                         .turn(Math.toRadians(90))
-                        .turn(Math.toRadians(90))
-                        .forward(36)
-                        .strafeLeft(2)
+                        .back(3)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
-                doRestStuff();
+                dropTheConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(35)
+                        .forward(34)
+                        .strafeLeft(4)
+                        .forward(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
+                sleep(500);
+                doRestStuff();
+                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .strafeRight(27)
+                        .build();
+                drive.followTrajectorySequence(trajSeq3);
 
                 stop = true;
 
+//            } else if (position == RSideConeLocDetection.RSideConePosition.CENTER) {
+//                telemetry.addLine("Detected Cone at Center");
+//                telemetry.update();
+//                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .forward(49)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq);
+//                //sleep(500);
+//                dropTheConePixel();
+//
+//                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .forward(6)
+//                        .turn(Math.toRadians(90))
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq2);
+////                turnLeft90D5MoreD(0.8);
+//                //sleep(500);
+//                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
+//
+//                        .strafeRight(6)
+//                        .forward(13)
+//                        .strafeRight(21)
+//                        .forward(23)
+//                        .strafeRight(2)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq3);
+//                //sleep(500);
+//                doRestStuff();
+//                //********Parking
+//                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .strafeRight(22)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq4);
+//
+//                stop = true;
             } else if (position == RSideConeLocDetection.RSideConePosition.CENTER) {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
-                 /*
-                 *  push the pixel to the middle line and back a little bit and
-                 */
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(35)
-                        .back(8)    //Going throught the middle door to booard
+                        .forward(28)
                         .turn(Math.toRadians(90))
-                        .forward(39)
-                        .strafeLeft(2)
+                        .turn(Math.toRadians(90))
                         .build();
                 drive.followTrajectorySequence(trajSeq);
-                doRestStuff();
+                //sleep(500);
+                dropTheConePixel();
+
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(35)
+                        .strafeLeft(20)
+                        .turn(-Math.toRadians(90))
+                        .forward(17)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
+//                turnLeft90D5MoreD(0.8);
+                //sleep(500);
+
+                //sleep(500);
+                doRestStuff();
+                //********Parking
+                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .strafeRight(24)
+                        .build();
+                drive.followTrajectorySequence(trajSeq4);
 
                 stop = true;
 
@@ -214,61 +261,71 @@ public class NanoTorjanAuto_RedClose_OpenCV extends LinearOpMode {
                 telemetry.update();
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(17)
-                        .forward(25)
-                        .back(10)
-                        .turn(Math.toRadians(90))
                         .forward(28)
-                        .strafeLeft(12)
+                        .turn(Math.toRadians(90))
+                        .forward(20)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
-                doRestStuff();
+                dropTheConePixel();
+
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(32)
+
+                        .forward(18)
+                        .strafeRight(8)
+
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
+                doRestStuff();
+
+                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .strafeRight(18)
+                        .build();
+                drive.followTrajectorySequence(trajSeq3);
 
                 stop = true;
             }
         }
     }
 
+    private void dropTheConePixel() {
+        g2control.clawDown();
+        sleep(500);
+        g2control.openLeftClaw();
+        //g2control.openClaw();
+        sleep(500);
+        g2control.clawUp();
+        //g2control.closeClaw();
+        g2control.closeLeftClaw();
+    }
+
     private void doRestStuff() {
         //************************
         // Lift claw and setup position
-        g2control.smallls();
-        sleep(250);
-        g2control.smalllsstop();
         //end move up
         g2control.armFull();
-        sleep(500);
-        g2control.clawUp();
-        g2control.reversesmallls();
         sleep(250);
-        g2control.reversesmalllsstop();
-        sleep(4000);
+        g2control.clawUp();
+        sleep(2000);
         g2control.openClaw();
-        sleep(3000);
+        sleep(500);
 
 
 
 
-        clawLeft.setPosition(1); //interchangable
-        clawRight.setPosition(0);
+
 
         g2control.armUp();
-        sleep(1000);
+        sleep(500);
         g2control.clawUp();
-        sleep(1000);
+        sleep(500);
         g2control.closeClaw();
         g2control.armDown();
         sleep(250);
         g2control.clawUp();
-        sleep(1000);
+        //sleep(500);
         //g2control.openClaw();
 
     }
-
     private void setRunMode(DcMotor.RunMode mode) {
         frontLeftMotor.setMode(mode);
         frontRightMotor.setMode(mode);
