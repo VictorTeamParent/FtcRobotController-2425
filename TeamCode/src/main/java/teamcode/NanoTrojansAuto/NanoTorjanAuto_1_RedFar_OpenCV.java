@@ -20,98 +20,43 @@
  * SOFTWARE.
  */
 
-package teamcode;
+package teamcode.NanoTrojansAuto;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
+
+import teamcode.OpenCVExt.LSideConeLocDetection;
+import teamcode.controls_NanoTrojans;
+import teamcode.drive.SampleMecanumDrive;
+import teamcode.trajectorysequence.TrajectorySequence;
 
 /**
  * This class contains the Autonomous Mode program.
  */
-@Autonomous(name="Auto_BlueRightNoStrafe")
-public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
-{
-//    private DcMotor frontLeft;
-//    private DcMotor frontRight;
-//    private DcMotor backLeft;
-//    private DcMotor backRight;
-//
-//    static final double COUNTS_PER_INCH = 537.7; // Replace this value with your actual counts per inch
-//
-//    @Override
-//    public void runOpMode() {
-//
-//        // Initialize motors
-//        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-//        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-//        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-//        backRight = hardwareMap.get(DcMotor.class, "backRight");
-//
-//        // Set motor directions
-//        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-//        frontRight.setDirection(DcMotor.Direction.REVERSE);
-//        backLeft.setDirection(DcMotor.Direction.FORWARD);
-//        backRight.setDirection(DcMotor.Direction.REVERSE);
-//
-//        // Set motor modes
-//        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//
-//        waitForStart();
-//
-//        // Move the robot forward 12 inches
-//        moveDistance(2);
-//
-//        // Stop the robot
-//        stopRobot();
-//    }
-//
-//    private void setRunMode(DcMotor.RunMode mode) {
-//        frontLeft.setMode(mode);
-//        frontRight.setMode(mode);
-//        backLeft.setMode(mode);
-//        backRight.setMode(mode);
-//    }
-//
-//    private void moveDistance(double inches) {
-//        int targetPosition = (int) (inches * COUNTS_PER_INCH);
-//
-//        frontLeft.setTargetPosition(targetPosition);
-//        frontRight.setTargetPosition(targetPosition);
-//        backLeft.setTargetPosition(targetPosition);
-//        backRight.setTargetPosition(targetPosition);
-//
-//        setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//        double power = .5; // Adjust power as needed
-//        frontLeft.setPower(power);
-//        frontRight.setPower(power);
-//        backLeft.setPower(power);
-//        backRight.setPower(power);
-//
-//        while (opModeIsActive() &&
-//                frontLeft.isBusy() &&
-//                frontRight.isBusy() &&
-//                backLeft.isBusy() &&
-//                backRight.isBusy()) {
-//            // Wait for motors to reach target position
-//        }
-//
-//        stopRobot();
-//    }
-//
-//    private void stopRobot() {
-//        frontLeft.setPower(0);
-//        frontRight.setPower(0);
-//        backLeft.setPower(0);
-//        backRight.setPower(0);
-//
-//        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//    }
+@Config
+@Autonomous(name = "Auto_1_RedFar_OpenCV")
+public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
 
-
+    // Constants for encoder counts and wheel measurements
+    static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
+    static final double WHEEL_DIAMETER_MM = 96.0; // Wheel diameter in millimeters
+    static final double MM_PER_REVOLUTION = WHEEL_DIAMETER_MM * Math.PI; // Wheel circumference
+    static final double COUNTS_PER_MM = COUNTS_PER_REVOLUTION / MM_PER_REVOLUTION; // Counts per millimeter
+    static final double COUNTS_PER_INCH = COUNTS_PER_MM * 25.4; // Counts per inch
+    OpenCvWebcam webcam2;
+    LSideConeLocDetection pipeline2;
+    LSideConeLocDetection.LSideConePosition position2 = LSideConeLocDetection.LSideConePosition.OTHER;
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor rearLeftMotor;
@@ -122,22 +67,23 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
     private Servo clawRight = null;
     private DcMotor lsRight = null;
     private DcMotor lsLeft = null;
-    // Constants for encoder counts and wheel measurements
-    static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
-    static final double WHEEL_DIAMETER_MM = 96.0; // Wheel diameter in millimeters
-    static final double MM_PER_REVOLUTION = WHEEL_DIAMETER_MM * Math.PI; // Wheel circumference
-    static final double COUNTS_PER_MM = COUNTS_PER_REVOLUTION / MM_PER_REVOLUTION; // Counts per millimeter
-    static final double COUNTS_PER_INCH = COUNTS_PER_MM * 25.4; // Counts per inch
-
-
+    //private DcMotor intake = null;
+    private CRServo planeLaunch = null;
+    private CRServo robotLift = null;
     private int frontLeftMotorCounts = 0;
-    private int frontRightMotorCounts = 0;
 
+
+    //The following are for single camera
+    private int frontRightMotorCounts = 0;
     private int rearLeftMotorCounts = 0;
     private int rearRightMotorCounts = 0;
+    private controls_NanoTrojans g2control;
+
+
+    public static double parkingLongStrafe = 30;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         // Initialize motors
         frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
@@ -145,16 +91,24 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
         rearRightMotor = hardwareMap.get(DcMotor.class, "backRight");
         lsRight = hardwareMap.dcMotor.get("lsRight");
         lsLeft = hardwareMap.dcMotor.get("lsLeft");
+        //intake = hardwareMap.dcMotor.get("intake");
 
         //Servo Motors
+        planeLaunch = hardwareMap.crservo.get("planeLaunch");
+        robotLift = hardwareMap.crservo.get("robotLift");
+
+        //hang
+
 
         // get 2 claw motors
         clawLeft = hardwareMap.servo.get("clawLeft");
-        clawRight= hardwareMap.servo.get("clawRight");
+        clawRight = hardwareMap.servo.get("clawRight");
 
         // get 2 arm motors
         clawLift = hardwareMap.servo.get("clawLift");
-        armLift= hardwareMap.servo.get("armLift");
+        armLift = hardwareMap.servo.get("armLift");
+
+
 
         // Set motor directions (adjust as needed based on your robot configuration)
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -166,82 +120,175 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        /*
+         *  Initialize camera and set pipeline
+         */
+        int cameraMonitorViewId2 = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam2 = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId2);
+        pipeline2 = new LSideConeLocDetection();
+        webcam2.setPipeline(pipeline2);
+        g2control=new controls_NanoTrojans( lsRight, lsLeft, planeLaunch,
+                clawLeft, clawRight, clawLift, armLift, robotLift);
+
+        /*
+         *  Create a thread for camera, so it will watch for us
+         */
+        webcam2.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                webcam2.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+            }
+        });
+
+        /*
+         *  create an instacne for MecanumDrive car
+         */
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        boolean stop = false;
+
         waitForStart();
+        sleep(2000);
+        while (opModeIsActive() && !stop) {
 
-        //moveBackward(3);
-        //sleep(500); // milliseconds
+            g2control.closeClaw();
+            g2control.clawUp();
 
-        //while(opModeIsActive()) {
-            // Move the robot forward 12 inches
-            sleep(250);
-            clawLeft.setPosition(1);
-            clawRight.setPosition(0.6);
-            moveDistance(25, 0.3);
+            // Don't burn CPU cycles busy-looping in this sample
+            //sleep(1000);
 
-            // Pause for a brief moment (adjust as needed)
+            position2 = pipeline2.getPosition();
+            telemetry.addData("Blue Close Got position", position2);
+            telemetry.update();
 
+            if (position2 == LSideConeLocDetection.LSideConePosition.RIGHT) {
 
-            sleep(1000); // milliseconds
+                telemetry.addLine("Detected Cone at Right");
+                telemetry.update();
 
-           //moveDistance(-5, 0.3);
+                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
+                        .forward(28)
+                        .turn(Math.toRadians(90))
+                        .forward(25)
+                        .build();
+                drive.followTrajectorySequence(trajSeq);
+                dropTheConePixel();
 
-            // Perform a 90-degree right turn
-            turnLeft90D(1);
+                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .forward(64)
+                        .strafeRight(5)
+                        .build();
+                drive.followTrajectorySequence(trajSeq2);
+                doRestStuff();
 
-            // Pause for a brief moment (adjust as needed)
-            sleep(500); // milliseconds
+                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .strafeLeft(27)
+                        .build();
+                drive.followTrajectorySequence(trajSeq3);
 
-            // Perform a 90-degree right turn
-            //turnLeft90D();
-
-             //move to the board
-             moveDistance(30, 0.4);
-             sleep(1000);
-            moveDistance(4, 0.2);
-            sleep(1000);
-            //move up linear slides
-            lsRight.setPower(-1);
-            lsLeft.setPower(1);
-            sleep(250);
-            lsRight.setPower(0);
-            lsLeft.setPower(0);
-            //end move up
-            armLift.setPosition(0.8);
-            sleep(500);
-            clawLift.setPosition(1);
-
-            sleep(2000);
-            clawLeft.setPosition(0.5);
-            clawRight.setPosition(1);
-            lsRight.setPower(1);
-            lsLeft.setPower(-1);
-            sleep(250);
-            lsRight.setPower(0);
-            lsLeft.setPower(0);
-            armLift.setPosition(0.5);
-            sleep(1000);
-            clawLift.setPosition(0.8);
-            clawLeft.setPosition(1);
-            clawRight.setPosition(0.6);
-            armLift.setPosition(0.125);
-            sleep(250);
-            clawLift.setPosition(0.173);
-            clawLeft.setPosition(0.5);
-            clawRight.setPosition(1);
-
-//            //for parking
-//            sleep(250);
-//            strafeLeft(20, 1);
+                stop = true;
 //
-//            sleep(250);
-//            moveDistance(12, 0.3);
+            } else if (position2 == LSideConeLocDetection.LSideConePosition.CENTER) {
+                telemetry.addLine("Detected Cone at Center");
+                telemetry.update();
+                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
+                        .forward(27.5)
+                        .turn(Math.toRadians(90))
+                        .turn(Math.toRadians(90))
+                        .build();
+                drive.followTrajectorySequence(trajSeq);
+                //sleep(500);
+                dropTheConePixel();
 
+                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .forward(2)
+                        .turn(-Math.toRadians(90))
+                        .forward(87)
+                        .strafeLeft(3)
+                        .build();
+                drive.followTrajectorySequence(trajSeq2);
+//                turnLeft90D5MoreD(0.8);
+                doRestStuff();
+                //********Parking
+                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .strafeLeft(24)
+                        .build();
+                drive.followTrajectorySequence(trajSeq4);
 
-        // Stop the robot
-            stopRobot();
-        //}
+                stop = true;
+
+            } else if (position2 == LSideConeLocDetection.LSideConePosition.LEFT) {
+
+                telemetry.addLine("Detected Cone at Left");
+                telemetry.update();
+
+                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
+                        .forward(28)
+                        .turn(Math.toRadians(90))
+                        .back(3)
+                        .forward(5)
+                        .build();
+                drive.followTrajectorySequence(trajSeq);
+                dropTheConePixel();
+                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .forward(86)
+                        .strafeLeft(4)
+                        .build();
+                drive.followTrajectorySequence(trajSeq2);
+                sleep(500);
+                doRestStuff();
+                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
+                        .strafeLeft(28)
+                        .build();
+                drive.followTrajectorySequence(trajSeq3);
+
+                stop = true;
+            }
+        }
     }
 
+    private void dropTheConePixel() {
+        g2control.clawDown();
+        sleep(500);
+        g2control.openLeftClaw();
+        //g2control.openClaw();
+        sleep(500);
+        g2control.clawUp();
+        //g2control.closeClaw();
+        g2control.closeLeftClaw();
+    }
+
+    private void doRestStuff() {
+        //************************
+        // Lift claw and setup position
+        //end move up
+        g2control.armFull();
+        sleep(250);
+        g2control.clawUp();
+        sleep(2000);
+        g2control.openClaw();
+        sleep(500);
+
+
+
+
+
+
+        g2control.armUp();
+        sleep(500);
+        g2control.clawUp();
+        sleep(500);
+        g2control.closeClaw();
+        g2control.armDown();
+        sleep(250);
+        g2control.clawUp();
+        //sleep(500);
+        //g2control.openClaw();
+
+    }
     private void setRunMode(DcMotor.RunMode mode) {
         frontLeftMotor.setMode(mode);
         frontRightMotor.setMode(mode);
@@ -249,13 +296,14 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
         rearRightMotor.setMode(mode);
     }
 
-    private void moveDistance(double inches , double power) {
+
+    private void moveDistance(double inches, double power) {
         int targetPosition = (int) (inches * COUNTS_PER_INCH);
 
-        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition()+targetPosition);
-        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition()+targetPosition);
-        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition()+targetPosition);
-        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition()+targetPosition);
+        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + targetPosition);
+        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() + targetPosition);
+        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition() + targetPosition);
+        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition() + targetPosition);
 
 
         setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -281,7 +329,7 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
 
 
     private void turnLeft90D(double power) {
-        int turnCounts = calculateTurnCounts();
+        int turnCounts = calculateTurnCountsLeft();
 
         // Set target positions for motors to perform a 90-degree right turn
         frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + turnCounts);
@@ -314,7 +362,7 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
 
 
     private void turnRight90D(double power) {
-        int turnCounts = calculateTurnCounts();
+        int turnCounts = calculateTurnCountsRight();
 
         // Set target positions for motors to perform a 90-degree right turn
         frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() - turnCounts);
@@ -346,10 +394,10 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
     private void strafeRight(double inches, double power) {
         int targetPosition = (int) (inches * COUNTS_PER_INCH);
 
-        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition()-targetPosition);
-        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() -targetPosition);
-        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition()+targetPosition);
-        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition()+targetPosition);
+        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() - targetPosition);
+        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() - targetPosition);
+        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition() + targetPosition);
+        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition() + targetPosition);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -362,7 +410,7 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
         rearRightMotor.setPower(power);
 
         while (opModeIsActive() && frontLeftMotor.isBusy() && frontRightMotor.isBusy() &&
-                rearLeftMotor.isBusy() &&rearRightMotor.isBusy()) {
+                rearLeftMotor.isBusy() && rearRightMotor.isBusy()) {
             // Wait until motors reach target position
         }
 
@@ -380,10 +428,10 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
     private void strafeLeft(double inches, double power) {
         int targetPosition = (int) (inches * COUNTS_PER_INCH);
 
-        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition()+targetPosition);
-        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() +targetPosition);
-        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition()-targetPosition);
-        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition()-targetPosition);
+        frontLeftMotor.setTargetPosition(frontLeftMotor.getCurrentPosition() + targetPosition);
+        frontRightMotor.setTargetPosition(frontRightMotor.getCurrentPosition() + targetPosition);
+        rearLeftMotor.setTargetPosition(rearLeftMotor.getCurrentPosition() - targetPosition);
+        rearRightMotor.setTargetPosition(rearRightMotor.getCurrentPosition() - targetPosition);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -396,7 +444,7 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
         rearRightMotor.setPower(power);
 
         while (opModeIsActive() && frontLeftMotor.isBusy() && frontRightMotor.isBusy() &&
-                rearLeftMotor.isBusy() &&rearRightMotor.isBusy()) {
+                rearLeftMotor.isBusy() && rearRightMotor.isBusy()) {
             // Wait until motors reach target position
         }
 
@@ -411,10 +459,19 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
         rearRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    private int calculateTurnCounts() {
+    private int calculateTurnCountsLeft() {
         // Calculate encoder counts needed for a 90-degree turn based on robot-specific measurements
         // Example calculation: Assume each motor needs to move half of the circumference of a circle with a 12-inch radius
         double robotWidth = 28; // This value represents half the distance between the wheels
+        double wheelCircumference = Math.PI * robotWidth;
+        double countsPerInch = COUNTS_PER_INCH; // Use your previously calculated value
+        return (int) ((wheelCircumference / 4.0) * countsPerInch); // 90-degree turn for each wheel
+    }
+
+    private int calculateTurnCountsRight() {
+        // Calculate encoder counts needed for a 90-degree turn based on robot-specific measurements
+        // Example calculation: Assume each motor needs to move half of the circumference of a circle with a 12-inch radius
+        double robotWidth = 27.5; // This value represents half the distance between the wheels
         double wheelCircumference = Math.PI * robotWidth;
         double countsPerInch = COUNTS_PER_INCH; // Use your previously calculated value
         return (int) ((wheelCircumference / 4.0) * countsPerInch); // 90-degree turn for each wheel
@@ -425,7 +482,6 @@ public class NanoTorjanAuto_BlueRight_no_strafe extends LinearOpMode
         frontRightMotor.setPower(0);
         rearLeftMotor.setPower(0);
         rearRightMotor.setPower(0);
-
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 

@@ -171,20 +171,21 @@ public class NanoTorjanAuto_BlueClose_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(28)
                         .turn(-Math.toRadians(90))
-                        .back(3)
+                        .back(6)
+                        .forward(3)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(34)
-                        .strafeRight(10)
+                        .strafeRight(2)
                         .forward(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 sleep(500);
                 doRestStuff();
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(30)
+                        .strafeLeft(28)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -229,7 +230,7 @@ public class NanoTorjanAuto_BlueClose_OpenCV extends LinearOpMode {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(28)
+                        .forward(27)
                         .turn(Math.toRadians(90))
                         .turn(Math.toRadians(90))
                         .build();
@@ -241,7 +242,7 @@ public class NanoTorjanAuto_BlueClose_OpenCV extends LinearOpMode {
                         .strafeRight(20)
                         .turn(Math.toRadians(90))
                         .forward(18)
-                        .strafeRight(2)
+                        .strafeRight(3)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
 //                turnLeft90D5MoreD(0.8);
@@ -264,21 +265,21 @@ public class NanoTorjanAuto_BlueClose_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(28)
                         .turn(-Math.toRadians(90))
-                        .forward(20)
+                        .forward(21)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
 
-                        .forward(19)
                         .strafeLeft(8)
+                        .forward(18)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
 
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(18)
+                        .strafeLeft(19)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 

@@ -195,7 +195,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 lsLeft.setPower(-lspower);
 
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
-                if (gamepad2.left_bumper) {
+                if (gamepad2.right_bumper) {
                     if (leftclawopen) {
                         g2control.closeLeftClaw();
                         sleep(250);
@@ -204,6 +204,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         g2control.openLeftClaw();
                         sleep(250);
                     }
+                    leftclawopen=!leftclawopen;
 
                 }
                 if (gamepad2.y){
@@ -211,7 +212,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     sleep(1000);
                     g2control.planeLaunchstop();
                 }
-                if (gamepad2.right_bumper){
+                if (gamepad2.left_bumper){
                     if(rightclawopen){
                         g2control.closeRightClaw();
                         sleep(250);
@@ -220,6 +221,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         g2control.openRightClaw();
                         sleep(250);
                     }
+                    rightclawopen= !rightclawopen;
                 }
                 if (gamepad2.left_trigger>=0.1) {
                     //if claw is closed then open it
