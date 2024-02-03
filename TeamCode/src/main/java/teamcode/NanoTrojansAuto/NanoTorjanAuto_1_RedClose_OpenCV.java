@@ -79,7 +79,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
     private int rearRightMotorCounts = 0;
     private controls_NanoTrojans g2control;
 
-
+    private DcMotor dcArm;
     public static double parkingLongStrafe = 30;
 
     @Override
@@ -107,7 +107,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
         // get 2 arm motors
         clawLift = hardwareMap.servo.get("clawLift");
         armLift = hardwareMap.servo.get("armLift");
-
+        dcArm = hardwareMap.dcMotor.get("dcArm");
 
 
         // Set motor directions (adjust as needed based on your robot configuration)
@@ -191,41 +191,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
 
                 stop = true;
 
-//            } else if (position == RSideConeLocDetection.RSideConePosition.CENTER) {
-//                telemetry.addLine("Detected Cone at Center");
-//                telemetry.update();
-//                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-//                        .forward(49)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq);
-//                //sleep(500);
-//                dropTheConePixel();
-//
-//                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-//                        .forward(6)
-//                        .turn(Math.toRadians(90))
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq2);
-////                turnLeft90D5MoreD(0.8);
-//                //sleep(500);
-//                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-//
-//                        .strafeRight(6)
-//                        .forward(13)
-//                        .strafeRight(21)
-//                        .forward(23)
-//                        .strafeRight(2)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq3);
-//                //sleep(500);
-//                doRestStuff();
-//                //********Parking
-//                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
-//                        .strafeRight(22)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq4);
-//
-//                stop = true;
+
             } else if (position == RSideConeLocDetection.RSideConePosition.CENTER) {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
@@ -268,7 +234,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeRight(8)
-                        .forward(18)
+                        .forward(17)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
@@ -313,10 +279,10 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
         g2control.armUp();
         sleep(500);
         g2control.clawUp();
-        sleep(500);
+        //sleep(500);
         g2control.closeClaw();
         g2control.armDown();
-        sleep(250);
+        //sleep(250);
         g2control.clawUp();
         //sleep(500);
         //g2control.openClaw();

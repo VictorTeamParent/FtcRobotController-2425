@@ -70,6 +70,7 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
     //private DcMotor intake = null;
     private CRServo planeLaunch = null;
     private CRServo robotLift = null;
+    private DcMotor dcArm;
     private int frontLeftMotorCounts = 0;
 
 
@@ -108,7 +109,7 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
         clawLift = hardwareMap.servo.get("clawLift");
         armLift = hardwareMap.servo.get("armLift");
 
-
+        dcArm = hardwareMap.dcMotor.get("dcArm");
 
         // Set motor directions (adjust as needed based on your robot configuration)
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -151,7 +152,7 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
         boolean stop = false;
 
         waitForStart();
-        sleep(2000);
+        sleep(4000);
         while (opModeIsActive() && !stop) {
 
             g2control.closeClaw();
@@ -178,16 +179,16 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
                 dropTheConePixel();
                 //                doRestStuff();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(69)
-                        .strafeLeft(4)
-
+                        .forward(39)
+                        .strafeLeft(6)
+                        .forward(30)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
-                sleep(2000);
+                //sleep(2000);
                 doRestStuff();
                 //********Parking
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(17)
+                        .strafeLeft(19)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -212,14 +213,14 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
                         .strafeRight(50)
                         .turn(Math.toRadians(90))
                         .forward(37)
-                        .strafeRight(3)
+                        .strafeLeft(4)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
 //                turnLeft90D5MoreD(0.8);
                 doRestStuff();
                 //********Parking
                 TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(24)
+                        .strafeLeft(22)
                         .build();
                 drive.followTrajectorySequence(trajSeq4);
 
@@ -237,15 +238,15 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(82)
+                        .forward(87)
                         .strafeRight(8)
-                        .forward(4)
+                        //.forward(4)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 sleep(1000);
                 doRestStuff();
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(18)
+                        .strafeLeft(25)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -275,13 +276,13 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
         g2control.clawUp();
         sleep(2000);
         g2control.openClaw();
-        //sleep(500);
+        sleep(500);
 
 
         g2control.armUp();
         //sleep(500);
         g2control.clawUp();
-        //sleep(500);
+        sleep(500);
         g2control.closeClaw();
         g2control.armDown();
         //sleep(250);

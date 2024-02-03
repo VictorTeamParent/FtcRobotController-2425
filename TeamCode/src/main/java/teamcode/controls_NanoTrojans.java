@@ -8,6 +8,13 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 
 public class controls_NanoTrojans  {
+    // Constants for encoder counts and wheel measurements
+    static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
+    static final double WHEEL_DIAMETER_MM = 96.0; // Wheel diameter in millimeters
+    static final double MM_PER_REVOLUTION = WHEEL_DIAMETER_MM * Math.PI; // Wheel circumference
+    static final double COUNTS_PER_MM = COUNTS_PER_REVOLUTION / MM_PER_REVOLUTION; // Counts per millimeter
+    static final double COUNTS_PER_INCH = COUNTS_PER_MM * 25.4; // Counts per inch
+
     //private DcMotor intake = null;
     private DcMotor lsRight = null;
     private DcMotor lsLeft = null;
@@ -28,6 +35,7 @@ public class controls_NanoTrojans  {
     private Servo clawLift = null;
     private Servo armLift = null;
     private CRServo robotLift = null;
+
     public controls_NanoTrojans( DcMotor lsR, DcMotor lsL, CRServo planeL,
                                      Servo clawL, Servo clawR, Servo clawLi, Servo armL, CRServo robotL)
     {
@@ -40,17 +48,18 @@ public class controls_NanoTrojans  {
         clawLift=clawLi;
         armLift=armL;
         robotLift=robotL;
+//        dcArm =arm;
     }
     public void closeClaw()
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
-        clawLeft.setPosition(1);
-        clawRight.setPosition(0.5);
+        clawLeft.setPosition(0.95);
+        clawRight.setPosition(0.55);
     }
     public void closeLeftClaw()
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
-        clawLeft.setPosition(1);
+        clawLeft.setPosition(0.95);
 
     }
 
@@ -58,7 +67,7 @@ public class controls_NanoTrojans  {
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
 
-        clawRight.setPosition(0.5);
+        clawRight.setPosition(0.55);
     }
     public void openClaw()
     {
@@ -128,12 +137,14 @@ public class controls_NanoTrojans  {
     {
         //same concept as clawUp, just on the arm.
         armLift.setPosition(0.25);
+//        moveArm(6,1);
 //        armLift.setPosition(0);
     }
     public void armDown()
     {
         //same thing as armUp but with a different position.
         armLift.setPosition(0.085);
+//        moveArm(-6,1);
     }
     public void armFull()
     {
@@ -205,4 +216,23 @@ public class controls_NanoTrojans  {
         lsRight.setPower(0);
         lsLeft.setPower(0);
     }
+
+//    private void moveArm(double inches, double power) {
+//        int targetPosition = (int) (inches * COUNTS_PER_INCH);
+//
+//        dcArm.setTargetPosition(dcArm.getCurrentPosition() + targetPosition);
+//
+//        dcArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        //double power = 0.3; // Adjust power as needed
+//        dcArm.setPower(power);
+//
+//        while ( dcArm.isBusy()) {
+//            // Wait for motors to reach target position
+//        }
+
+//        resetEncoderCounts();
+//        resetRobotPosition();
+//        stopRobot();
+//    }
 }

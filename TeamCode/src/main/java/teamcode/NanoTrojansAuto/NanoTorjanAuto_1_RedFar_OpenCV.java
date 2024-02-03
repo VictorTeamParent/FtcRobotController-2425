@@ -79,7 +79,7 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
     private int rearRightMotorCounts = 0;
     private controls_NanoTrojans g2control;
 
-
+    private DcMotor dcArm;
     public static double parkingLongStrafe = 30;
 
     @Override
@@ -108,13 +108,15 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
         clawLift = hardwareMap.servo.get("clawLift");
         armLift = hardwareMap.servo.get("armLift");
 
-
+        dcArm = hardwareMap.dcMotor.get("dcArm");
 
         // Set motor directions (adjust as needed based on your robot configuration)
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         rearLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         rearRightMotor.setDirection(DcMotor.Direction.REVERSE);
+
+
 
         // Set motor modes
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -170,7 +172,7 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
                 telemetry.update();
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(28)
+                        .forward(27)
                         .turn(Math.toRadians(90))
                         .forward(25)
                         .build();
@@ -195,7 +197,7 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(27.5)
+                        .forward(26)
                         .turn(Math.toRadians(90))
                         .turn(Math.toRadians(90))
                         .build();
@@ -205,16 +207,17 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(2)
+                        .strafeLeft(48)
                         .turn(-Math.toRadians(90))
-                        .forward(87)
-                        .strafeLeft(3)
+                        .forward(40)
+                        .strafeRight(4)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
 //                turnLeft90D5MoreD(0.8);
                 doRestStuff();
                 //********Parking
                 TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(24)
+                        .strafeLeft(20)
                         .build();
                 drive.followTrajectorySequence(trajSeq4);
 
@@ -226,7 +229,7 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
                 telemetry.update();
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(28)
+                        .forward(27)
                         .turn(Math.toRadians(90))
                         .back(3)
                         .forward(5)
@@ -235,13 +238,13 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
                 dropTheConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(86)
-                        .strafeLeft(4)
+                        .strafeLeft(5)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 sleep(500);
                 doRestStuff();
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(28)
+                        .strafeLeft(18)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -280,10 +283,10 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
         g2control.armUp();
         sleep(500);
         g2control.clawUp();
-        sleep(500);
+        //sleep(500);
         g2control.closeClaw();
         g2control.armDown();
-        sleep(250);
+        //sleep(250);
         g2control.clawUp();
         //sleep(500);
         //g2control.openClaw();
