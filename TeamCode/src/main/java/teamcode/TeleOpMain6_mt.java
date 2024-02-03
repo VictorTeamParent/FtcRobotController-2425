@@ -270,7 +270,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         sleep(250);
                     }
                     //automation to reset position
-                    else if (defaultscore == true) {
+                    else if (lowscore == true) {
 
                         g2control.armUp();
                         sleep(1000);
@@ -286,7 +286,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         leftclawopen = true;
                         sleep(250);
                     }
-                    defaultscore = !defaultscore;
+                    lowscore = !lowscore;
                 }
                 if (gamepad2.dpad_up) {
                     if (defaultscore == false) {

@@ -1,0 +1,35 @@
+/***************************************************/
+Road Runner tunning summary
+
+/****************************************************/
+
+ * MaxVelocityTuner
+ will run at max speed for the specified RUNTIME  By default, the bot will run full speed for 2 seconds. 
+ 
+ * DriveVelocityPIDTuner 
+ The bot will travel travel back and forth in a straight(ish) line over and over, default distance is 72 inches
+ 
+ 
+ * Follower PID Tuning
+ 
+ HEADING_PID and TRANSLATION_PID. Both options are located in the SampleMecanumDrive file.
+ Open up HEADING_PID first. Just keep increasing kP until the robot starts to keep an accurate heading. 
+ 
+ 
+* straigt Test
+GEAR_RATIO in DriveConstants.java :    if measured distance didn't match modify Gear_RATIo
+LATERAL_MULTIPLIER variable in SampleMecanumDrive.java:    if straft distance didn't match
+MAX_ANG_VEL field in your DriveConstants.java:    run Turn Test to make sure the robot turn 90 degrees 
+MAX_ANG_ACCEL field in your DriveConstants.java:   run Turn Test to make sure the robot turn 90 degrees
+
+DriveConstants.java file under TRACK_WIDTH:  
+
+TrackWidthTunerTo tune the track width manually, simply keep adjusting the track width yourself until it turns 180 degrees.
+ If the the bot turns less than 180 degrees, raise the trackwidth. 
+ If the bot turns more than 180 degrees, lower the trackwidth.
+ 
+ This will turn robot 180 5 times
+ 
+ 
+ * motor encoder test
+ We developed a class call Auto_Encoder_Test and Auto_Encoder_Test to make sure all motors under encoder are running well.

@@ -1,0 +1,11 @@
+GAMEPAD 2 CONTROLS
+RIGHT BUMPER- close/open
+RIGHT TRIGGER- claw up/down
+DPAD UP- normal score and reset
+DPAD RIGHT- medium score and reset
+DPAD DOWN- left score and reset
+A- arm go up half way
+X- arm go down
+RIGHT BUMPER- plane launch
+RIGHT JOYSTICK- linear slide up and down
+LEFT JOYSTICK- intake
