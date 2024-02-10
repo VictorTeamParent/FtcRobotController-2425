@@ -9,7 +9,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import teamcode.OpenCVExt.LSideConeLocDetection;
+import teamcode.OpenCVExt.LCamConeLocDetection;
 
 
 /**
@@ -19,7 +19,7 @@ import teamcode.OpenCVExt.LSideConeLocDetection;
 public class NanoTorjanAuto_Cam2_Test extends LinearOpMode {
 
     OpenCvWebcam webcam;
-    LSideConeLocDetection pipeline;
+    LCamConeLocDetection pipeline;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,7 +27,7 @@ public class NanoTorjanAuto_Cam2_Test extends LinearOpMode {
         // the following is for one camera
         int cameraMonitorViewId2 = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId2);
-        pipeline = new LSideConeLocDetection();
+        pipeline = new LCamConeLocDetection();
         webcam.setPipeline(pipeline);
 
 
@@ -38,7 +38,7 @@ public class NanoTorjanAuto_Cam2_Test extends LinearOpMode {
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
             }
 
             @Override

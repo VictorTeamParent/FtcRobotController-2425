@@ -45,8 +45,8 @@ import teamcode.trajectorysequence.TrajectorySequence;
  * This class contains the Autonomous Mode program.
  */
 @Config
-@Autonomous(name = "Auto_1_RedFar_OpenCV")
-public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
+@Autonomous(name = "Auto_1_RedFar_OpenCVe")
+public class NanoTorjanAuto_1_RedFar_OpenCV_e extends LinearOpMode {
 
     // Constants for encoder counts and wheel measurements
     static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
@@ -179,17 +179,17 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
 
-                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(63)
-                        .strafeRight(5)
-                        .build();
-                drive.followTrajectorySequence(trajSeq2);
-                doRestStuff();
-
-                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(27)
-                        .build();
-                drive.followTrajectorySequence(trajSeq3);
+//                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .forward(63)
+//                        .strafeRight(5)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq2);
+//                doRestStuff();
+//
+//                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .strafeLeft(27)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq3);
 
                 stop = true;
 //
@@ -205,21 +205,21 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
                 //sleep(500);
                 dropTheConePixel();
 
-                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(2)
-                        .strafeLeft(48)
-                        .turn(-Math.toRadians(90))
-                        .forward(39)
-                        .strafeRight(4)
-                        .build();
-                drive.followTrajectorySequence(trajSeq2);
-//                turnLeft90D5MoreD(0.8);
-                doRestStuff();
-                //********Parking
-                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(20)
-                        .build();
-                drive.followTrajectorySequence(trajSeq4);
+//                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .forward(2)
+//                        .strafeLeft(48)
+//                        .turn(-Math.toRadians(90))
+//                        .forward(39)
+//                        .strafeRight(4)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq2);
+////                turnLeft90D5MoreD(0.8);
+//                doRestStuff();
+//                //********Parking
+//                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .strafeLeft(20)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq4);
 
                 stop = true;
 
@@ -236,17 +236,17 @@ public class NanoTorjanAuto_1_RedFar_OpenCV extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
-                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(85)
-                        .strafeLeft(5)
-                        .build();
-                drive.followTrajectorySequence(trajSeq2);
-                sleep(500);
-                doRestStuff();
-                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(18)
-                        .build();
-                drive.followTrajectorySequence(trajSeq3);
+//                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .forward(85)
+//                        .strafeLeft(5)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq2);
+//                sleep(500);
+//                doRestStuff();
+//                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .strafeLeft(18)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq3);
 
                 stop = true;
             }

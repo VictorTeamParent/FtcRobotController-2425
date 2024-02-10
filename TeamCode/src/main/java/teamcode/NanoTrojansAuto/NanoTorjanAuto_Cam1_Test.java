@@ -9,7 +9,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import teamcode.OpenCVExt.RSideConeLocDetection;
+import teamcode.OpenCVExt.RCamConeLocDetection;
 
 
 /**
@@ -19,7 +19,7 @@ import teamcode.OpenCVExt.RSideConeLocDetection;
 public class NanoTorjanAuto_Cam1_Test extends LinearOpMode {
 
     OpenCvWebcam webcam;
-    RSideConeLocDetection pipeline;
+    RCamConeLocDetection pipeline;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,7 +27,7 @@ public class NanoTorjanAuto_Cam1_Test extends LinearOpMode {
         // the following is for one camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new RSideConeLocDetection();
+        pipeline = new RCamConeLocDetection();
         webcam.setPipeline(pipeline);
 
 
