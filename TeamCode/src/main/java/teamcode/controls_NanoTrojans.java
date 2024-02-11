@@ -110,11 +110,13 @@ public class controls_NanoTrojans  {
     public void planeLaunch()
     {
         //plane launch also uses a continuous servo so it has the same concept as the hang mechanism, it basically just turns the servo for a second and then turns it off.
-        planeLaunch.setPower(1);
+        planeLaunch.setPower(-0.2);
+        //planeLaunch.setPosition(0.55);
     }
     public void planeLaunchstop()
     {
         planeLaunch.setPower(0);
+        //planeLaunch.setPosition(0.5);
     }
     public void clawDown()
     {
@@ -143,12 +145,13 @@ public class controls_NanoTrojans  {
     public void armDown()
     {
         //same thing as armUp but with a different position.
-        armLift.setPosition(0.085);
+        //armLift.setPosition(0.085);
+        armLift.setPosition(0.045);
 //        moveArm(-6,1);
     }
     public void armFull()
     {
-        armLift.setPosition(1);
+        armLift.setPosition(0.95);
     }
     public void smallls()
     {

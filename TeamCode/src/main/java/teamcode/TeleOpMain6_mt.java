@@ -120,10 +120,12 @@ public class TeleOpMain6_mt extends LinearOpMode {
         waitForStart();
         Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
+        Thread dronControlThread = new Thread(new droneControl());
 
         //Start 2  threads
         baseControlThread.start();
         armControlThread.start();
+        //dronControlThread.start();
 
         // This is the 3rd thread
         //The following  loop is just to keep this main thread running.
@@ -140,6 +142,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
     // This is the thread class to control the base of the robot to move arround, this normally is
     // controlled by another person seperated from the base control person
     private class baseControl implements Runnable {
+        boolean droneLaunced = false;
         @Override
         public void run() {
             waitForStart();
@@ -149,10 +152,34 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
 
-                if (gamepad1.left_bumper){
+                if (!droneLaunced &&   gamepad1.left_bumper ){
                     g2control.planeLaunch();
-                    sleep(1000);
+                    //sleep(10);
                     g2control.planeLaunchstop();
+                    droneLaunced = true;
+                }
+            }
+        }
+    }//end of class baseControl
+
+    private class droneControl implements Runnable {
+        boolean droneLaunced = false;
+        @Override
+        public void run() {
+            waitForStart();
+            while (!Thread.interrupted() && opModeIsActive()) {
+                // Motor control logic for motors 1 and 2
+                //Call Robot base movement algorithem to drive the base
+                //driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                //sleep 90 seconds before you are able to launch the drone
+                sleep(20000);
+                if (!droneLaunced &&   gamepad1.left_bumper ){
+                    g2control.planeLaunch();
+                    //sleep(50);
+                    g2control.planeLaunchstop();
+                    droneLaunced = true;
+                    break;
+
                 }
             }
         }
