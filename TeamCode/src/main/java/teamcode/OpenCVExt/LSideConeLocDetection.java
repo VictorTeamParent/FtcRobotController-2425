@@ -34,8 +34,8 @@ public class LSideConeLocDetection extends OpenCvPipeline {
      * The core values which define the location and size of the sample regions
      * The following is design for size 320 x 240 resolution
      */
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0, 73);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(195, 55);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(70, 0);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(250, 0);
 
 //    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(70, 0);
 //    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(225, 0);
@@ -44,9 +44,8 @@ public class LSideConeLocDetection extends OpenCvPipeline {
     //    //blue Left
     //static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(0, 85);
 
-    static final int REGION_WIDTH = 65;
-    static final int REGION_HEIGHT = 50;
-
+    static final int REGION_WIDTH = 70;
+    static final int REGION_HEIGHT = 25;
     /*
      * Points which actually define the sample region rectangles, derived from above values
      *
@@ -69,7 +68,7 @@ public class LSideConeLocDetection extends OpenCvPipeline {
             REGION1_TOPLEFT_ANCHOR_POINT.y);
     Point region1_pointB = new Point(
             REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-            REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT-5);
+            REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
     Point region3_pointA = new Point(
             REGION3_TOPLEFT_ANCHOR_POINT.x,
             REGION3_TOPLEFT_ANCHOR_POINT.y);

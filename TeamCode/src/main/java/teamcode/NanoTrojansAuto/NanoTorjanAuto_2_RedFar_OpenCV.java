@@ -36,7 +36,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import teamcode.OpenCVExt.LSideConeLocDetection;
+import teamcode.OpenCVExt.LCamConeLocDetection;
 import teamcode.controls_NanoTrojans;
 import teamcode.drive.SampleMecanumDrive;
 import teamcode.trajectorysequence.TrajectorySequence;
@@ -55,8 +55,8 @@ public class NanoTorjanAuto_2_RedFar_OpenCV extends LinearOpMode {
     static final double COUNTS_PER_MM = COUNTS_PER_REVOLUTION / MM_PER_REVOLUTION; // Counts per millimeter
     static final double COUNTS_PER_INCH = COUNTS_PER_MM * 25.4; // Counts per inch
     OpenCvWebcam webcam2;
-    LSideConeLocDetection pipeline2;
-    LSideConeLocDetection.LSideConePosition position2 = LSideConeLocDetection.LSideConePosition.OTHER;
+    LCamConeLocDetection pipeline2;
+    LCamConeLocDetection.LSideConePosition position2 = LCamConeLocDetection.LSideConePosition.OTHER;
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor rearLeftMotor;
@@ -127,7 +127,7 @@ public class NanoTorjanAuto_2_RedFar_OpenCV extends LinearOpMode {
          */
         int cameraMonitorViewId2 = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam2 = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId2);
-        pipeline2 = new LSideConeLocDetection();
+        pipeline2 = new LCamConeLocDetection();
         webcam2.setPipeline(pipeline2);
         g2control=new controls_NanoTrojans( lsRight, lsLeft, planeLaunch,
                 clawLeft, clawRight, clawLift, armLift, robotLift);
@@ -138,7 +138,7 @@ public class NanoTorjanAuto_2_RedFar_OpenCV extends LinearOpMode {
         webcam2.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam2.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                webcam2.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
             }
 
             @Override
@@ -163,10 +163,10 @@ public class NanoTorjanAuto_2_RedFar_OpenCV extends LinearOpMode {
             //sleep(1000);
 
             position2 = pipeline2.getPosition();
-            telemetry.addData("Blue Close Got position", position2);
+            telemetry.addData("Red far Got position", position2);
             telemetry.update();
 
-            if (position2 == LSideConeLocDetection.LSideConePosition.RIGHT) {
+            if (position2 == LCamConeLocDetection.LSideConePosition.RIGHT) {
 
                 telemetry.addLine("Detected Cone at Right");
                 telemetry.update();
@@ -180,9 +180,9 @@ public class NanoTorjanAuto_2_RedFar_OpenCV extends LinearOpMode {
                 dropTheConePixel();
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(24)
+                        .strafeRight(31)
                         .turn(Math.toRadians(90))
-                        .turn(Math.toRadians(90))
+                        .turn(Math.toRadians(89))
                         .forward(89)
                         .strafeRight(19)
                         .build();
@@ -197,23 +197,22 @@ public class NanoTorjanAuto_2_RedFar_OpenCV extends LinearOpMode {
                 stop = true;
                 stop = true;
 //
-            } else if (position2 == LSideConeLocDetection.LSideConePosition.CENTER) {
+            } else if (position2 == LCamConeLocDetection.LSideConePosition.CENTER) {
                 sleep(4000);
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(26)
-                        .turn(Math.toRadians(90))
-                        .turn(Math.toRadians(90))
+                        .forward(50)
+//                        .turn(Math.toRadians(90))
+//                        .turn(Math.toRadians(90))
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 //sleep(500);
                 dropTheConePixel();
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(2)
-                        .strafeLeft(48)
-                        .turn(-Math.toRadians(90))
+
+                        .turn(Math.toRadians(90))
                         .forward(40)
                         .strafeRight(4)
                         .build();
@@ -228,7 +227,7 @@ public class NanoTorjanAuto_2_RedFar_OpenCV extends LinearOpMode {
 
                 stop = true;
 
-            } else if (position2 == LSideConeLocDetection.LSideConePosition.LEFT) {
+            } else if (position2 == LCamConeLocDetection.LSideConePosition.LEFT) {
 
                 telemetry.addLine("Detected Cone at Left");
                 telemetry.update();
@@ -242,8 +241,8 @@ public class NanoTorjanAuto_2_RedFar_OpenCV extends LinearOpMode {
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeLeft(24)
-                        .forward(86)
+                        .strafeLeft(30)
+                        .forward(83)
                         .strafeRight(20)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);

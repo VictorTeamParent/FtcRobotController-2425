@@ -36,7 +36,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import teamcode.OpenCVExt.RSideConeLocDetection;
+import teamcode.OpenCVExt.RCamConeLocDetection;
 import teamcode.controls_NanoTrojans;
 import teamcode.drive.SampleMecanumDrive;
 import teamcode.trajectorysequence.TrajectorySequence;
@@ -55,8 +55,8 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
     static final double COUNTS_PER_MM = COUNTS_PER_REVOLUTION / MM_PER_REVOLUTION; // Counts per millimeter
     static final double COUNTS_PER_INCH = COUNTS_PER_MM * 25.4; // Counts per inch
     OpenCvWebcam webcam;
-    RSideConeLocDetection pipeline;
-    RSideConeLocDetection.RSideConePosition position = RSideConeLocDetection.RSideConePosition.OTHER;
+    RCamConeLocDetection pipeline;
+    RCamConeLocDetection.RSideConePosition position = RCamConeLocDetection.RSideConePosition.OTHER;
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor rearLeftMotor;
@@ -126,7 +126,7 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
          */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new RSideConeLocDetection();
+        pipeline = new RCamConeLocDetection();
         webcam.setPipeline(pipeline);
         g2control=new controls_NanoTrojans(lsRight, lsLeft, planeLaunch,
                 clawLeft, clawRight, clawLift, armLift, robotLift);
@@ -165,7 +165,7 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
             telemetry.addData("Red Close Got position", position);
             telemetry.update();
 
-            if (position == RSideConeLocDetection.RSideConePosition.LEFT) {
+            if (position == RCamConeLocDetection.RSideConePosition.LEFT) {
 
                 telemetry.addLine("Detected Cone at Left");
                 telemetry.update();
@@ -195,7 +195,7 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
                 stop = true;
 
 
-            } else if (position == RSideConeLocDetection.RSideConePosition.CENTER) {
+            } else if (position == RCamConeLocDetection.RSideConePosition.CENTER) {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
@@ -226,7 +226,7 @@ public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
 
                 stop = true;
 
-            } else if (position == RSideConeLocDetection.RSideConePosition.RIGHT) {
+            } else if (position == RCamConeLocDetection.RSideConePosition.RIGHT) {
                 telemetry.addLine("Detected Cone at Right");
                 telemetry.update();
 

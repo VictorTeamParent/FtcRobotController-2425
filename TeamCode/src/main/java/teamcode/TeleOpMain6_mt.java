@@ -120,7 +120,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
         waitForStart();
         Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
-        Thread dronControlThread = new Thread(new droneControl());
+        //Thread dronControlThread = new Thread(new droneControl());
 
         //Start 2  threads
         baseControlThread.start();
@@ -137,6 +137,14 @@ public class TeleOpMain6_mt extends LinearOpMode {
             //intake.setPower(gamepad2.left_stick_y * 0.5);
 
         }
+
+
+//        if ( gamepad1.left_bumper ){
+//            g2control.planeLaunch();
+//            sleep(300);
+//            g2control.planeLaunchstop();
+//            //droneLaunced = true;
+//        }
     }
 
     // This is the thread class to control the base of the robot to move arround, this normally is
@@ -151,12 +159,11 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 //Call Robot base movement algorithem to drive the base
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-
-                if (!droneLaunced &&   gamepad1.left_bumper ){
+                if ( gamepad1.left_bumper ){
                     g2control.planeLaunch();
-                    //sleep(10);
+                    sleep(100);
                     g2control.planeLaunchstop();
-                    droneLaunced = true;
+                    //droneLaunced = true;
                 }
             }
         }
@@ -318,14 +325,15 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 if (gamepad2.dpad_up) {
                     if (defaultscore == false) {
                         //move up linear slides
-                        g2control.smallls();
-                        sleep(250);
-                        g2control.smalllsstop();
-                        //end move up
                         g2control.armFull();
                         sleep(500);
                         g2control.clawUp();
                         sleep(250);
+                        g2control.smallls();
+                        sleep(250);
+                        g2control.smalllsstop();
+                        //end move up
+
                         lsmove=true;
                     }
                     //automation to reset position
@@ -355,13 +363,13 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 }
                 if (gamepad2.dpad_right) {
                     if (mediumscore == false) {
+                        g2control.armFull();
+                        sleep(1500);
+                        g2control.clawFull();
                         g2control.smallls();
                         sleep(250);
                         g2control.smalllsstop();
                         //end move up
-                        g2control.armFull();
-                        sleep(1500);
-                        g2control.clawFull();
                         g2control.mediumls();
                         sleep(750);
                         g2control.mediumlsstop();
@@ -402,13 +410,14 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 //automation to score pixel
                 if (gamepad2.dpad_down) {
                     if (highscore == false) {
+                        g2control.armFull();
+                        sleep(1250);
+                        g2control.clawFull();
                         g2control.smallls();
                         sleep(250);
                         g2control.smalllsstop();
                         //end move up
-                        g2control.armFull();
-                        sleep(1250);
-                        g2control.clawFull();
+
                         //linear slide go up
                         g2control.highls();
                         sleep(2000);

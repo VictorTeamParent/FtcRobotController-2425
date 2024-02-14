@@ -57,7 +57,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = 1.38;
+    public static double LATERAL_MULTIPLIER = 1;
 
     //Victor : set straft 60 inches  but reported 17, just set that value here
     //public static double LATERAL_MULTIPLIER = 17/60;
@@ -104,11 +104,18 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         //victor the following code is not straft let's swith front and back wheels on one side
 
+        //the following turn clock wise
         frontLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         backLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
 
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+
+//        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
+//        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+//
+//        backRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+//        frontRight = hardwareMap.get(DcMotorEx.class, "backRight");
 
 
         //Victor: add the following 2 lines to reverse onside of the motors.
