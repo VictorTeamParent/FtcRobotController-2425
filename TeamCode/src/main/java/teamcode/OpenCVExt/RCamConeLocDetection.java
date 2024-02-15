@@ -34,8 +34,8 @@ public class RCamConeLocDetection extends OpenCvPipeline {
      * The core values which define the location and size of the sample regions
      * The following is design for size 320 x 240 resolution
      */
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0, 8);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(175, 5);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0, 35);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(175, 40);
 
 //    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(70, 0);
 //    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(225, 0);

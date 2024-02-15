@@ -170,22 +170,23 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(28)
-                        .turn(Math.toRadians(90))
+                        .turn(Math.toRadians(89))
                         .back(8)
                         .forward(5)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(34)
-                        .strafeLeft(4)
-                        .forward(6)
+                        .forward(38)
+                        .strafeLeft(6)
+                        //.forward(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 sleep(500);
                 doRestStuff();
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(27)
+                        .strafeRight(31)
+                        .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -196,9 +197,11 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(28)
-                        .turn(Math.toRadians(90))
-                        .turn(Math.toRadians(90))
+                        .forward(27)
+                        .turn(Math.toRadians(89))
+                        .turn(Math.toRadians(89))
+                        .back(6)
+                        .forward(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
 
@@ -206,8 +209,8 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeLeft(18)
-                        .turn(-Math.toRadians(90))
-                        .forward(17)
+                        .turn(-Math.toRadians(89))
+                        .forward(18)
                         .strafeRight(2)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
@@ -215,6 +218,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
                 //********Parking
                 TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeRight(24)
+                        .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq4);
 
@@ -226,21 +230,22 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(28)
-                        .turn(Math.toRadians(90))
+                        .turn(Math.toRadians(89))
                         .forward(21)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(8)
-                        .forward(17)
+                        .strafeRight(9)
+                        .forward(16)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
 
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(18)
+                        .strafeRight(19)
+                        .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -264,12 +269,14 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
         //************************
         // Lift claw and setup position
         //end move up
+
+
         g2control.armFull();
         sleep(250);
         g2control.clawUp();
         sleep(2000);
         g2control.openClaw();
-        sleep(500);
+        sleep(1000);
 
 
 
@@ -286,6 +293,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
         g2control.clawUp();
         //sleep(500);
         //g2control.openClaw();
+
 
     }
     private void setRunMode(DcMotor.RunMode mode) {
