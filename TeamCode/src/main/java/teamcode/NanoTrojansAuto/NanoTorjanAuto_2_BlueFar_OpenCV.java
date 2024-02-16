@@ -191,7 +191,7 @@ public class NanoTorjanAuto_2_BlueFar_OpenCV extends LinearOpMode {
                 doRestStuff();
 
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(27)
+                        .strafeRight(25)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
