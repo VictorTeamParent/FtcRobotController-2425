@@ -45,8 +45,8 @@ import teamcode.trajectorysequence.TrajectorySequence;
  * This class contains the Autonomous Mode program.
  */
 @Config
-@Autonomous(name = "Auto_2_PL_RedFar_OpenCV")
-public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
+@Autonomous(name = "Auto_2_PL_RedFar_OpenCVjason")
+public class NanoTorjanAuto_2_PL_RedFar_OpenCV_jason extends LinearOpMode {
 
     // Constants for encoder counts and wheel measurements
     static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
@@ -185,7 +185,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
                         .strafeRight(18)
                         .turn(Math.toRadians(89))
                         .turn(Math.toRadians(89))
-                        .forward(89)
+                        .forward(86)
                         .strafeRight(27)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
@@ -215,7 +215,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(2)
                         .turn(Math.toRadians(89))
-                        .forward(90)
+                        .forward(88)
                         .strafeRight(20)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
@@ -244,7 +244,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
                 dropTheLeftConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeLeft(25)
-                        .forward(86)
+                        .forward(84)
                         .strafeRight(15)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
@@ -266,7 +266,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         g2control.openLeftClaw();
         //g2control.openClaw();
         sleep(500);
-        g2control.clawFull();
+        g2control.clawUp();
         //g2control.closeClaw();
         g2control.closeLeftClaw();
     }
@@ -277,7 +277,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         g2control.openRightClaw();
         //g2control.openClaw();
         sleep(500);
-        g2control.clawFull();
+        g2control.clawUp();
         //g2control.closeClaw();
         g2control.closeRightClaw();
     }
@@ -288,7 +288,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         //end move up
 
         g2control.armFull();
-        g2control.clawFull();
+        g2control.clawUp();
         sleep(2000);
         g2control.openClaw();
         sleep(500);
@@ -301,12 +301,12 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
 
         g2control.armUp();
         sleep(500);
-        g2control.clawFull();
+        g2control.clawUp();
         //sleep(500);
         g2control.closeClaw();
         g2control.armDown();
         //sleep(250);
-        g2control.clawFull();
+        g2control.clawUp();
         sleep(200);
         //g2control.openClaw();
 
@@ -320,7 +320,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
 
 
         g2control.armFull();
-        g2control.clawFull();
+        g2control.clawUp();
         sleep(2000);
         g2control.openClaw();
         sleep(500);
@@ -333,12 +333,12 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
 
         g2control.armUp();
         sleep(500);
-        g2control.clawFull();
+        g2control.clawUp();
         //sleep(500);
         g2control.closeClaw();
         g2control.armDown();
         //sleep(250);
-        g2control.clawFull();
+        g2control.clawUp();
         sleep(200);
         //g2control.openClaw();
 

@@ -128,8 +128,9 @@ public class controls_NanoTrojans  {
       public void clawUp()
     {
         //same thing for this except the position is different.
-//        clawLift.setPosition(0.8);
         clawLift.setPosition(1);
+ //       clawLift.setPosition(0.8);
+//        clawLift.setPosition(0.69);
     }
     public void clawFull()
     {

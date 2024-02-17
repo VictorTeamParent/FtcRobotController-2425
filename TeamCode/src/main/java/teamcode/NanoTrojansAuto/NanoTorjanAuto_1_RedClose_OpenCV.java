@@ -155,7 +155,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
         while (opModeIsActive() && !stop) {
 
             g2control.closeClaw();
-            g2control.clawUp();
+            g2control.clawFull();
 
             // Don't burn CPU cycles busy-looping in this sample
             //sleep(1000);
@@ -177,7 +177,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(38)
+                        .forward(37)
                         .strafeLeft(6)
                         //.forward(6)
                         .build();
@@ -210,7 +210,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeLeft(18)
                         .turn(-Math.toRadians(89))
-                        .forward(18)
+                        .forward(17)
                         .strafeRight(2)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
@@ -238,7 +238,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeRight(9)
-                        .forward(16)
+                        .forward(15)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
@@ -260,7 +260,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
         g2control.openLeftClaw();
         //g2control.openClaw();
         sleep(500);
-        g2control.clawUp();
+        g2control.clawFull();
         //g2control.closeClaw();
         g2control.closeLeftClaw();
     }

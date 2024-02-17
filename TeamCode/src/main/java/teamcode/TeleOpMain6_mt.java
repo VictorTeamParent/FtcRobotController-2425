@@ -231,10 +231,14 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     if (leftclawopen) {
                         g2control.closeLeftClaw();
                         sleep(250);
+                        telemetry.addLine("Left claw close");
+                        telemetry.update();
                     }
                     else {
                         g2control.openLeftClaw();
                         sleep(250);
+                        telemetry.addLine("Left claw open");
+                        telemetry.update();
                     }
                     leftclawopen=!leftclawopen;
 
@@ -244,10 +248,14 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     if(rightclawopen){
                         g2control.closeRightClaw();
                         sleep(250);
+                        telemetry.addLine("Right claw close");
+                        telemetry.update();
                     }
                     else{
                         g2control.openRightClaw();
                         sleep(250);
+                        telemetry.addLine("Right claw open");
+                        telemetry.update();
                     }
                     rightclawopen= !rightclawopen;
                 }
@@ -256,13 +264,19 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     if (clawopen == false) {
                         g2control.openClaw();
                         sleep(250);
+                        telemetry.addLine("Right claw open");
+                        telemetry.addLine("Left claw open");
+                        telemetry.update();
                     }
                     //if claw is opened then close it
                     else {
                         g2control.closeClaw();
                         sleep(250);
+                        telemetry.addLine("Right claw closed");
+                        telemetry.addLine("Left claw closed");
+                        telemetry.update();
                     }
-                    clawopen = !clawopen;
+                    clawopen = false;
                     rightclawopen= !rightclawopen;
                     leftclawopen = !leftclawopen;
                 }
@@ -272,18 +286,17 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     if (clawup) {
                         g2control.clawDown();
                         sleep(250);
+                        telemetry.addLine("Claw down");
+                        telemetry.update();
                     } else {
                         g2control.clawFull();
                         sleep(250);
+                        telemetry.addLine("Claw up");
+                        telemetry.update();
                     }
                     clawup = !clawup;
                 }
-                if(gamepad2.left_bumper){
-                    g2control.planeLaunch();
-                    sleep(1000);
-                    g2control.planeLaunchstop();
 
-                }
                 //make the arm lift so we can manually reset it
                 if (gamepad2.a) {
                     g2control.armFull();
@@ -300,7 +313,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         //end move up
                         g2control.armFull();
                         sleep(500);
-                        g2control.clawUp();
+                        g2control.clawFull();
                         sleep(250);
                     }
                     //automation to reset position
@@ -308,14 +321,12 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
                         g2control.armUp();
                         sleep(1000);
-                        g2control.clawUp();
+                        g2control.clawFull();
                         g2control.closeClaw();
                         g2control.armDown();
                         sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
+                        clawup = true;
+                        clawopen = false;
                         rightclawopen= true;
                         leftclawopen = true;
                         sleep(250);
@@ -327,7 +338,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         //move up linear slides
                         g2control.armFull();
                         sleep(500);
-                        g2control.clawUp();
+                        g2control.clawFull();
                         sleep(250);
                         g2control.smallls();
                         sleep(250);
@@ -346,14 +357,12 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
                         g2control.armUp();
                         sleep(1000);
-                        g2control.clawUp();
+                        g2control.clawFull();
                         g2control.closeClaw();
                         g2control.armDown();
                         sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
+                        clawup = true;
+                        clawopen = false;
                         rightclawopen= true;
                         leftclawopen = true;
                         lsmove=false;
@@ -379,7 +388,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     } else if (mediumscore == true) {
                         g2control.armUp();
                         sleep(1500);
-                        g2control.clawUp();
+                        g2control.clawFull();
                         if (moveup3) {
                             //reset linear slides only if it was up
                             g2control.reversesmallls();
@@ -397,10 +406,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         g2control.closeClaw();
                         g2control.armDown();
                         sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
+                        clawup = true;
+                        clawopen = false;
                         rightclawopen= true;
                         leftclawopen = true;
                         sleep(250);
@@ -428,7 +435,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     } else if (highscore == true) {
                         g2control.armUp();
                         sleep(500);
-                        g2control.clawUp();
+                        g2control.clawFull();
                         if (moveup2) {
                             //reset linear slides only if it was up
                             g2control.reversesmallls();
@@ -445,10 +452,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         g2control.closeClaw();
                         g2control.armDown();
                         sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
+                        clawup = true;
+                        clawopen = false;
                         rightclawopen= true;
                         leftclawopen = true;
                         sleep(250);
