@@ -157,7 +157,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         while (opModeIsActive() && !stop) {
 
             g2control.closeClaw();
-            g2control.clawFull();
+            g2control.clawUp();
 
             // Don't burn CPU cycles busy-looping in this sample
             //sleep(1000);
@@ -185,7 +185,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
                         .strafeRight(18)
                         .turn(Math.toRadians(89))
                         .turn(Math.toRadians(89))
-                        .forward(89)
+                        .forward(88)
                         .strafeRight(27)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
@@ -266,7 +266,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         g2control.openLeftClaw();
         //g2control.openClaw();
         sleep(500);
-        g2control.clawFull();
+        g2control.clawUp();
         //g2control.closeClaw();
         g2control.closeLeftClaw();
     }
@@ -277,7 +277,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         g2control.openRightClaw();
         //g2control.openClaw();
         sleep(500);
-        g2control.clawFull();
+        g2control.clawUp();
         //g2control.closeClaw();
         g2control.closeRightClaw();
     }
@@ -287,8 +287,13 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         // Lift claw and setup position
         //end move up
 
+        sleep(250);
+        g2control.smallls();
+        sleep(250);
+        g2control.smalllsstop();
+
         g2control.armFull();
-        g2control.clawFull();
+        g2control.clawUp();
         sleep(2000);
         g2control.openClaw();
         sleep(500);
@@ -301,15 +306,18 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
 
         g2control.armUp();
         sleep(500);
-        g2control.clawFull();
+        g2control.clawUp();
         //sleep(500);
         g2control.closeClaw();
         g2control.armDown();
         //sleep(250);
-        g2control.clawFull();
+        g2control.clawUp();
         sleep(200);
         //g2control.openClaw();
 
+        g2control.reversesmallls();
+        sleep(250);
+        g2control.reversehighlsstop();
 
     }
 
@@ -318,9 +326,13 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         // Lift claw and setup position
         //end move up
 
+        sleep(250);
+        g2control.smallls();
+        sleep(300);
+        g2control.smalllsstop();
 
         g2control.armFull();
-        g2control.clawFull();
+        g2control.clawUp();
         sleep(2000);
         g2control.openClaw();
         sleep(500);
@@ -333,15 +345,18 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
 
         g2control.armUp();
         sleep(500);
-        g2control.clawFull();
+        g2control.clawUp();
         //sleep(500);
         g2control.closeClaw();
         g2control.armDown();
         //sleep(250);
-        g2control.clawFull();
+        g2control.clawUp();
         sleep(200);
         //g2control.openClaw();
 
+        g2control.reversesmallls();
+        sleep(300);
+        g2control.reversehighlsstop();
 
     }
     private void setRunMode(DcMotor.RunMode mode) {
