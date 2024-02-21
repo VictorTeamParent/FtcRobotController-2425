@@ -160,7 +160,7 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
             g2control.clawUp();
 
             // Don't burn CPU cycles busy-looping in this sample
-            //sleep(1000);
+            sleep(6000);
 
             position2 = pipeline2.getPosition();
             telemetry.addData("Red far Got position", position2);
@@ -174,8 +174,8 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(28)
                         .turn(-Math.toRadians(90))
-                        .back(7)
-                        .forward(5)
+                        .back(8)
+                        .forward(6)
                         .strafeRight(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
@@ -286,13 +286,14 @@ public class NanoTorjanAuto_2_PL_RedFar_OpenCV extends LinearOpMode {
         //************************
         // Lift claw and setup position
         //end move up
-
+        g2control.armFull();
         sleep(250);
         g2control.smallls();
         sleep(250);
         g2control.smalllsstop();
 
-        g2control.armFull();
+
+
         g2control.clawUp();
         sleep(2000);
         g2control.openClaw();

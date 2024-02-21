@@ -45,8 +45,8 @@ import teamcode.trajectorysequence.TrajectorySequence;
  * This class contains the Autonomous Mode program.
  */
 @Config
-@Autonomous(name = "Auto_2_BlueFar_OpenCV")
-public class NanoTorjanAuto_2_BlueFar_OpenCV extends LinearOpMode {
+@Autonomous(name = "Auto_1_BlueFar_OpenCV")
+public class NanoTorjanAuto_1_BlueFar_OpenCV extends LinearOpMode {
 
     // Constants for encoder counts and wheel measurements
     static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution

@@ -122,7 +122,7 @@ public class controls_NanoTrojans  {
     {
         //these follow the same concept as the claw, except it only needs to move one servo.
 //        clawLift.setPosition(0.625);
-        clawLift.setPosition(0.4);
+        clawLift.setPosition(0.395);
     }
 
       public void clawUp()
@@ -135,6 +135,11 @@ public class controls_NanoTrojans  {
     {
         clawLift.setPosition(1);
     }
+    public void clawparallel()
+    {
+        clawLift.setPosition(0.69);
+    }
+
     public void armUp()
     {
         //same concept as clawUp, just on the arm.

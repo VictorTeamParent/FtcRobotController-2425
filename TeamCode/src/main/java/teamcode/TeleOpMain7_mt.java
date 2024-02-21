@@ -9,15 +9,21 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name = "TeleOpMain6_mt", group = "TeleOp")
+
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 
-public class TeleOpMain6_mt extends LinearOpMode {
+@TeleOp(name = "TeleOpMain7_mt", group = "TeleOp")
+
+
+public class TeleOpMain7_mt extends LinearOpMode {
 
     //private DcMotor intake = null;
     private DcMotor lsRight = null;
@@ -41,6 +47,11 @@ public class TeleOpMain6_mt extends LinearOpMode {
     private CRServo robotLift = null;
 
     private DcMotor dcArm;
+
+    private ColorSensor rightClawColorSensor;
+    private ColorSensor leftClawColorSensor;
+
+    private DistanceSensor leftClawDistanceSensor;
 
 
     private final double driveAdjuster = 1;
@@ -84,6 +95,10 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
         dcArm = hardwareMap.dcMotor.get("dcArm");
 
+        rightClawColorSensor = hardwareMap.colorSensor.get("rightclawcolor");
+        //leftClawColorSensor = hardwareMap.colorSensor.get("leftclawcolor");
+        leftClawDistanceSensor = hardwareMap.get(DistanceSensor.class, "leftclawdistance");
+
         // huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -120,12 +135,12 @@ public class TeleOpMain6_mt extends LinearOpMode {
         waitForStart();
         Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
-        //Thread dronControlThread = new Thread(new droneControl());
+        Thread clawControlThread = new Thread(new clawControl());
 
         //Start 2  threads
         baseControlThread.start();
         armControlThread.start();
-        //dronControlThread.start();
+        //clawControlThread.start();
 
         // This is the 3rd thread
         //The following  loop is just to keep this main thread running.
@@ -135,6 +150,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
             // Game Pad 2 controller for other motors
             // control intake motor
             //intake.setPower(gamepad2.left_stick_y * 0.5);
+
 
         }
 
@@ -159,18 +175,21 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 //Call Robot base movement algorithem to drive the base
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-                if ( gamepad1.left_bumper ){
+                if ( gamepad1.y ){
                     g2control.planeLaunch();
                     sleep(100);
                     g2control.planeLaunchstop();
                     //droneLaunced = true;
                 }
+
+
+
             }
         }
     }//end of class baseControl
 
-    private class droneControl implements Runnable {
-        boolean droneLaunced = false;
+    private class clawControl implements Runnable {
+        boolean clawClosed = false;
         @Override
         public void run() {
             waitForStart();
@@ -179,15 +198,30 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 //Call Robot base movement algorithem to drive the base
                 //driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
                 //sleep 90 seconds before you are able to launch the drone
-                sleep(20000);
-                if (!droneLaunced &&   gamepad1.left_bumper ){
-                    g2control.planeLaunch();
-                    //sleep(50);
-                    g2control.planeLaunchstop();
-                    droneLaunced = true;
-                    break;
+                //sleep(20000);
+                int redValue = rightClawColorSensor.red();
+                int greenValue = rightClawColorSensor.green();
+                int blueValue = rightClawColorSensor.blue();
 
-                }
+
+                telemetry.addData("Red", redValue);
+                telemetry.addData("Green", greenValue);
+                telemetry.addData("Blue", blueValue);
+
+                if(redValue > 100 && greenValue < 50 && blueValue < 50)
+                    telemetry.addData("Red color", "detected");
+                telemetry.update();
+
+
+                double distance = leftClawDistanceSensor.getDistance(DistanceUnit.MM);
+
+                // Display the detected distance
+                telemetry.addData("Distance (MM)", distance);
+                telemetry.update();
+
+
+
+
             }
         }
     }//end of class baseControl
@@ -216,10 +250,13 @@ public class TeleOpMain6_mt extends LinearOpMode {
             boolean armup = false;
             boolean lowscore = false;
 
+
             waitForStart();
             //set closed claw and claw lift down
             //while (!isStopRequested()) {
             while (!Thread.interrupted() && opModeIsActive()) {
+                double clawliftpos = clawLift.getPosition();
+                double armliftpos = armLift.getPosition();
 
                 //lift power take from the second game pad
                 lspower = gamepad2.right_stick_y;
@@ -278,12 +315,6 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     }
                     clawup = !clawup;
                 }
-                if(gamepad2.left_bumper){
-                    g2control.planeLaunch();
-                    sleep(1000);
-                    g2control.planeLaunchstop();
-
-                }
                 //make the arm lift so we can manually reset it
                 if (gamepad2.a) {
                     g2control.armFull();
@@ -300,7 +331,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         //end move up
                         g2control.armFull();
                         sleep(500);
-                        g2control.clawUp();
+//                        g2control.clawUp();
+                        g2control.clawparallel();
                         sleep(250);
                     }
                     //automation to reset position
@@ -327,7 +359,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                         //move up linear slides
                         g2control.armFull();
                         sleep(500);
-                        g2control.clawUp();
+                        g2control.clawparallel();
                         sleep(250);
                         g2control.smallls();
                         sleep(250);
@@ -365,7 +397,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     if (mediumscore == false) {
                         g2control.armFull();
                         sleep(1500);
-                        g2control.clawFull();
+                        g2control.clawparallel();
                         g2control.smallls();
                         sleep(250);
                         g2control.smalllsstop();
@@ -412,7 +444,7 @@ public class TeleOpMain6_mt extends LinearOpMode {
                     if (highscore == false) {
                         g2control.armFull();
                         sleep(1250);
-                        g2control.clawFull();
+                        g2control.clawparallel();
                         g2control.smallls();
                         sleep(250);
                         g2control.smalllsstop();
@@ -474,8 +506,39 @@ public class TeleOpMain6_mt extends LinearOpMode {
                 if(clawup==false){
                     telemetry.addLine("Claw down");
                 }
+                telemetry.addData("Arm position:",armliftpos);
+                telemetry.addData("Claw position:",clawliftpos);
+
 
                 telemetry.update();
+
+
+                int redValue = rightClawColorSensor.red();
+                int greenValue = rightClawColorSensor.green();
+                int blueValue = rightClawColorSensor.blue();
+
+
+                telemetry.addData("Red", redValue);
+                telemetry.addData("Green", greenValue);
+                telemetry.addData("Blue", blueValue);
+                telemetry.update();
+
+                if(redValue > 100 && greenValue < 50 && blueValue < 50)
+                    telemetry.addData("Red color", "detected");
+                telemetry.update();
+
+
+                double distance = leftClawDistanceSensor.getDistance(DistanceUnit.MM);
+
+                // Display the detected distance
+                telemetry.addData("Distance (MM)", distance);
+                telemetry.update();
+
+                if(distance<30){
+                    telemetry.addLine("Distance less than 30");
+                    g2control.closeClaw();
+                }
+
             }
         } //end of class armControl.run()
     }//end of class armControl
