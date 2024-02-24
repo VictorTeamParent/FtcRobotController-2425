@@ -48,11 +48,12 @@ public class TeleOpMain7_mt extends LinearOpMode {
 
     private DcMotor dcArm;
 
-    private ColorSensor rightClawColorSensor;
-    private ColorSensor leftClawColorSensor;
+
 
     private DistanceSensor leftClawDistanceSensor;
-
+    private DistanceSensor rightClawDistanceSensor;
+    private ColorSensor rightClawColorSensor;
+    private ColorSensor leftClawColorSensor;
 
     private final double driveAdjuster = 1;
 
@@ -67,6 +68,10 @@ public class TeleOpMain7_mt extends LinearOpMode {
     //private DriveControl driveControl;
 
     private controls_NanoTrojans g2control;
+
+    private boolean rightPixelPicked = false;
+    private boolean leftPixelPicked = false;
+    private boolean autopick = false;
     @Override
     public void runOpMode()  throws InterruptedException {
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
@@ -96,8 +101,9 @@ public class TeleOpMain7_mt extends LinearOpMode {
         dcArm = hardwareMap.dcMotor.get("dcArm");
 
         rightClawColorSensor = hardwareMap.colorSensor.get("rightclawcolor");
-        //leftClawColorSensor = hardwareMap.colorSensor.get("leftclawcolor");
-        leftClawDistanceSensor = hardwareMap.get(DistanceSensor.class, "leftclawdistance");
+        leftClawColorSensor = hardwareMap.colorSensor.get("leftclawcolor");
+        //leftClawDistanceSensor = hardwareMap.get(DistanceSensor.class, "leftclawdistance");
+        //rightClawDistanceSensor = hardwareMap.get(DistanceSensor.class, "rightclawdistance");
 
         // huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
@@ -199,18 +205,18 @@ public class TeleOpMain7_mt extends LinearOpMode {
                 //driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
                 //sleep 90 seconds before you are able to launch the drone
                 //sleep(20000);
-                int redValue = rightClawColorSensor.red();
-                int greenValue = rightClawColorSensor.green();
-                int blueValue = rightClawColorSensor.blue();
-
-
-                telemetry.addData("Red", redValue);
-                telemetry.addData("Green", greenValue);
-                telemetry.addData("Blue", blueValue);
-
-                if(redValue > 100 && greenValue < 50 && blueValue < 50)
-                    telemetry.addData("Red color", "detected");
-                telemetry.update();
+//                //int redValue = rightClawColorSensor.red();
+//                int greenValue = rightClawColorSensor.green();
+//                int blueValue = rightClawColorSensor.blue();
+//
+//
+//                telemetry.addData("Red", redValue);
+//                telemetry.addData("Green", greenValue);
+//                telemetry.addData("Blue", blueValue);
+//
+//                if(redValue > 100 && greenValue < 50 && blueValue < 50)
+//                    telemetry.addData("Red color", "detected");
+//                telemetry.update();
 
 
                 double distance = leftClawDistanceSensor.getDistance(DistanceUnit.MM);
@@ -226,8 +232,12 @@ public class TeleOpMain7_mt extends LinearOpMode {
         }
     }//end of class baseControl
 
+
     // This is the thread class to control arms , claws
     private class armControl implements Runnable {
+
+        boolean rightpixeldetected;
+        boolean leftpixeldetected;
         @Override
         public void run() {
 
@@ -370,14 +380,23 @@ public class TeleOpMain7_mt extends LinearOpMode {
                     }
                     //automation to reset position
                     else if (defaultscore == true) {
+
+                        //Victor comment out this code and move to run it later
+//                        if (lsmove){
+//                            g2control.reversesmallls();
+//                            sleep(250);
+//                            g2control.reversesmalllsstop();
+//                        }
+
+                        g2control.armUp();
+                        sleep(1000);
+
+                        //victor move above code to here
                         if (lsmove){
                             g2control.reversesmallls();
                             sleep(250);
                             g2control.reversesmalllsstop();
                         }
-
-                        g2control.armUp();
-                        sleep(1000);
                         g2control.clawUp();
                         g2control.closeClaw();
                         g2control.armDown();
@@ -487,60 +506,147 @@ public class TeleOpMain7_mt extends LinearOpMode {
                     }
                     highscore = !highscore;
                 }
+                boolean enableTel = false;
 
-                if (rightclawopen){
-                    telemetry.addLine("Right claw open");
+                if(enableTel) {
+                    if (rightclawopen) {
+                        telemetry.addLine("Right claw open");
+                    }
+                    if (rightclawopen == false) {
+                        telemetry.addLine("Right claw closed");
+                    }
+                    if (leftclawopen) {
+                        telemetry.addLine("Left claw open");
+                    }
+                    if (leftclawopen == false) {
+                        telemetry.addLine("Left claw closed");
+                    }
+                    if (!g2control.clawdown) {
+                        telemetry.addLine("Claw up");
+                    }
+                    if (g2control.clawdown) {
+                        telemetry.addLine("Claw down");
+                    }
+                    telemetry.addData("Arm position:", armliftpos);
+                    telemetry.addData("Claw position:", clawliftpos);
+
+
+                    telemetry.update();
+
                 }
-                if (rightclawopen==false){
-                    telemetry.addLine("Right claw closed");
-                }
-                if (leftclawopen){
-                    telemetry.addLine("Left claw open");
-                }
-                if (leftclawopen==false){
-                    telemetry.addLine("Left claw closed");
-                }
-                if (clawup){
-                    telemetry.addLine("Claw up");
-                }
-                if(clawup==false){
-                    telemetry.addLine("Claw down");
-                }
-                telemetry.addData("Arm position:",armliftpos);
-                telemetry.addData("Claw position:",clawliftpos);
+               //if(!g2control.autopicksucess) {
+                   rightpixeldetected = detectPixel(rightClawColorSensor);
+                   leftpixeldetected = detectPixel(leftClawColorSensor);
 
 
-                telemetry.update();
+//                double distanceleft = leftClawDistanceSensor.getDistance(DistanceUnit.MM);
+//                //double distanceright = rightClawDistanceSensor.getDistance(DistanceUnit.MM);
+//                // Display the detected distance
+//                telemetry.addData("Distance left (MM)", distanceleft);
+//                //telemetry.addData("Distance Right (MM)", distanceright);
+//                telemetry.addData("Claw is down ? ",  g2control.clawdown);
+//
+//                telemetry.update();
+//
+//                if(distanceleft<=25 && g2control.clawdown){
+//                    //telemetry.addLine("Distance less than 30");
+//                    g2control.closeLeftClaw();
+//                    leftPixelPicked = true;
+//                }
+
+//                if(distanceright<=26 && g2control.clawdown){
+//
+//                    //telemetry.addLine("Distance less than 30");
+//                    g2control.closeRightClaw();
+//                    rightPixelPicked = true;
+//                }
+
+                   if (leftpixeldetected && g2control.clawdown) {
+
+                       //telemetry.addLine("Distance less than 30");
+                       g2control.closeLeftClaw();
+                       leftPixelPicked = true;
+                       leftpixeldetected = false;
+                   }
+                   if (rightpixeldetected && g2control.clawdown) {
+
+                       //telemetry.addLine("Distance less than 30");
+                       g2control.closeRightClaw();
+                       rightPixelPicked = true;
+                       rightpixeldetected = false;
+                   }
 
 
-                int redValue = rightClawColorSensor.red();
-                int greenValue = rightClawColorSensor.green();
-                int blueValue = rightClawColorSensor.blue();
+//                   if (rightPixelPicked && leftPixelPicked) {
+//                       sleep(200);
+//                       g2control.clawFull();
+//
+//                       leftPixelPicked = false;
+//                       rightPixelPicked = false;
+//
+//                       g2control.autopicksucess = true;
+//                       //autopick = false;
+//                   }
 
+               //}
 
-                telemetry.addData("Red", redValue);
-                telemetry.addData("Green", greenValue);
-                telemetry.addData("Blue", blueValue);
-                telemetry.update();
-
-                if(redValue > 100 && greenValue < 50 && blueValue < 50)
-                    telemetry.addData("Red color", "detected");
-                telemetry.update();
-
-
-                double distance = leftClawDistanceSensor.getDistance(DistanceUnit.MM);
-
-                // Display the detected distance
-                telemetry.addData("Distance (MM)", distance);
-                telemetry.update();
-
-                if(distance<30){
-                    telemetry.addLine("Distance less than 30");
-                    g2control.closeClaw();
-                }
 
             }
         } //end of class armControl.run()
+
+        private boolean detectPixel (ColorSensor  cs)
+        {
+            boolean rc = false;
+            boolean enableTelemetry = true;
+            int red = cs.red();
+            int green = cs.green();
+            int blue = cs.blue();
+
+            //boolean rightpixeldetected = false;
+            if(enableTelemetry) {
+                telemetry.addData("Red", red);
+                telemetry.addData("Green", green);
+                telemetry.addData("Blue", blue);
+                telemetry.update();
+            }
+//            if (red > 100 && blue > 100 && green < 50) {
+//                if(enableTelemetry) {
+//                    telemetry.addData("Color", "Purple");
+//                }
+//                rc = true;
+//            }
+//            // Check for yellow color
+//            else if (red > 100 && green > 100 && blue < 50) {
+//                if(enableTelemetry) {
+//                    telemetry.addData("Color", "Yellow");
+//                }
+//                rc = true;
+//            }
+            // Check for green color
+            //else if (green > 250 && red < 200 && blue > 200) {
+            if ( red > 150 && green > 250 && blue > 200) {
+                if(enableTelemetry) {
+                    telemetry.addData("Color", "Green");
+                }
+                rc = true;
+            }
+            // Check for white color
+            else if (red > 200 && green > 200 && blue > 200) {
+                if(enableTelemetry) {
+                    telemetry.addData("Color", "White");
+                }
+                rc = true;
+            }
+            // None of the specified colors detected
+            else {
+                if(enableTelemetry) {
+                    telemetry.addData("Color", "Unknown");
+                }
+            }
+
+            telemetry.update();
+            return rc;
+        }
     }//end of class armControl
 
 }//end of main class to3controlchange_ms

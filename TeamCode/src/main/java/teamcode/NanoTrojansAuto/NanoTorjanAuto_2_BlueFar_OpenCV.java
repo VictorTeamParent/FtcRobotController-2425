@@ -182,16 +182,16 @@ public class NanoTorjanAuto_2_BlueFar_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeLeft(18)
-                        .turn(Math.toRadians(89))
-                        .turn(Math.toRadians(89))
-                        .forward(87)
+                        .turn(-Math.toRadians(89))
+                        .turn(-Math.toRadians(89))
+                        .forward(86)
                         .strafeLeft(25)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
 
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(25)
+                        .strafeRight(37)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -203,8 +203,6 @@ public class NanoTorjanAuto_2_BlueFar_OpenCV extends LinearOpMode {
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(48)
-//                        .turn(Math.toRadians(90))
-//                        .turn(Math.toRadians(90))
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 //sleep(500);
@@ -213,7 +211,7 @@ public class NanoTorjanAuto_2_BlueFar_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(2)
                         .turn(-Math.toRadians(89))
-                        .forward(89)
+                        .forward(87)
                         .strafeLeft(23)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
@@ -241,7 +239,7 @@ public class NanoTorjanAuto_2_BlueFar_OpenCV extends LinearOpMode {
                 dropTheConePixel();
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
                         .strafeRight(25)
-                        .forward(86)
+                        .forward(84)
                         .strafeLeft(19)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);

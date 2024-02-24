@@ -36,6 +36,11 @@ public class controls_NanoTrojans  {
     private Servo armLift = null;
     private CRServo robotLift = null;
 
+    //Victor for auto pick
+    public boolean clawdown = false;
+    public boolean autopicksucess = false;
+
+
     public controls_NanoTrojans( DcMotor lsR, DcMotor lsL, CRServo planeL,
                                      Servo clawL, Servo clawR, Servo clawLi, Servo armL, CRServo robotL)
     {
@@ -122,7 +127,10 @@ public class controls_NanoTrojans  {
     {
         //these follow the same concept as the claw, except it only needs to move one servo.
 //        clawLift.setPosition(0.625);
-        clawLift.setPosition(0.395);
+        //clawLift.setPosition(0.395);
+        clawLift.setPosition(0.380);
+        clawdown = true;
+
     }
 
       public void clawUp()
@@ -130,10 +138,25 @@ public class controls_NanoTrojans  {
         //same thing for this except the position is different.
 //        clawLift.setPosition(0.8);
         clawLift.setPosition(1);
+        clawdown = false;
+        autopicksucess = false;
+
     }
+
+//    public void clawUpParallerToBoard()
+//    {
+//        //same thing for this except the position is different.
+////        clawLift.setPosition(0.8);
+//        clawLift.setPosition(0.90);
+//        clawdown = false;
+//        autopicksucess = false;
+//
+//    }
     public void clawFull()
     {
+
         clawLift.setPosition(1);
+        clawdown = false;
     }
     public void clawparallel()
     {
