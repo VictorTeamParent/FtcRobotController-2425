@@ -237,7 +237,7 @@ public class NanoTorjanAuto_1_BlueClose_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(new Pose2d())
 
                         .strafeLeft(8)
-                        .forward(15)
+                        .forward(14)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
