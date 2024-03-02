@@ -209,7 +209,7 @@ public class NanoTorjanAuto_1_RedClose_OpenCV extends LinearOpMode {
                         .forward(3)
                         .turn(Math.toRadians(89))
                         .forward(30)
-                        .strafeRight(30)
+                        .strafeRight(25)
                         .forward(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
