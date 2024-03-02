@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -20,27 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class TeleOpMain6_mt extends LinearOpMode {
 
     //private DcMotor intake = null;
-    private DcMotor lsRight = null;
-    private DcMotor lsLeft = null;
 
-    private DcMotor frontLeft = null;
-    private DcMotor frontRight = null;
-    private DcMotor backLeft = null;
-    private DcMotor backRight = null;
-
-    //servo motors
-    private CRServo planeLaunch = null;
-
-    //2 claws servo motors
-    private Servo clawLeft = null;
-    private Servo clawRight = null;
-
-    //2 arms servo motors
-    private Servo clawLift = null;
-    private Servo armLift = null;
-    private CRServo robotLift = null;
-
-    private DcMotor dcArm;
 
 
     private final double driveAdjuster = 1;
@@ -56,33 +37,10 @@ public class TeleOpMain6_mt extends LinearOpMode {
     //private DriveControl driveControl;
 
     private controls_NanoTrojans g2control;
+    private resources_NanoTrojans resources;
     @Override
     public void runOpMode()  throws InterruptedException {
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        backLeft = hardwareMap.dcMotor.get("backLeft");
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        backRight = hardwareMap.dcMotor.get("backRight");
-
-        lsRight = hardwareMap.dcMotor.get("lsRight");
-        lsLeft = hardwareMap.dcMotor.get("lsLeft");
-        //intake = hardwareMap.dcMotor.get("intake");
-
-        //Servo Motors
-        planeLaunch = hardwareMap.crservo.get("planeLaunch");
-        robotLift = hardwareMap.crservo.get("robotLift");
-
-        //hang
-
-
-        // get 2 claw motors
-        clawLeft = hardwareMap.servo.get("clawLeft");
-        clawRight = hardwareMap.servo.get("clawRight");
-
-        // get 2 arm motors
-        clawLift = hardwareMap.servo.get("clawLift");
-        armLift = hardwareMap.servo.get("armLift");
-
-        dcArm = hardwareMap.dcMotor.get("dcArm");
+        resources=new resources_NanoTrojans (hardwareMap);
 
         // huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
@@ -109,13 +67,13 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
         telemetry.update();
         // because the gear is always outside or inside then one size of wheels need to be revers
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
+        resources.frontRight.setDirection(DcMotor.Direction.REVERSE);
+        resources.backRight.setDirection(DcMotor.Direction.REVERSE);
 
-        driveControl = new DriveControl_NanoTorjan(frontLeft, frontRight, backLeft, backRight, imu);
+        driveControl = new DriveControl_NanoTorjan(resources.frontLeft, resources.frontRight, resources.backLeft, resources.backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
-        g2control=new controls_NanoTrojans(lsRight, lsLeft, planeLaunch,
-                                          clawLeft, clawRight, clawLift, armLift, robotLift);
+        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
+                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
 
         waitForStart();
         Thread baseControlThread = new Thread(new baseControl());
@@ -223,8 +181,8 @@ public class TeleOpMain6_mt extends LinearOpMode {
 
                 //lift power take from the second game pad
                 lspower = gamepad2.right_stick_y;
-                lsRight.setPower(lspower);
-                lsLeft.setPower(-lspower);
+                resources.lsRight.setPower(lspower);
+                resources.lsLeft.setPower(-lspower);
 
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
                 if (gamepad2.right_bumper) {
