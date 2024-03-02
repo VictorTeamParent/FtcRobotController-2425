@@ -105,32 +105,40 @@ public class SampleMecanumDrive extends MecanumDrive {
         //victor the following code is not straft let's swith front and back wheels on one side
 
         //the following turn clock wise
-        frontLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
-        backLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
-
-        backRight = hardwareMap.get(DcMotorEx.class, "backRight");
-        frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
-
-//        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
-//        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+//        frontLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+//        backLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
 //
-//        backRight = hardwareMap.get(DcMotorEx.class, "frontRight");
-//        frontRight = hardwareMap.get(DcMotorEx.class, "backRight");
+//        frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+//        backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+
+        //the following turn anti clock wise
+        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+
+        frontRight = hardwareMap.get(DcMotorEx.class, "backRight");
+        backRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+
+
+//        frontLeft = hardwareMap.get(DcMotorEx.class, "backRight");
+//        backLeft = hardwareMap.get(DcMotorEx.class, "frontRight");
+//
+//        frontRight = hardwareMap.get(DcMotorEx.class, "frontLeft");
+//        backRight = hardwareMap.get(DcMotorEx.class, "backLeft");
 
 
         //Victor: add the following 2 lines to reverse onside of the motors.
         //        the following works for all tunning before straft
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
-
-
         //frontRight.setDirection(DcMotor.Direction.REVERSE);
         //backRight.setDirection(DcMotor.Direction.REVERSE);
 
-        //frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        //backLeft.setDirection(DcMotor.Direction.REVERSE);
-        //motors = Arrays.asList(frontLeft, backLeft, backRight, frontRight);
-        motors = Arrays.asList(frontLeft, backLeft, backRight,  frontRight);
+
+//        frontRight.setDirection(DcMotor.Direction.REVERSE);
+//        backRight.setDirection(DcMotor.Direction.REVERSE);
+
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        motors = Arrays.asList(frontLeft, backLeft, backRight, frontRight);
+        //motors = Arrays.asList(frontLeft, backLeft, backRight,  frontRight);
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
