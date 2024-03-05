@@ -1,8 +1,12 @@
 package teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -42,6 +46,15 @@ public class resources_NanoTrojans {
     public int rearLeftMotorCounts = 0;
     public int rearRightMotorCounts = 0;
     public controls_NanoTrojans g2control;
+
+    //private BNO055IMU imu;
+
+    public DistanceSensor leftClawDistanceSensor;
+    public DistanceSensor rightClawDistanceSensor;
+    public ColorSensor rightClawColorSensor;
+    public ColorSensor leftClawColorSensor;
+
+    private HuskyLens huskyLens;
 public resources_NanoTrojans (HardwareMap hardwareMap){
     frontLeft = hardwareMap.get(DcMotor.class,"frontLeft");
     frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -74,6 +87,14 @@ public resources_NanoTrojans (HardwareMap hardwareMap){
     backLeft.setDirection(DcMotor.Direction.FORWARD);
     backRight.setDirection(DcMotor.Direction.REVERSE);
 
-    // Set motor modes
+    //get imu resource fron control hub
+//    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+//    parameters.loggingEnabled = true;
+//    parameters.loggingTag = "IMU";
+//    imu = hardwareMap.get(BNO055IMU.class, "imu");
+//    imu.initialize(parameters);
+
+    rightClawColorSensor = hardwareMap.colorSensor.get("rightclawcolor");
+    leftClawColorSensor = hardwareMap.colorSensor.get("leftclawcolor");
 }
 }

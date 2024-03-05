@@ -40,8 +40,8 @@ public class RCamConeLocDetection extends OpenCvPipeline {
 //    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(70, 0);
 //    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(225, 0);
 
-    static final int REGION_WIDTH = 70;
-    static final int REGION_HEIGHT = 25;
+    static final int REGION_WIDTH = 65;
+    static final int REGION_HEIGHT = 20;
 
     /*
      * Points which actually define the sample region rectangles, derived from above values

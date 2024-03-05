@@ -138,7 +138,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         motors = Arrays.asList(frontLeft, backLeft, backRight, frontRight);
-        //motors = Arrays.asList(frontLeft, backLeft, backRight,  frontRight);
+
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);

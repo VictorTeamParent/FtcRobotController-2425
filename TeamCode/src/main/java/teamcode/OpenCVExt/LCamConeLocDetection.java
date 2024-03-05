@@ -44,8 +44,8 @@ public class LCamConeLocDetection extends OpenCvPipeline {
     //    //blue Left
     //static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(0, 85);
 
-    static final int REGION_WIDTH = 70;
-    static final int REGION_HEIGHT = 25;
+    static final int REGION_WIDTH = 65;
+    static final int REGION_HEIGHT = 20;
 
     /*
      * Points which actually define the sample region rectangles, derived from above values
