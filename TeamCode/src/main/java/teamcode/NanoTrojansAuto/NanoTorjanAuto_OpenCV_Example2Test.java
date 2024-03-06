@@ -9,7 +9,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import teamcode.OpenCVExt.LSideConeLocDetectionTest;
+import teamcode.OpenCVExt.LCamConeLocDetection;
 
 
 /**
@@ -19,7 +19,7 @@ import teamcode.OpenCVExt.LSideConeLocDetectionTest;
 public class NanoTorjanAuto_OpenCV_Example2Test extends LinearOpMode {
 
     OpenCvWebcam webcam;
-    LSideConeLocDetectionTest pipeline;
+    LCamConeLocDetection pipeline;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,7 +27,7 @@ public class NanoTorjanAuto_OpenCV_Example2Test extends LinearOpMode {
         // the following is for one camera
         int cameraMonitorViewId2 = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId2);
-        pipeline = new LSideConeLocDetectionTest();
+        pipeline = new LCamConeLocDetection();
         webcam.setPipeline(pipeline);
 
 
@@ -63,8 +63,8 @@ public class NanoTorjanAuto_OpenCV_Example2Test extends LinearOpMode {
             telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
 
             telemetry.addData("Analysis", pipeline.getPosition());
-            telemetry.addData("Red Pix Detected", pipeline.redPixDetect());
-            telemetry.addData("Blue Pix Detected", pipeline.bluePixDetect());
+            //telemetry.addData("Red Pix Detected", pipeline.redPixDetect());
+            //telemetry.addData("Blue Pix Detected", pipeline.bluePixDetect());
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample

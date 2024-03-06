@@ -38,7 +38,8 @@ public class NanoTorjanAuto_Cam2_Test extends LinearOpMode {
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
+               // webcam.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
