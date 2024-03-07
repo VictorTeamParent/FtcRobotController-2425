@@ -1,27 +1,14 @@
 //package org.firstinspires.ftc.teamcode;
 package teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
-
 import java.util.concurrent.TimeUnit;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 import teamcode.drive.SampleMecanumDrive;
 
 
@@ -52,52 +39,21 @@ public class TeleOpMain8_mt extends LinearOpMode {
     @Override
     public void runOpMode()  throws InterruptedException {
         resources=new resources_NanoTrojans (hardwareMap);
-        //leftClawDistanceSensor = hardwareMap.get(DistanceSensor.class, "leftclawdistance");
-        //rightClawDistanceSensor = hardwareMap.get(DistanceSensor.class, "rightclawdistance");
-
-        // huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
-
-//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-//        parameters.loggingEnabled = true;
-//        parameters.loggingTag = "IMU";
-//        resources.imu = hardwareMap.get(BNO055IMU.class, "imu");
-//        resources.imu.initialize(parameters);
-
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
         rateLimit.expire();
 
-        /* if (!huskyLens.knock()) {
-            telemetry.addData(">>", "Problem communicating with " + huskyLens.getDeviceName());
-        } else {
-            telemetry.addData(">>", "Press start to continue");
-        } */
-
-
-        //huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
-        // huskyLens.selectAlgorithm(HuskyLens.Algorithm.OBJECT_TRACKING);
-        //********************** Husky Lens end *********************
-
-
-        //telemetry.update();
-        // because the gear is always outside or inside then one size of wheels need to be revers
-       // resources.frontRight.setDirection(DcMotor.Direction.REVERSE);
-        //resources.backRight.setDirection(DcMotor.Direction.REVERSE);
-
-        //driveControl = new DriveControl_NanoTorjan(resources.frontLeft, resources.frontRight,
-         //                                          resources.backLeft, resources.backRight, resources.imu);
-
-        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
+         g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
                 resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
 
 
         //Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
-        Thread clawControlThread = new Thread(new clawControl());
+        Thread lsControlThread = new Thread(new lsControl());
 
         //Start 2  threads
         //baseControlThread.start();
         armControlThread.start();
-        //clawControlThread.start();
+        lsControlThread.start();
 
         // This is the 3rd thread
         //The following  loop is just to keep this main thread running.
@@ -120,19 +76,12 @@ public class TeleOpMain8_mt extends LinearOpMode {
             drive.update();
 
             Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
-            telemetry.update();
+//            telemetry.addData("x", poseEstimate.getX());
+//            telemetry.addData("y", poseEstimate.getY());
+//            telemetry.addData("heading", poseEstimate.getHeading());
+//            telemetry.update();
         }
 
-
-//        if ( gamepad1.left_bumper ){
-//            g2control.planeLaunch();
-//            sleep(300);
-//            g2control.planeLaunchstop();
-//            //droneLaunced = true;
-//        }
     }
 
     // This is the thread class to control the base of the robot to move arround, this normally is
@@ -160,10 +109,14 @@ public class TeleOpMain8_mt extends LinearOpMode {
         }
     }//end of class baseControl
 
-    private class clawControl implements Runnable {
+    private class lsControl implements Runnable {
         boolean clawClosed = false;
         @Override
         public void run() {
+
+            boolean moveup2 = false;
+            boolean lsmove = false;
+            boolean highscore = false;
             waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
                 // Motor control logic for motors 1 and 2
@@ -183,8 +136,33 @@ public class TeleOpMain8_mt extends LinearOpMode {
 //                if(redValue > 100 && greenValue < 50 && blueValue < 50)
 //                    telemetry.addData("Red color", "detected");
 //                telemetry.update();
+                if (highscore == false) {
+                    if (gamepad2.dpad_down) {
+                        //linear slide go up
+                        g2control.highls();
+                        sleep(1400);
+                        g2control.highlsstop();
+                        moveup2 = true;
+                        lsmove = true;
+                        sleep(250);
+                    }
+                }else {
 
-
+                    if (moveup2) {
+                        //reset linear slides only if it was up
+                        g2control.reversesmallls();
+                        sleep(250);
+                        g2control.reversesmalllsstop();
+                        moveup2 = false;
+                    }
+                    if (lsmove) {
+                        g2control.reversehighls();
+                        sleep(650);
+                        g2control.reversehighlsstop();
+                        lsmove = false;
+                    }
+                }
+                highscore = !highscore;
 
             }
         }
@@ -294,33 +272,33 @@ public class TeleOpMain8_mt extends LinearOpMode {
 
                 }
                 if (gamepad2.dpad_left) {
-                    if (lowscore == false) {
-                        //move up linear slides
-                        //end move up
-                        g2control.armFull();
-                        sleep(500);
+//                    if (lowscore == false) {
+//                        //move up linear slides
+//                        //end move up
+//                        g2control.armFull();
+//                        sleep(500);
+//
+//                        g2control.clawparallel();
+//                        sleep(250);
+//                    }
+//                    //automation to reset position
+//                    else if (lowscore == true) {
+//
+//                        g2control.armUp();
+//                        sleep(1000);
 //                        g2control.clawUp();
-                        g2control.clawparallel();
-                        sleep(250);
-                    }
-                    //automation to reset position
-                    else if (lowscore == true) {
-
-                        g2control.armUp();
-                        sleep(1000);
-                        g2control.clawUp();
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
-                        rightclawopen= true;
-                        leftclawopen = true;
-                        sleep(250);
-                    }
-                    lowscore = !lowscore;
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawDown();
+//                        g2control.openClaw();
+//                        clawup = false;
+//                        clawopen = true;
+//                        rightclawopen= true;
+//                        leftclawopen = true;
+//                        sleep(250);
+//                    }
+//                    lowscore = !lowscore;
                 }
                 if (gamepad2.dpad_up) {
                     if (defaultscore == false) {
@@ -427,30 +405,30 @@ public class TeleOpMain8_mt extends LinearOpMode {
                         g2control.smalllsstop();
                         //end move up
 
-                        //linear slide go up
-                        g2control.highls();
-                        sleep(2000);
-                        g2control.highlsstop();
-                        moveup2 = true;
-                        lsmove = true;
-                        sleep(250);
+//                        //linear slide go up
+//                        g2control.highls();
+//                        sleep(1400);
+//                        g2control.highlsstop();
+//                        moveup2 = true;
+//                        lsmove = true;
+//                        sleep(250);
                     } else if (highscore == true) {
                         g2control.armUp();
                         sleep(500);
                         g2control.clawUp();
-                        if (moveup2) {
-                            //reset linear slides only if it was up
-                            g2control.reversesmallls();
-                            sleep(250);
-                            g2control.reversesmalllsstop();
-                            moveup2 = false;
-                        }
-                        if (lsmove) {
-                            g2control.reversehighls();
-                            sleep(1250);
-                            g2control.reversehighlsstop();
-                            lsmove = false;
-                        }
+//                        if (moveup2) {
+//                            //reset linear slides only if it was up
+//                            g2control.reversesmallls();
+//                            sleep(250);
+//                            g2control.reversesmalllsstop();
+//                            moveup2 = false;
+//                        }
+//                        if (lsmove) {
+//                            g2control.reversehighls();
+//                            sleep(650);
+//                            g2control.reversehighlsstop();
+//                            lsmove = false;
+//                        }
                         g2control.closeClaw();
                         g2control.armDown();
                         sleep(250);

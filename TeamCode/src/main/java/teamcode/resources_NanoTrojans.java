@@ -15,18 +15,18 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import teamcode.OpenCVExt.LCamConeLocDetection;
 
 public class resources_NanoTrojans {
-    static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
-    static final double WHEEL_DIAMETER_MM = 96.0; // Wheel diameter in millimeters
-    static final double MM_PER_REVOLUTION = WHEEL_DIAMETER_MM * Math.PI; // Wheel circumference
-    static final double COUNTS_PER_MM = COUNTS_PER_REVOLUTION / MM_PER_REVOLUTION; // Counts per millimeter
-    static final double COUNTS_PER_INCH = COUNTS_PER_MM * 25.4; // Counts per inch
+//    static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
+//    static final double WHEEL_DIAMETER_MM = 96.0; // Wheel diameter in millimeters
+//    static final double MM_PER_REVOLUTION = WHEEL_DIAMETER_MM * Math.PI; // Wheel circumference
+//    static final double COUNTS_PER_MM = COUNTS_PER_REVOLUTION / MM_PER_REVOLUTION; // Counts per millimeter
+//    static final double COUNTS_PER_INCH = COUNTS_PER_MM * 25.4; // Counts per inch
     OpenCvWebcam webcam2;
     LCamConeLocDetection pipeline2;
     LCamConeLocDetection.LSideConePosition position2 = LCamConeLocDetection.LSideConePosition.OTHER;
-    public DcMotor frontLeft;
-    public DcMotor frontRight;
-    public DcMotor backLeft;
-    public DcMotor backRight;
+//    public DcMotor frontLeft;
+//    public DcMotor frontRight;
+//    public DcMotor backLeft;
+//    public DcMotor backRight;
     public Servo clawLift = null;
     public Servo armLift = null;
     public Servo clawLeft = null;
@@ -56,10 +56,10 @@ public class resources_NanoTrojans {
 
     private HuskyLens huskyLens;
 public resources_NanoTrojans (HardwareMap hardwareMap){
-    frontLeft = hardwareMap.get(DcMotor.class,"frontLeft");
-    frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-    backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-    backRight = hardwareMap.get(DcMotor.class, "backRight");
+//    frontLeft = hardwareMap.get(DcMotor.class,"frontLeft");
+//    frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+//    backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+//    backRight = hardwareMap.get(DcMotor.class, "backRight");
     lsRight = hardwareMap.dcMotor.get("lsRight");
     lsLeft = hardwareMap.dcMotor.get("lsLeft");
     //intake = hardwareMap.dcMotor.get("intake");
@@ -82,10 +82,10 @@ public resources_NanoTrojans (HardwareMap hardwareMap){
     dcArm = hardwareMap.dcMotor.get("dcArm");
 
     // Set motor directions (adjust as needed based on your robot configuration)
-    frontLeft.setDirection(DcMotor.Direction.FORWARD);
-    frontRight.setDirection(DcMotor.Direction.REVERSE);
-    backLeft.setDirection(DcMotor.Direction.FORWARD);
-    backRight.setDirection(DcMotor.Direction.REVERSE);
+//    frontLeft.setDirection(DcMotor.Direction.FORWARD);
+//    frontRight.setDirection(DcMotor.Direction.REVERSE);
+//    backLeft.setDirection(DcMotor.Direction.FORWARD);
+//    backRight.setDirection(DcMotor.Direction.REVERSE);
 
     //get imu resource fron control hub
 //    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

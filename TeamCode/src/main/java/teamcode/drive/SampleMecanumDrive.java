@@ -54,8 +54,8 @@ import static teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(5, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(5, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1.12;
 
@@ -118,22 +118,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         frontRight = hardwareMap.get(DcMotorEx.class, "backRight");
         backRight = hardwareMap.get(DcMotorEx.class, "frontRight");
 
-
-//        frontLeft = hardwareMap.get(DcMotorEx.class, "backRight");
-//        backLeft = hardwareMap.get(DcMotorEx.class, "frontRight");
-//
-//        frontRight = hardwareMap.get(DcMotorEx.class, "frontLeft");
-//        backRight = hardwareMap.get(DcMotorEx.class, "backLeft");
-
-
-        //Victor: add the following 2 lines to reverse onside of the motors.
-        //        the following works for all tunning before straft
-        //frontRight.setDirection(DcMotor.Direction.REVERSE);
-        //backRight.setDirection(DcMotor.Direction.REVERSE);
-
-
-//        frontRight.setDirection(DcMotor.Direction.REVERSE);
-//        backRight.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
