@@ -35,9 +35,9 @@ public class resources_NanoTrojans {
     public DcMotor lsLeft = null;
     //public DcMotor intake = null;
     public CRServo planeLaunch = null;
-    public CRServo robotLift = null;
+    //public CRServo robotLift = null;
 
-    public DcMotor dcArm;
+    //public DcMotor dcArm;
     public int frontLeftMotorCounts = 0;
 
 
@@ -66,7 +66,7 @@ public resources_NanoTrojans (HardwareMap hardwareMap){
 
     //Servo Motors
     planeLaunch = hardwareMap.crservo.get("planeLaunch");
-    robotLift = hardwareMap.crservo.get("robotLift");
+    //robotLift = hardwareMap.crservo.get("robotLift");
 
     //hang
 
@@ -79,7 +79,7 @@ public resources_NanoTrojans (HardwareMap hardwareMap){
     clawLift = hardwareMap.servo.get("clawLift");
     armLift = hardwareMap.servo.get("armLift");
 
-    dcArm = hardwareMap.dcMotor.get("dcArm");
+    //dcArm = hardwareMap.dcMotor.get("dcArm");
 
     // Set motor directions (adjust as needed based on your robot configuration)
 //    frontLeft.setDirection(DcMotor.Direction.FORWARD);

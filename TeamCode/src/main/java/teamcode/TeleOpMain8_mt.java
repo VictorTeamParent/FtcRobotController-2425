@@ -43,7 +43,7 @@ public class TeleOpMain8_mt extends LinearOpMode {
         rateLimit.expire();
 
          g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
-                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
+                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
 
         //Thread baseControlThread = new Thread(new baseControl());

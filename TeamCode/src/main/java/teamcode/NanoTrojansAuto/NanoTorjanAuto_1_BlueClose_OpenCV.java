@@ -130,7 +130,7 @@ public class NanoTorjanAuto_1_BlueClose_OpenCV extends LinearOpMode {
         pipeline2 = new LCamConeLocDetection();
         webcam2.setPipeline(pipeline2);
         g2control=new controls_NanoTrojans( lsRight, lsLeft, planeLaunch,
-                clawLeft, clawRight, clawLift, armLift, robotLift);
+                clawLeft, clawRight, clawLift, armLift);
 
         /*
          *  Create a thread for camera, so it will watch for us

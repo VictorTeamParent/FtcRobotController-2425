@@ -54,7 +54,7 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
 
     private controls_NanoTrojans g2control;
 
-     private resources_NanoTrojans resources;
+    private resources_NanoTrojans resources;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -69,7 +69,7 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
         pipeline = new RCamConeLocDetection();
         webcam.setPipeline(pipeline);
         g2control=new controls_NanoTrojans( resources.lsRight, resources.lsLeft, resources.planeLaunch,
-                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
+                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
         /*
          *  Create a thread for camera, so it will watch for us
@@ -128,7 +128,7 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .forward(37)
-                        .strafeLeft(6)
+                        .strafeLeft(2)
                         //.forward(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
@@ -138,8 +138,9 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
                 // Update the starting pose for the second trajectory sequence
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
+                //parking
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeRight(31)
+                        .strafeRight(32)
                         .forward(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
@@ -152,7 +153,7 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
 
-                        .forward(49)
+                        .forward(48)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
@@ -162,9 +163,8 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .forward(3)
                         .turn(-Math.toRadians(89))
-                        .forward(30)
-                        .strafeRight(25)
-                        .forward(6)
+                        .forward(34)
+                        .strafeRight(28)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
@@ -187,7 +187,7 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(28)
                         .turn(-Math.toRadians(89))
-                        .forward(21)
+                        .forward(20)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
@@ -197,8 +197,8 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
 
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeRight(9)
-                        .forward(15)
+                        .strafeRight(14)
+                        .forward(14)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();

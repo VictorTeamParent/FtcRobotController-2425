@@ -34,7 +34,7 @@ public class controls_NanoTrojans  {
     //2 arms servo motors
     private Servo clawLift = null;
     private Servo armLift = null;
-    private CRServo robotLift = null;
+    //private CRServo robotLift = null;
 
     //Victor for auto pick
     public boolean clawdown = false;
@@ -42,7 +42,7 @@ public class controls_NanoTrojans  {
 
 
     public controls_NanoTrojans( DcMotor lsR, DcMotor lsL, CRServo planeL,
-                                     Servo clawL, Servo clawR, Servo clawLi, Servo armL, CRServo robotL)
+                                     Servo clawL, Servo clawR, Servo clawLi, Servo armL)
     {
         //intake= intak;
         lsRight=lsR;
@@ -52,7 +52,7 @@ public class controls_NanoTrojans  {
         clawRight=clawR;
         clawLift=clawLi;
         armLift=armL;
-        robotLift=robotL;
+        //robotLift=robotL;
 //        dcArm =arm;
     }
     public void closeClaw()
@@ -93,25 +93,25 @@ public class controls_NanoTrojans  {
         clawRight.setPosition(1);
 
     }
-    public void hangSpin()
-    {
-        //since this servo is continuous, we have to use set power like motors; then sleep 1000 milliseconds which is equal to one second before turning the servo off.
-        //you can also hold down the button to continuously turn the servo instead of pressing multiple times.
-        robotLift.setPower(1);
-    }
-    public void hangSpinstop()
-    {
-        robotLift.setPower(0);
-    }
-    public void reversehangSpin()
-    {
-        // this is the same as the hang spin except reversing the servo so it goes the other way so that we can unload the tension.
-        robotLift.setPower(-1);
-    }
-    public void reversehangSpinstop()
-    {
-        robotLift.setPower(0);
-    }
+//    public void hangSpin()
+//    {
+//        //since this servo is continuous, we have to use set power like motors; then sleep 1000 milliseconds which is equal to one second before turning the servo off.
+//        //you can also hold down the button to continuously turn the servo instead of pressing multiple times.
+//        robotLift.setPower(1);
+//    }
+//    public void hangSpinstop()
+//    {
+//        robotLift.setPower(0);
+//    }
+//    public void reversehangSpin()
+//    {
+//        // this is the same as the hang spin except reversing the servo so it goes the other way so that we can unload the tension.
+//        robotLift.setPower(-1);
+//    }
+//    public void reversehangSpinstop()
+//    {
+//        robotLift.setPower(0);
+//    }
     public void planeLaunch()
     {
         //plane launch also uses a continuous servo so it has the same concept as the hang mechanism, it basically just turns the servo for a second and then turns it off.

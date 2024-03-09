@@ -43,6 +43,8 @@ public class TeleOpMain7_mt extends LinearOpMode {
     private controls_NanoTrojans g2control;
     private resources_NanoTrojans resources;
 
+    private resources_base_NanoTrojans resourcesbase;
+
     private boolean rightPixelPicked = false;
     private boolean leftPixelPicked = false;
     private boolean autopick = false;
@@ -50,7 +52,7 @@ public class TeleOpMain7_mt extends LinearOpMode {
     public void runOpMode()  throws InterruptedException {
         resources = new resources_NanoTrojans(hardwareMap);
 
-
+        resourcesbase = new resources_base_NanoTrojans(hardwareMap);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.loggingEnabled = true;
         parameters.loggingTag = "IMU";
@@ -74,13 +76,13 @@ public class TeleOpMain7_mt extends LinearOpMode {
 
         telemetry.update();
         // because the gear is always outside or inside then one size of wheels need to be revers
-        resources.frontRight.setDirection(DcMotor.Direction.REVERSE);
-        resources.backRight.setDirection(DcMotor.Direction.REVERSE);
+        resourcesbase.frontRight.setDirection(DcMotor.Direction.REVERSE);
+        resourcesbase.backRight.setDirection(DcMotor.Direction.REVERSE);
 
-        driveControl = new DriveControl_NanoTorjan(resources.frontLeft, resources.frontRight, resources.backLeft, resources.backRight, imu);
+        driveControl = new DriveControl_NanoTorjan(resourcesbase.frontLeft, resourcesbase.frontRight, resourcesbase.backLeft, resourcesbase.backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
         g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
-                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
+                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
         waitForStart();
         Thread baseControlThread = new Thread(new baseControl());

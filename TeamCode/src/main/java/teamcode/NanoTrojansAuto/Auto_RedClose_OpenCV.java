@@ -136,7 +136,7 @@ public class Auto_RedClose_OpenCV extends LinearOpMode {
         pipeline = new RCamConeLocDetection();
         webcam.setPipeline(pipeline);
         g2control=new controls_NanoTrojans( resources.lsRight, resources.lsLeft, resources.planeLaunch,
-                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
+                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
         /*
          *  Create a thread for camera, so it will watch for us

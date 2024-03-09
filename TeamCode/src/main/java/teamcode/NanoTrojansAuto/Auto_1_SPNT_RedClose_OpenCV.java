@@ -26,9 +26,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -42,12 +39,21 @@ import teamcode.drive.SampleMecanumDrive;
 import teamcode.resources_NanoTrojans;
 import teamcode.trajectorysequence.TrajectorySequence;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.path.heading.LinearInterpolator;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+//import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
+
+
+
 /**
  * This class contains the Autonomous Mode program.
  */
 @Config
-@Autonomous(name = "AutoNT_1_BlueFar_OpenCV")
-public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
+@Autonomous(name = "Auto_1_SPNT_RedClose_OpenCV")
+public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
 
     // Constants for encoder counts and wheel measurements
 
@@ -56,15 +62,14 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
     RCamConeLocDetection.RSideConePosition position = RCamConeLocDetection.RSideConePosition.OTHER;
 
     private controls_NanoTrojans g2control;
-    private resources_NanoTrojans resources;
 
-    public static double parkingLongStrafe = 30;
+    private resources_NanoTrojans resources;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // Initialize motors
 
         resources = new resources_NanoTrojans(hardwareMap);
+
         /*
          *  Initialize camera and set pipeline
          */
@@ -72,7 +77,7 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new RCamConeLocDetection();
         webcam.setPipeline(pipeline);
-        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
+        g2control=new controls_NanoTrojans( resources.lsRight, resources.lsLeft, resources.planeLaunch,
                 resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
         /*
@@ -93,6 +98,9 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
          *  create an instacne for MecanumDrive car
          */
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        //drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         boolean stop = false;
 
         waitForStart();
@@ -103,43 +111,87 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
             g2control.clawUp();
 
             // Don't burn CPU cycles busy-looping in this sample
-            sleep(6000);
+            //sleep(1000);
 
             position = pipeline.getPosition();
-            telemetry.addData("Blue far Got position", position);
+            telemetry.addData("Red Close Got position", position);
             telemetry.update();
 
             if (position == RCamConeLocDetection.RSideConePosition.LEFT) {
-
                 telemetry.addLine("Detected Cone at Left");
                 telemetry.update();
 
-                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(24)
-                        .turn(-Math.toRadians(89))
-                        .back(9)
-                        .forward(6)
-                        .strafeLeft(8)
-                        .build();
-                drive.followTrajectorySequence(trajSeq);
-                dropTheConePixel();
-                Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+//                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
+//                        .forward(26)
+//                        .turn(-Math.toRadians(89))
+//                        .back(8)
+//                        .forward(5)
+//                        .strafeLeft(2)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq);
+//                Vector2d targetPosition = new Vector2d(24, 36); // Change this to your desired location
+//                double targetHeading = Math.toRadians(90); // Change this to your desired heading in radians
+//                double startHeading = Math.toRadians(0); // Change this to your desired heading in radians
+
+//                // Set drive constraints (optional)
+//                DriveConstraints constraints = new DriveConstraints(
+//                        60, // MaxVel
+//                        40, // MaxAccel
+//                        40, // MaxDecel
+//                        Math.toRadians(180), // MaxAngVel
+//                        Math.toRadians(180), // MaxAngAccel
+//                        AngleUnit.RADIANS
+//                );
+
+                // Create a trajectory builder with the starting position
+//                TrajectoryBuilder trajectoryBuilder = drive.trajectoryBuilder(new Pose2d())
+//                        .lineToLinearHeading(new Pose2d(
+//                                targetPosition.getX(), targetPosition.getY(), targetHeading
+//                        ), new LinearInterpolator(targetHeading));
+//                        //.build();
+//
+//                // Build the trajectory
+//                Trajectory trajectory = trajectoryBuilder.build();
+//
+//                // Wait for start button to be pressed
+//                waitForStart();
+//
+//                // Run the trajectory
+//                drive.followTrajectory(trajectory);
+//
+//                // Do something after reaching the target position and heading
+//                telemetry.addData("Status", "Reached target position and heading");
+//                telemetry.update();
+//                dropTheConePixel();
+//
+//                // Update the starting pose for the second trajectory sequence
 
 
-                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeLeft(18)
-                        .turn(Math.toRadians(89))
-                        .turn(Math.toRadians(89))
-                        .forward(86)
-                        .strafeLeft(25)
+                Trajectory traj = drive.trajectoryBuilder(new Pose2d())
+                        .splineTo(new Vector2d(30, 30), 0)
                         .build();
-                drive.followTrajectorySequence(trajSeq2);
-                doRestStuff();
 
-                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
-                        .strafeRight(37)
-                        .build();
-                drive.followTrajectorySequence(trajSeq3);
+                drive.followTrajectory(traj);
+                //Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+
+
+//                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
+//                        .forward(37)
+//                        .strafeLeft(6)
+//                        //.forward(6)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq2);
+//                //sleep(500);
+//                doRestStuff();
+//
+//                // Update the starting pose for the second trajectory sequence
+//                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+//
+//                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
+//                        .strafeRight(31)
+//                        .forward(6)
+//                        .build();
+//                drive.followTrajectorySequence(trajSeq3);
 
                 stop = true;
 
@@ -148,29 +200,30 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(48)
+
+                        .forward(49)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
-                //sleep(500);
                 dropTheConePixel();
+                // Update the starting pose for the second trajectory sequence
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
-
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .forward(2)
-                        .turn(Math.toRadians(89))
-                        .forward(87)
-                        .strafeLeft(23)
+                        .forward(3)
+                        .turn(-Math.toRadians(89))
+                        .forward(30)
+                        .strafeRight(25)
+                        .forward(6)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
-//                turnLeft90D5MoreD(0.8);
                 doRestStuff();
-                //********Parking
+
+                // Update the starting pose for the second trajectory sequence
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
+                //********Parking
                 TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeRight(23)
+                        .strafeRight(24)
+                        .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq4);
 
@@ -181,70 +234,61 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
                 telemetry.update();
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(27)
-                        .turn(Math.toRadians(89))
-                        .back(3)
-                        .forward(6)
+                        .forward(28)
+                        .turn(-Math.toRadians(89))
+                        .forward(21)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
+
+                // Update the starting pose for the second trajectory sequence
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
 
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeRight(25)
-                        .forward(84)
-                        .strafeLeft(19)
+                        .strafeRight(9)
+                        .forward(15)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
-                sleep(500);
                 doRestStuff();
+
+                // Update the starting pose for the second trajectory sequence
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
-
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeRight(18)
+                        .strafeRight(19)
+                        .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
                 stop = true;
-
-
             }
         }
     }
+
     private void dropTheConePixel() {
         g2control.clawDown();
         sleep(500);
         g2control.openLeftClaw();
         //g2control.openClaw();
-        sleep(1000);
+        sleep(500);
         g2control.clawUp();
         //g2control.closeClaw();
         g2control.closeLeftClaw();
     }
 
-       private void doRestStuff() {
+    private void doRestStuff() {
         //************************
         // Lift claw and setup position
         //end move up
-           g2control.armFull();
-        sleep(250);
-        g2control.smallls();
-        sleep(250);
-        g2control.smalllsstop();
 
-
+        g2control.armFull();
+        sleep(250);
         g2control.clawUp();
-        sleep(2000);
+        //g2control.clawparallel();
+        sleep(1000);
         g2control.openClaw();
-        sleep(500);
-
-
-
-
-
-
+        sleep(1000);
 
         g2control.armUp();
         sleep(500);
@@ -254,14 +298,7 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
         g2control.armDown();
         //sleep(250);
         g2control.clawUp();
-        sleep(200);
-        //g2control.openClaw();
-
-        g2control.reversesmallls();
-        sleep(250);
-        g2control.reversehighlsstop();
 
     }
-
 
 }
