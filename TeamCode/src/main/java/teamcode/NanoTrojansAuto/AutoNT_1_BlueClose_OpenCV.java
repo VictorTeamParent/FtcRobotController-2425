@@ -136,10 +136,11 @@ public class AutoNT_1_BlueClose_OpenCV extends LinearOpMode {
                 sleep(500);
                 doRestStuff();
 
+                //parking
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
                         .strafeLeft(35)
+                        .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -170,8 +171,6 @@ public class AutoNT_1_BlueClose_OpenCV extends LinearOpMode {
                 doRestStuff();
                 //********Parking
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose3)
                         .strafeLeft(27)
                         .forward(7)
@@ -202,9 +201,10 @@ public class AutoNT_1_BlueClose_OpenCV extends LinearOpMode {
                 doRestStuff();
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
-
+                //parking
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
                         .strafeLeft(20)
+                        .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 

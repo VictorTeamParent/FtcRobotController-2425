@@ -115,28 +115,26 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(27)
-                        .turn(Math.toRadians(90))
+                        .turn(Math.toRadians(89))
                         .back(8)
                         .forward(6)
                         .strafeRight(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheLeftConePixel();
+
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .strafeRight(18)
                         .turn(-Math.toRadians(89))
                         .turn(-Math.toRadians(89))
-                        .forward(83)
-                        .strafeRight(36)
+                        .forward(83.5)
+                        .strafeRight(33)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
+
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
                         .strafeLeft(29)
                         .build();
@@ -159,21 +157,20 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
                 dropTheLeftConePixel();
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
-
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .forward(3)
                         .turn(-Math.toRadians(89))
-                        .forward(86)
-                        .strafeRight(23)
+                        .forward(85)
+                        .strafeRight(25.5)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
 //                turnLeft90D5MoreD(0.8);
                 doRestStuff();
+
                 //********Parking
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
                 TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeLeft(21)
+                        .strafeLeft(23)
                         .build();
                 drive.followTrajectorySequence(trajSeq4);
 
@@ -192,20 +189,18 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheLeftConePixel();
+
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .strafeLeft(25)
                         .forward(84)
-                        .strafeRight(16)
+                        .strafeRight(15.5)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 sleep(500);
                 doRestStuff();
+
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
                         .strafeLeft(18)
                         .build();

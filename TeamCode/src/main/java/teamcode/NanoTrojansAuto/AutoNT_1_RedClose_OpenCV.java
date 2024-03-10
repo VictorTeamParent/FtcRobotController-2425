@@ -207,7 +207,7 @@ public class AutoNT_1_RedClose_OpenCV extends LinearOpMode {
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeRight(19)
+                        .strafeRight(17)
                         .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
