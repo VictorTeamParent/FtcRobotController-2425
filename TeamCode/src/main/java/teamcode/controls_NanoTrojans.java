@@ -137,7 +137,7 @@ public class controls_NanoTrojans  {
     {
         //same thing for this except the position is different.
 //        clawLift.setPosition(0.8);
-        clawLift.setPosition(1);
+        clawLift.setPosition(0.75);
         clawdown = false;
         autopicksucess = false;
 

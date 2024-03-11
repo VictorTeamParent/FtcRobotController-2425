@@ -64,6 +64,8 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
     private controls_NanoTrojans g2control;
 
     private resources_NanoTrojans resources;
+    
+    private int autoOptions = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -103,7 +105,11 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
 
         boolean stop = false;
 
+
+
+        // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        UserChoice();
 
         while (opModeIsActive() && !stop) {
 
@@ -120,73 +126,36 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
             if (position == RCamConeLocDetection.RSideConePosition.LEFT) {
                 telemetry.addLine("Detected Cone at Left");
                 telemetry.update();
-
-//                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-//                        .forward(26)
-//                        .turn(-Math.toRadians(89))
-//                        .back(8)
-//                        .forward(5)
-//                        .strafeLeft(2)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq);
-//                Vector2d targetPosition = new Vector2d(24, 36); // Change this to your desired location
-//                double targetHeading = Math.toRadians(90); // Change this to your desired heading in radians
-//                double startHeading = Math.toRadians(0); // Change this to your desired heading in radians
-
-//                // Set drive constraints (optional)
-//                DriveConstraints constraints = new DriveConstraints(
-//                        60, // MaxVel
-//                        40, // MaxAccel
-//                        40, // MaxDecel
-//                        Math.toRadians(180), // MaxAngVel
-//                        Math.toRadians(180), // MaxAngAccel
-//                        AngleUnit.RADIANS
-//                );
-
-                // Create a trajectory builder with the starting position
-//                TrajectoryBuilder trajectoryBuilder = drive.trajectoryBuilder(new Pose2d())
-//                        .lineToLinearHeading(new Pose2d(
-//                                targetPosition.getX(), targetPosition.getY(), targetHeading
-//                        ), new LinearInterpolator(targetHeading));
-//                        //.build();
-//
-//                // Build the trajectory
-//                Trajectory trajectory = trajectoryBuilder.build();
-//
-//                // Wait for start button to be pressed
-//                waitForStart();
-//
-//                // Run the trajectory
-//                drive.followTrajectory(trajectory);
-//
-//                // Do something after reaching the target position and heading
-//                telemetry.addData("Status", "Reached target position and heading");
-//                telemetry.update();
-//                dropTheConePixel();
-//
-//                // Update the starting pose for the second trajectory sequence
-
-
-                Trajectory traj = drive.trajectoryBuilder(new Pose2d())
-                        .splineTo(new Vector2d(30, 30), 0)
+                TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
+                        .splineTo(new Vector2d(25, -5), -Math.toRadians(89))
+                        .back(12)
+                        .forward(5)
+                        .strafeLeft(5)
                         .build();
+                drive.followTrajectorySequence(traj);
+                dropTheConePixel();
+                Pose2d startingPose2 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
-                drive.followTrajectory(traj);
-                //Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+
+                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
+                        .forward(36)
+                        .strafeLeft(2)
+                        .build();
+                drive.followTrajectorySequence(trajSeq2);
+                //sleep(500);
+                doRestStuff();
+                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+
+                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
+                        .strafeRight(30)
+                        .forward(8)
+                        .build();
+                drive.followTrajectorySequence(trajSeq3);
 
 
-//                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-//                        .forward(37)
-//                        .strafeLeft(6)
-//                        //.forward(6)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq2);
-//                //sleep(500);
-//                doRestStuff();
-//
+                   //parking
 //                // Update the starting pose for the second trajectory sequence
 //                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-//
 //                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
 //                        .strafeRight(31)
 //                        .forward(6)
@@ -230,36 +199,58 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
                 stop = true;
 
             } else if (position == RCamConeLocDetection.RSideConePosition.RIGHT) {
-                telemetry.addLine("Detected Cone at Right");
-                telemetry.update();
+//                telemetry.addLine("Detected Cone at Right");
+//                telemetry.update();
 
-                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(28)
-                        .turn(-Math.toRadians(89))
-                        .forward(21)
+                Trajectory traj = drive.trajectoryBuilder(new Pose2d())
+                        .splineTo(new Vector2d(32, -20), -Math.toRadians(89))
                         .build();
-                drive.followTrajectorySequence(trajSeq);
+                drive.followTrajectory(traj);
                 dropTheConePixel();
 
                 // Update the starting pose for the second trajectory sequence
-                Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
+                Pose2d startingPose2 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeRight(9)
-                        .forward(15)
+                        .strafeRight(15)
+                        .forward(13)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
 
-                // Update the starting pose for the second trajectory sequence
-                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
+                autoOptions = 2;
+                // just parking
+                if (autoOptions == 1)
+                {
+                    //parking
+                    // Update the starting pose for the second trajectory sequence
+                    Pose2d startingPose3 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
                         .strafeRight(19)
                         .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
+              } else if(autoOptions == 2) {
+
+                    //pick more pixels
+                    Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+                    TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
+                            .strafeLeft(31)
+                            .back(100)
+                            .build();
+                    drive.followTrajectorySequence(trajSeq3);
+                    setupClawToPickStack();
+
+                    Pose2d startingPose4 = trajSeq3.end(); //
+                    TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose4)
+                            .back(6)
+                            .build();
+                    drive.followTrajectorySequence(trajSeq4);
+
+                    g2control.closeRightClaw();
+                   //g2control.closeLeftClaw();
+
+                }
+
 
                 stop = true;
             }
@@ -301,4 +292,72 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
 
     }
 
-}
+    private void setupClawToPickStack() {
+        //************************
+        // Lift claw and setup position
+        //end move up
+
+        g2control.smallls();
+        sleep(250);
+        g2control.smalllsstop();
+
+        g2control.clawDown();
+        sleep(500);
+        g2control.openRightClaw();
+        sleep(500);
+
+        //g2control.closeRightClaw();
+//        g2control.clawUp();
+//        g2control.reversesmallls();
+//        sleep(150);
+//        g2control.reversesmallls();
+    }
+
+    private void UserChoice() {
+        int userChoice = getUserInput();
+
+        // Execute the selected autonomous behavior based on user choice
+        switch (userChoice) {
+            case 1:
+                autoOptions = 1;
+                telemetry.addLine( "You Chose Parking Only");
+                break;
+            case 2:
+                autoOptions = 2;
+                telemetry.addLine( "You Chose Pick more Pixels");
+                break;
+            // Add more cases for additional options as needed
+            default:
+                // Default behavior if an invalid option is selected
+                telemetry.addData("Error", "Invalid option selected");
+                telemetry.update();
+                break;
+
+        }
+    }
+    
+    // Method to get user input (replace with your implementation)
+    private int getUserInput()
+    {
+            // Prompt the user to make a choice and wait for input
+            telemetry.addData("Autonomous Options", ":");
+            telemetry.addLine( "dpad_left: Parking Only");
+            telemetry.addLine("dpad_right: Get More Pixels");
+            telemetry.addData("Enter Choice", "Press dpad-left or right");
+            telemetry.update();
+
+            // Loop until valid input is received
+            while (!gamepad1.dpad_left && !gamepad1.dpad_right) {
+                // Check gamepad input
+                if (gamepad1.dpad_left) {
+                    return 1; // Option 1 selected
+
+                } else if (gamepad1.dpad_right) {
+                    return 2; // Option 2 selected
+                }
+            }
+            return 0; // Default to 0 if no valid input is received
+        }
+    }
+
+
