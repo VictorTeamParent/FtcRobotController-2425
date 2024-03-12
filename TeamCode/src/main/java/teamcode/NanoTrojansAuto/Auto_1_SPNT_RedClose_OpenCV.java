@@ -134,55 +134,40 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequence(traj);
                 dropTheConePixel();
+
                 Pose2d startingPose2 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .forward(36)
-                        .strafeLeft(2)
+                        .strafeLeft(1)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 //sleep(500);
                 doRestStuff();
-                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
+                //parking
+                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeRight(30)
+                        .strafeRight(31)
                         .forward(8)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
-
-
-                   //parking
-//                // Update the starting pose for the second trajectory sequence
-//                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-//                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-//                        .strafeRight(31)
-//                        .forward(6)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq3);
-
                 stop = true;
 
 
             } else if (position == RCamConeLocDetection.RSideConePosition.CENTER) {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
-                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-
-                        .forward(49)
+                Trajectory traj = drive.trajectoryBuilder(new Pose2d())
+                        .splineTo(new Vector2d(38, -10), -Math.toRadians(89))
                         .build();
-                drive.followTrajectorySequence(trajSeq);
+                drive.followTrajectory(traj);
                 dropTheConePixel();
-                // Update the starting pose for the second trajectory sequence
-                Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
+                // Update the starting pose for the second trajectory sequence
+                Pose2d startingPose2 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .forward(3)
-                        .turn(-Math.toRadians(89))
-                        .forward(30)
-                        .strafeRight(25)
-                        .forward(6)
+                        .forward(24)
+                        .strafeRight(14)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
@@ -191,7 +176,7 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 //********Parking
                 TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeRight(24)
+                        .strafeRight(25)
                         .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq4);
@@ -212,20 +197,20 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
                 Pose2d startingPose2 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .strafeRight(15)
-                        .forward(13)
+                        .forward(14)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
 
-                autoOptions = 2;
+                autoOptions = 1;
                 // just parking
                 if (autoOptions == 1)
                 {
                     //parking
                     // Update the starting pose for the second trajectory sequence
-                    Pose2d startingPose3 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeRight(19)
+                    Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+                    TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
+                        .strafeRight(17)
                         .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
@@ -234,7 +219,7 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
                     //pick more pixels
                     Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                     TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                            .strafeLeft(31)
+                            .strafeLeft(34)
                             .back(100)
                             .build();
                     drive.followTrajectorySequence(trajSeq3);
