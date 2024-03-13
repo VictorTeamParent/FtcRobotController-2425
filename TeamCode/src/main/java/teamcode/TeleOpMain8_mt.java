@@ -80,6 +80,13 @@ public class TeleOpMain8_mt extends LinearOpMode {
 //            telemetry.addData("y", poseEstimate.getY());
 //            telemetry.addData("heading", poseEstimate.getHeading());
 //            telemetry.update();
+            if ( gamepad1.y ){
+                telemetry.addLine("Y pressed");
+                g2control.planeLaunch();
+                sleep(100);
+                g2control.planeLaunchstop();
+                //droneLaunced = true;
+            }
         }
 
     }
