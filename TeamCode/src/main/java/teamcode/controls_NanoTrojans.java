@@ -155,7 +155,7 @@ public class controls_NanoTrojans  {
     public void clawFull()
     {
 
-        clawLift.setPosition(1);
+        clawLift.setPosition(0.75);
         clawdown = false;
     }
     public void clawparallel()

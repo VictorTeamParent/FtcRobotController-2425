@@ -87,12 +87,12 @@ public class TeleOpMain7_mt extends LinearOpMode {
         waitForStart();
         Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
-        Thread clawControlThread = new Thread(new clawControl());
-
+        //Thread clawControlThread = new Thread(new clawControl());
+        Thread lsControlThread = new Thread(new lsControl());
         //Start 2  threads
         baseControlThread.start();
         armControlThread.start();
-        //clawControlThread.start();
+        //lsControlThread.start();
 
         // This is the 3rd thread
         //The following  loop is just to keep this main thread running.
@@ -140,6 +140,24 @@ public class TeleOpMain7_mt extends LinearOpMode {
         }
     }//end of class baseControl
 
+    private class lsControl implements Runnable {
+        boolean clawClosed = false;
+        @Override
+        public void run() {
+
+            boolean moveup2 = false;
+            boolean lsmove = false;
+            boolean highscore = false;
+            waitForStart();
+            while (!Thread.interrupted() && opModeIsActive()) {
+
+                double lspower = gamepad2.right_stick_y;
+                resources.lsRight.setPower(lspower);
+                resources.lsLeft.setPower(-lspower);
+
+            }
+        }
+    }//end of class baseControl
     private class clawControl implements Runnable {
         boolean clawClosed = false;
         @Override
