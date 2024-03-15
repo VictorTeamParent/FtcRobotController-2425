@@ -265,32 +265,23 @@ public class Auto2_PickMore_RedClose_OpenCV extends LinearOpMode {
                 drive.followTrajectory(traj);
                 dropTheConePixel();
 
-                // Place Yellow pixel to the board
-                // Update the starting pose for the second trajectory sequence
-                Pose2d startingPose2 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeRight(15.5)
-                        .forward(14)
-                        .build();
-                drive.followTrajectorySequence(trajSeq2);
-                doRestStuff();
 
 
                 //pick more pixels
-                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+                Pose2d startingPose2 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
-                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeLeft(36.5)
-                        .back(103.8)
+                TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
+                        .strafeRight(26)
+                        .back(19)
                         .build();
-                drive.followTrajectorySequence(trajSeq3);
+                drive.followTrajectorySequence(trajSeq2);
                 setupLeftClawToPickStack(lluptime);
 
-                Pose2d startingPose4 = trajSeq3.end(); //
-                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose4)
+                Pose2d startingPose3 = trajSeq2.end(); //
+                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
                         .back(1.60)
                         .build();
-                drive.followTrajectorySequence(trajSeq4);
+                drive.followTrajectorySequence(trajSeq3);
 
                 //sleep(1000);
                 g2control.closeLeftClaw();
@@ -298,11 +289,11 @@ public class Auto2_PickMore_RedClose_OpenCV extends LinearOpMode {
 
                 g2control.openLeftClaw();
 
-                Pose2d startingPose5 = trajSeq4.end(); //
-                TrajectorySequence trajSeq5 = drive.trajectorySequenceBuilder(startingPose5)
+                Pose2d startingPose4 = trajSeq3.end(); //
+                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose4)
                         .back(0.3)
                         .build();
-                drive.followTrajectorySequence(trajSeq5);
+                drive.followTrajectorySequence(trajSeq4);
                 sleep(100);
                 g2control.closeLeftClaw();
                 sleep(1000);
@@ -311,12 +302,12 @@ public class Auto2_PickMore_RedClose_OpenCV extends LinearOpMode {
                 g2control.clawUp();
                 sleep(1000);
 
-                Pose2d startingPose6 = trajSeq5.end(); //
-                TrajectorySequence trajSeq6 = drive.trajectorySequenceBuilder(startingPose6)
+                Pose2d startingPose5 = trajSeq4.end(); //
+                TrajectorySequence trajSeq5 = drive.trajectorySequenceBuilder(startingPose5)
                         .forward(105)
                         .strafeRight(25)
                         .build();
-                drive.followTrajectorySequence(trajSeq6);
+                drive.followTrajectorySequence(trajSeq5);
                 doRestStuff();
 
                 lldown(lluptime);

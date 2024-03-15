@@ -95,8 +95,7 @@ public class Auto2_PickMore_PLRedFar_OpenCV extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !stop) {
-            int lluptime = 160;
-            int time = 160;
+            int lluptime = 170;
 
             g2control.closeClaw();
             g2control.clawUp();
@@ -121,35 +120,52 @@ public class Auto2_PickMore_PLRedFar_OpenCV extends LinearOpMode {
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
 
-//                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-//                        .forward(27)
-//                        .turn(Math.toRadians(89))
-//                        .back(8)
-//                        .forward(6)
-//                        .strafeRight(7)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq);
-//                dropTheLeftConePixel();
+
+
 
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeRight(20)
-                        //.turn(-Math.toRadians(89))
-                        //.turn(-Math.toRadians(89))
-                        .back(74)
-                        .strafeLeft(29)
-                        .turn(-Math.toRadians(88))
-                        .turn(-Math.toRadians(89))
-                        .forward(9)
+                        .strafeLeft(36.5)
+                        .back(103.8)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
-                doRestStuff();
+                setupLeftClawToPickStack(lluptime);
 
-                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+                Pose2d startingPose3 = trajSeq2.end(); //
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeLeft(29)
+                        .back(1.60)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
+
+                //sleep(1000);
+                g2control.closeLeftClaw();
+                sleep(1000);
+
+                g2control.openLeftClaw();
+
+                Pose2d startingPose4 = trajSeq3.end(); //
+                TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose4)
+                        .back(0.3)
+                        .build();
+                drive.followTrajectorySequence(trajSeq4);
+                sleep(100);
+                g2control.closeLeftClaw();
+                sleep(1000);
+
+
+                g2control.clawUp();
+                sleep(1000);
+
+                Pose2d startingPose5 = trajSeq4.end(); //
+                TrajectorySequence trajSeq5 = drive.trajectorySequenceBuilder(startingPose5)
+                        .forward(105)
+                        .strafeRight(25)
+                        .build();
+                drive.followTrajectorySequence(trajSeq5);
+                doRestStuff();
+
+                lldown(lluptime);
 
 
                 stop = true;
@@ -299,7 +315,7 @@ public class Auto2_PickMore_PLRedFar_OpenCV extends LinearOpMode {
         sleep(lluptime);
         g2control.smalllsstop();
 
-        g2control.openLeftClawWide();
+        g2control.openRightClaw();
 
         sleep(500);
         g2control.clawDown();
