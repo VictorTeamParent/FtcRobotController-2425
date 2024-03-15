@@ -102,12 +102,6 @@ public class controls_NanoTrojans  {
 
     }
 
-    public void openRightClawWide()
-    {
-        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
-        clawRight.setPosition(0.8);
-
-    }
 //    public void hangSpin()
 //    {
 //        //since this servo is continuous, we have to use set power like motors; then sleep 1000 milliseconds which is equal to one second before turning the servo off.
