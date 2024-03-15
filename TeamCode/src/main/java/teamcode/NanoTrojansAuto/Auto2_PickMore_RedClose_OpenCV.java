@@ -24,8 +24,11 @@ package teamcode.NanoTrojansAuto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -38,22 +41,15 @@ import teamcode.controls_NanoTrojans;
 import teamcode.drive.SampleMecanumDrive;
 import teamcode.resources_NanoTrojans;
 import teamcode.trajectorysequence.TrajectorySequence;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.path.heading.LinearInterpolator;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 //import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
-
 
 
 /**
  * This class contains the Autonomous Mode program.
  */
 @Config
-@Autonomous(name = "Auto_1_SPNT_RedClose_OpenCV")
-public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
+@Autonomous(name = "Auto2_PickMore_RedClose_OpenCV")
+public class Auto2_PickMore_RedClose_OpenCV extends LinearOpMode {
 
     // Constants for encoder counts and wheel measurements
 
@@ -109,7 +105,7 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        UserChoice();
+        //UserChoice();
 
         while (opModeIsActive() && !stop) {
 
@@ -186,6 +182,7 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
             } else if (position == RCamConeLocDetection.RSideConePosition.RIGHT) {
 //                telemetry.addLine("Detected Cone at Right");
 //                telemetry.update();
+                int lluptime = 160;
 
                 Trajectory traj = drive.trajectoryBuilder(new Pose2d())
                         .splineTo(new Vector2d(32, -20), -Math.toRadians(89))
@@ -196,13 +193,13 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
                 // Update the starting pose for the second trajectory sequence
                 Pose2d startingPose2 = traj.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeRight(15)
+                        .strafeRight(15.5)
                         .forward(14)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
 
-                autoOptions = 1;
+                autoOptions = 2;
                 // just parking
                 if (autoOptions == 1)
                 {
@@ -214,26 +211,75 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
                         .forward(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
+                //pick up more pixels
               } else if(autoOptions == 2) {
 
                     //pick more pixels
                     Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+
                     TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                            .strafeLeft(34)
-                            .back(100)
+                            .strafeLeft(36.5)
+                            .back(103.8)
                             .build();
                     drive.followTrajectorySequence(trajSeq3);
-                    setupClawToPickStack();
+                    setupLeftClawToPickStack(lluptime);
 
                     Pose2d startingPose4 = trajSeq3.end(); //
                     TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose4)
-                            .back(6)
+                            .back(1.60)
                             .build();
                     drive.followTrajectorySequence(trajSeq4);
 
-                    g2control.closeRightClaw();
-                   //g2control.closeLeftClaw();
+                    //sleep(1000);
+                    g2control.closeLeftClaw();
+                    sleep(1000);
 
+                    g2control.openLeftClaw();
+
+                   Pose2d startingPose5 = trajSeq4.end(); //
+                    TrajectorySequence trajSeq5 = drive.trajectorySequenceBuilder(startingPose5)
+                            .back(0.3)
+                            .build();
+                    drive.followTrajectorySequence(trajSeq5);
+                    sleep(100);
+                    g2control.closeLeftClaw();
+                    sleep(1000);
+
+
+//
+//                    if(detectPixel(resources.rightClawColorSensor))
+//                    {
+//                        //g2control.closeRightClaw();
+//                        g2control.closeLeftClaw();
+//                    }
+//
+//                    if (detectPixel(resources.leftClawColorSensor))
+//                    {
+//                        //g2control.closeRightClaw();
+//                        g2control.openLeftClaw();
+//                        Pose2d startingPose5 = trajSeq4.end(); //
+//                        TrajectorySequence trajSeq5 = drive.trajectorySequenceBuilder(startingPose5)
+//                                .back(0.3)
+//                                .build();
+//                        drive.followTrajectorySequence(trajSeq5);
+//
+//                        g2control.closeLeftClaw();
+//                        sleep
+//
+//                    }
+
+                    g2control.clawUp();
+                    sleep(1000);
+
+                    Pose2d startingPose6 = trajSeq5.end(); //
+                    TrajectorySequence trajSeq6 = drive.trajectorySequenceBuilder(startingPose6)
+                            .forward(105)
+                            .strafeRight(25)
+                            .build();
+                    drive.followTrajectorySequence(trajSeq6);
+                    doRestStuff();
+
+                    lldown(lluptime);
                 }
 
 
@@ -277,7 +323,7 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
 
     }
 
-    private void setupClawToPickStack() {
+    private void setupRighClawToPickStack() {
         //************************
         // Lift claw and setup position
         //end move up
@@ -297,6 +343,42 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
 //        sleep(150);
 //        g2control.reversesmallls();
     }
+
+    private void setupLeftClawToPickStack(int lluptime) {
+        //************************
+        // Lift claw and setup position
+        //end move up
+
+        g2control.smallls();
+        sleep(lluptime);
+        g2control.smalllsstop();
+
+        g2control.openLeftClawWide();
+
+        sleep(500);
+        g2control.clawDown();
+        //g2control.openRightClawWide();
+        sleep(500);
+
+        //g2control.closeRightClaw();
+//        g2control.clawUp();
+//        g2control.reversesmallls();
+//        sleep(150);
+//        g2control.reversesmallls();
+    }
+
+    private void lldown(int time) {
+        //************************
+        // Lift claw and setup position
+        //end move up
+
+       g2control.reversesmallls();
+        sleep(time);
+        g2control.reversesmallls();
+
+    }
+
+
 
     private void UserChoice() {
         int userChoice = getUserInput();
@@ -343,6 +425,62 @@ public class Auto_1_SPNT_RedClose_OpenCV extends LinearOpMode {
             }
             return 0; // Default to 0 if no valid input is received
         }
+
+    private boolean detectPixel (ColorSensor cs)
+    {
+        boolean rc = false;
+        boolean enableTelemetry = true;
+        int red = cs.red();
+        int green = cs.green();
+        int blue = cs.blue();
+
+        //boolean rightpixeldetected = false;
+        if(enableTelemetry) {
+            telemetry.addData("Red", red);
+            telemetry.addData("Green", green);
+            telemetry.addData("Blue", blue);
+            telemetry.update();
+        }
+//            if (red > 100 && blue > 100 && green < 50) {
+//                if(enableTelemetry) {
+//                    telemetry.addData("Color", "Purple");
+//                }
+//                rc = true;
+//            }
+//            // Check for yellow color
+//            else if (red > 100 && green > 100 && blue < 50) {
+//                if(enableTelemetry) {
+//                    telemetry.addData("Color", "Yellow");
+//                }
+//                rc = true;
+//            }
+        // Check for green color
+        //else if (green > 250 && red < 200 && blue > 200) {
+        if ( red > 150 && green > 250 && blue > 200) {
+            if(enableTelemetry) {
+                telemetry.addData("Color", "Green");
+            }
+            rc = true;
+        }
+        // Check for white color
+        else if (red > 200 && green > 200 && blue > 200) {
+            if(enableTelemetry) {
+                telemetry.addData("Color", "White");
+            }
+            rc = true;
+        }
+        // None of the specified colors detected
+        else {
+            if(enableTelemetry) {
+                telemetry.addData("Color", "Unknown");
+            }
+        }
+
+        telemetry.update();
+        return rc;
     }
+    }
+
+
 
 

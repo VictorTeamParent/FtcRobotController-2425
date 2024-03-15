@@ -1,6 +1,9 @@
 package teamcode;
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -86,11 +89,23 @@ public class controls_NanoTrojans  {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
         clawLeft.setPosition(0.5);
     }
+    public void openLeftClawWide()
+    {
+        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
+        clawLeft.setPosition(0.4);
+    }
 
     public void openRightClaw()
     {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
         clawRight.setPosition(1);
+
+    }
+
+    public void openRightClawWide()
+    {
+        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
+        clawRight.setPosition(0.8);
 
     }
 //    public void hangSpin()
@@ -247,6 +262,48 @@ public class controls_NanoTrojans  {
         lsRight.setPower(0);
         lsLeft.setPower(0);
     }
+
+//    public boolean detectPixel (ColorSensor cs)
+//    {
+//        boolean rc = false;
+//        boolean enableTelemetry = false;
+//        int red = cs.red();
+//        int green = cs.green();
+//        int blue = cs.blue();
+//
+//        //boolean rightpixeldetected = false;
+//        if(enableTelemetry) {
+//            telemetry.addData("Red", red);
+//            telemetry.addData("Green", green);
+//            telemetry.addData("Blue", blue);
+//            telemetry.update();
+//        }
+//
+//        // Check for green color
+//        //else if (green > 250 && red < 200 && blue > 200) {
+//        if ( red > 150 && green > 250 && blue > 200) {
+//            if(enableTelemetry) {
+//                telemetry.addData("Color", "Green");
+//            }
+//            rc = true;
+//        }
+//        // Check for white color
+//        else if (red > 200 && green > 200 && blue > 200) {
+//            if(enableTelemetry) {
+//                telemetry.addData("Color", "White");
+//            }
+//            rc = true;
+//        }
+//        // None of the specified colors detected
+//        else {
+//            if(enableTelemetry) {
+//                telemetry.addData("Color", "Unknown");
+//            }
+//        }
+//
+//        telemetry.update();
+//        return rc;
+//    }
 
 //    private void moveArm(double inches, double power) {
 //        int targetPosition = (int) (inches * COUNTS_PER_INCH);
