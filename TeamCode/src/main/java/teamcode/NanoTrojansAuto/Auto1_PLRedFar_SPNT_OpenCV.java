@@ -119,24 +119,12 @@ public class Auto1_PLRedFar_SPNT_OpenCV extends LinearOpMode {
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();
 
-//                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-//                        .forward(27)
-//                        .turn(Math.toRadians(89))
-//                        .back(8)
-//                        .forward(6)
-//                        .strafeRight(7)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq);
-//                dropTheLeftConePixel();
-
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeRight(20)
-                        //.turn(-Math.toRadians(89))
-                        //.turn(-Math.toRadians(89))
+                        .strafeRight(21)
                         .back(74)
-                        .strafeLeft(29)
-                        .turn(-Math.toRadians(88))
+                        .strafeLeft(30)
+                        .turn(-Math.toRadians(89))
                         .turn(-Math.toRadians(89))
                         .forward(9)
                         .build();
@@ -157,7 +145,7 @@ public class Auto1_PLRedFar_SPNT_OpenCV extends LinearOpMode {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(47)
+                        .forward(48)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheLeftConePixel();
@@ -168,7 +156,7 @@ public class Auto1_PLRedFar_SPNT_OpenCV extends LinearOpMode {
                         .forward(3)
                         .turn(-Math.toRadians(89))
                         .forward(85)
-                        .strafeRight(25.5)
+                        .strafeRight(24.5)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
 //                turnLeft90D5MoreD(0.8);
@@ -195,20 +183,10 @@ public class Auto1_PLRedFar_SPNT_OpenCV extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequence(traj);
                 dropTheConePixel();
+
                 Pose2d startingPose2 = traj.end();
-
-//                TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-//                        .forward(27)
-//                        .turn(-Math.toRadians(90))
-//                        .back(3)
-//                        .forward(5)
-//                        .build();
-//                drive.followTrajectorySequence(trajSeq);
-//                dropTheLeftConePixel();
-
-//                Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeLeft(20)
+                        .strafeLeft(21)
                         .forward(84.5)
                         .strafeRight(15)
                         .build();

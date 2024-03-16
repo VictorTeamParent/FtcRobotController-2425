@@ -147,7 +147,7 @@ public class Auto1_BlueClose_SPNT_OpenCV extends LinearOpMode {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .splineTo(new Vector2d(35, 10), Math.toRadians(89))
+                        .splineTo(new Vector2d(36, 10), Math.toRadians(89))
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheConePixel();

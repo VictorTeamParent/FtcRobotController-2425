@@ -187,9 +187,9 @@ public class Auto1__BlueFar_SPNT_OpenCV extends LinearOpMode {
 
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .strafeRight(23)
-                        .forward(84)
-                        .strafeLeft(20.5)
+                        .strafeRight(19)
+                        .forward(84.5)
+                        .strafeLeft(18.5)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 sleep(500);
