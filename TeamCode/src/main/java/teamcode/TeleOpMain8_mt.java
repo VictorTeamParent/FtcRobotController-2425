@@ -51,10 +51,12 @@ public class TeleOpMain8_mt extends LinearOpMode {
         //Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
         Thread lsControlThread = new Thread(new lsControl());
+        Thread lsControl2 = new Thread(new lsControl2());
 
         //Start 2  threads
         //baseControlThread.start();
         armControlThread.start();
+        lsControl2.start();
         //lsControlThread.start();
 
         // This is the 3rd thread
@@ -114,6 +116,48 @@ public class TeleOpMain8_mt extends LinearOpMode {
         }
     }//end of class baseControl
 
+    private class lsControl2 implements Runnable {
+        boolean clawClosed = false;
+        @Override
+        public void run() {
+
+            boolean moveup2 = false;
+            boolean lsmove = false;
+            boolean lowscore = false;
+
+            waitForStart();
+            while (!Thread.interrupted() && opModeIsActive()) {
+                if (gamepad2.dpad_left) {
+                    if (lowscore == false) {
+                        //move up linear slides
+                        //end move up
+                        g2control.armFull();
+                        sleep(500);
+
+                        g2control.clawparallel();
+                        sleep(250);
+                    }
+                    //automation to reset position
+                    else if (lowscore == true) {
+
+                        g2control.armUp();
+                        sleep(1000);
+                        g2control.clawUp();
+                        g2control.closeClaw();
+                        g2control.armDown();
+                        sleep(250);
+                        g2control.clawUp();
+                        g2control.openClaw();
+                        sleep(250);
+                    }
+                    lowscore = !lowscore;
+                }
+
+
+
+            }
+        }
+    }//end of class baseControl
 
     private class lsControl implements Runnable {
         boolean clawClosed = false;
@@ -236,179 +280,179 @@ public class TeleOpMain8_mt extends LinearOpMode {
                     g2control.armDown();
 
                 }
-                if (gamepad2.dpad_left) {
-                    if (lowscore == false) {
-                        //move up linear slides
-                        //end move up
-                        g2control.armFull();
-                        sleep(500);
-
-                        g2control.clawparallel();
-                        sleep(250);
-                    }
-                    //automation to reset position
-                    else if (lowscore == true) {
-
-                        g2control.armUp();
-                        sleep(1000);
-                        g2control.clawUp();
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
-                        rightclawopen= true;
-                        leftclawopen = true;
-                        sleep(250);
-                    }
-                    lowscore = !lowscore;
-                }
-                if (gamepad2.dpad_up) {
-                    if (defaultscore == false) {
-                        //move up linear slides
-                        g2control.armFull();
-                        sleep(500);
-                        g2control.clawparallel();
-                        sleep(250);
-                        g2control.smallls();
-
-                        sleep(250);
-                        g2control.smalllsstop();
-
-                        //end move up
-
-                        lsmove=true;
-                    }
-                    //automation to reset position
-                    else if (defaultscore == true) {
-
-                        //Victor comment out this code and move to run it later
+//                if (gamepad2.dpad_left) {
+//                    if (lowscore == false) {
+//                        //move up linear slides
+//                        //end move up
+//                        g2control.armFull();
+//                        sleep(500);
+//
+//                        g2control.clawparallel();
+//                        sleep(250);
+//                    }
+//                    //automation to reset position
+//                    else if (lowscore == true) {
+//
+//                        g2control.armUp();
+//                        sleep(1000);
+//                        g2control.clawUp();
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawDown();
+//                        g2control.openClaw();
+//                        clawup = false;
+//                        clawopen = true;
+//                        rightclawopen= true;
+//                        leftclawopen = true;
+//                        sleep(250);
+//                    }
+//                    lowscore = !lowscore;
+//                }
+//                if (gamepad2.dpad_up) {
+//                    if (defaultscore == false) {
+//                        //move up linear slides
+//                        g2control.armFull();
+//                        sleep(500);
+//                        g2control.clawparallel();
+//                        sleep(250);
+//                        g2control.smallls();
+//
+//                        sleep(250);
+//                        g2control.smalllsstop();
+//
+//                        //end move up
+//
+//                        lsmove=true;
+//                    }
+//                    //automation to reset position
+//                    else if (defaultscore == true) {
+//
+//                        //Victor comment out this code and move to run it later
+////                        if (lsmove){
+////                            g2control.reversesmallls();
+////                            sleep(250);
+////                            g2control.reversesmalllsstop();
+////                        }
+//
+//                        g2control.armUp();
+//                        sleep(1000);
+//
+//                        //victor move above code to here
 //                        if (lsmove){
 //                            g2control.reversesmallls();
 //                            sleep(250);
 //                            g2control.reversesmalllsstop();
 //                        }
-
-                        g2control.armUp();
-                        sleep(1000);
-
-                        //victor move above code to here
-                        if (lsmove){
-                            g2control.reversesmallls();
-                            sleep(250);
-                            g2control.reversesmalllsstop();
-                        }
-                        g2control.clawUp();
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
-                        rightclawopen= true;
-                        leftclawopen = true;
-                        lsmove=false;
-                        sleep(250);
-                    }
-                    defaultscore = !defaultscore;
-                }
-                if (gamepad2.dpad_right) {
-                    if (mediumscore == false) {
-                        g2control.armFull();
-                        sleep(1500);
-                        g2control.clawparallel();
-                        g2control.smallls();
-                        sleep(250);
-                        g2control.smalllsstop();
-                        //end move up
-                        g2control.mediumls();
-                        sleep(750);
-                        g2control.mediumlsstop();
-                        moveup3 = true;
-                        lsmove2 = true;
-                        sleep(250);
-                    } else if (mediumscore == true) {
-                        g2control.armUp();
-                        sleep(1500);
-                        g2control.clawUp();
-                        if (moveup3) {
-                            //reset linear slides only if it was up
-                            g2control.reversesmallls();
-                            sleep(250);
-                            g2control.reversesmalllsstop();
-                            moveup3 = false;
-                        }
-                        if (lsmove2) {
-                            g2control.reversemediumls();
-                            sleep(750);
-                            g2control.reversemediumlsstop();
-                            lsmove2 = false;
-
-                        }
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
-                        rightclawopen= true;
-                        leftclawopen = true;
-                        sleep(250);
-                    }
-                    mediumscore = !mediumscore;
-                }
-                //automation to score pixel
-                if (gamepad2.dpad_down) {
-                    if (highscore == false) {
-                        g2control.armFull();
-                        sleep(1250);
-                        g2control.clawparallel();
-                        g2control.smallls();
-                        sleep(250);
-                        g2control.smalllsstop();
-                        //end move up
-
-                        //linear slide go up
-                        g2control.highls();
-                        sleep(1400);
-                        g2control.highlsstop();
-                        moveup2 = true;
-                        lsmove = true;
-                        sleep(250);
-                    } else if (highscore == true) {
-                        g2control.armUp();
-                        sleep(500);
-                        g2control.clawUp();
-                        if (moveup2) {
-                            //reset linear slides only if it was up
-                            g2control.reversesmallls();
-                            sleep(250);
-                            g2control.reversesmalllsstop();
-                            moveup2 = false;
-                        }
-                        if (lsmove) {
-                            g2control.reversehighls();
-                            sleep(650);
-                            g2control.reversehighlsstop();
-                            lsmove = false;
-                        }
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
-                        rightclawopen= true;
-                        leftclawopen = true;
-                        sleep(250);
-                    }
-                    highscore = !highscore;
-                }
+//                        g2control.clawUp();
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawDown();
+//                        g2control.openClaw();
+//                        clawup = false;
+//                        clawopen = true;
+//                        rightclawopen= true;
+//                        leftclawopen = true;
+//                        lsmove=false;
+//                        sleep(250);
+//                    }
+//                    defaultscore = !defaultscore;
+//                }
+//                if (gamepad2.dpad_right) {
+//                    if (mediumscore == false) {
+//                        g2control.armFull();
+//                        sleep(1500);
+//                        g2control.clawparallel();
+//                        g2control.smallls();
+//                        sleep(250);
+//                        g2control.smalllsstop();
+//                        //end move up
+//                        g2control.mediumls();
+//                        sleep(750);
+//                        g2control.mediumlsstop();
+//                        moveup3 = true;
+//                        lsmove2 = true;
+//                        sleep(250);
+//                    } else if (mediumscore == true) {
+//                        g2control.armUp();
+//                        sleep(1500);
+//                        g2control.clawUp();
+//                        if (moveup3) {
+//                            //reset linear slides only if it was up
+//                            g2control.reversesmallls();
+//                            sleep(250);
+//                            g2control.reversesmalllsstop();
+//                            moveup3 = false;
+//                        }
+//                        if (lsmove2) {
+//                            g2control.reversemediumls();
+//                            sleep(750);
+//                            g2control.reversemediumlsstop();
+//                            lsmove2 = false;
+//
+//                        }
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawDown();
+//                        g2control.openClaw();
+//                        clawup = false;
+//                        clawopen = true;
+//                        rightclawopen= true;
+//                        leftclawopen = true;
+//                        sleep(250);
+//                    }
+//                    mediumscore = !mediumscore;
+//                }
+//                //automation to score pixel
+//                if (gamepad2.dpad_down) {
+//                    if (highscore == false) {
+//                        g2control.armFull();
+//                        sleep(1250);
+//                        g2control.clawparallel();
+//                        g2control.smallls();
+//                        sleep(250);
+//                        g2control.smalllsstop();
+//                        //end move up
+//
+//                        //linear slide go up
+//                        g2control.highls();
+//                        sleep(1400);
+//                        g2control.highlsstop();
+//                        moveup2 = true;
+//                        lsmove = true;
+//                        sleep(250);
+//                    } else if (highscore == true) {
+//                        g2control.armUp();
+//                        sleep(500);
+//                        g2control.clawUp();
+//                        if (moveup2) {
+//                            //reset linear slides only if it was up
+//                            g2control.reversesmallls();
+//                            sleep(250);
+//                            g2control.reversesmalllsstop();
+//                            moveup2 = false;
+//                        }
+//                        if (lsmove) {
+//                            g2control.reversehighls();
+//                            sleep(650);
+//                            g2control.reversehighlsstop();
+//                            lsmove = false;
+//                        }
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawDown();
+//                        g2control.openClaw();
+//                        clawup = false;
+//                        clawopen = true;
+//                        rightclawopen= true;
+//                        leftclawopen = true;
+//                        sleep(250);
+//                    }
+//                    highscore = !highscore;
+//                }
                 boolean enableTel = false;
 
                 if(enableTel) {
