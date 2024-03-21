@@ -197,7 +197,7 @@ public class Auto2_PickMore_BlueClose_OpenCV extends LinearOpMode {
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .strafeLeft(10)
-                        .forward(25)
+                        .forward(23)
                         //.forward(4)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);

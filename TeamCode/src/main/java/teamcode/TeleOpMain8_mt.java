@@ -280,6 +280,14 @@ public class TeleOpMain8_mt extends LinearOpMode {
                     g2control.armDown();
 
                 }
+                if (gamepad2.dpad_up){
+                    g2control.smallls();
+                    sleep(170);
+                    g2control.smalllsstop();
+                }
+                if (gamepad2.dpad_right){
+                    g2control.clawparallel();
+                }
 //                if (gamepad2.dpad_left) {
 //                    if (lowscore == false) {
 //                        //move up linear slides
@@ -514,6 +522,7 @@ public class TeleOpMain8_mt extends LinearOpMode {
                        g2control.closeLeftClaw();
                        leftPixelPicked = true;
                        leftpixeldetected = false;
+                       leftclawopen = false;
                    }
                    if (rightpixeldetected && g2control.clawdown) {
 
@@ -521,6 +530,7 @@ public class TeleOpMain8_mt extends LinearOpMode {
                        g2control.closeRightClaw();
                        rightPixelPicked = true;
                        rightpixeldetected = false;
+                       rightclawopen = false;
                    }
 
 
