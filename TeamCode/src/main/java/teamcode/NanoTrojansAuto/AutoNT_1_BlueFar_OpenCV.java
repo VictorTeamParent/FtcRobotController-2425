@@ -46,7 +46,7 @@ import teamcode.trajectorysequence.TrajectorySequence;
  * This class contains the Autonomous Mode program.
  */
 @Config
-@Autonomous(name = "Auto_2_BlueFar_OpenCV")
+@Autonomous(name = "AutoNT_1_BlueFar_OpenCV")
 public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
 
     // Constants for encoder counts and wheel measurements
@@ -64,7 +64,7 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Initialize motors
 
-
+        resources = new resources_NanoTrojans(hardwareMap);
         /*
          *  Initialize camera and set pipeline
          */
@@ -73,7 +73,7 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
         pipeline = new RCamConeLocDetection();
         webcam.setPipeline(pipeline);
         g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
-                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
+                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
         /*
          *  Create a thread for camera, so it will watch for us
@@ -130,13 +130,15 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
                         .strafeLeft(18)
                         .turn(Math.toRadians(89))
                         .turn(Math.toRadians(89))
-                        .forward(86)
-                        .strafeLeft(25)
+                        .forward(83)
+                        .strafeLeft(30)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
 
-                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(new Pose2d())
+                Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
+
+                TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
                         .strafeRight(37)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
@@ -159,8 +161,8 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .forward(2)
                         .turn(Math.toRadians(89))
-                        .forward(87)
-                        .strafeLeft(23)
+                        .forward(85.5)
+                        .strafeLeft(26.85)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
 //                turnLeft90D5MoreD(0.8);
@@ -194,7 +196,7 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .strafeRight(25)
                         .forward(84)
-                        .strafeLeft(19)
+                        .strafeLeft(20)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 sleep(500);
@@ -231,7 +233,7 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
            g2control.armFull();
         sleep(250);
         g2control.smallls();
-        sleep(250);
+        sleep(350);
         g2control.smalllsstop();
 
 

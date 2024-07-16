@@ -1,6 +1,9 @@
 package teamcode;
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -34,7 +37,7 @@ public class controls_NanoTrojans  {
     //2 arms servo motors
     private Servo clawLift = null;
     private Servo armLift = null;
-    private CRServo robotLift = null;
+    //private CRServo robotLift = null;
 
     //Victor for auto pick
     public boolean clawdown = false;
@@ -42,7 +45,7 @@ public class controls_NanoTrojans  {
 
 
     public controls_NanoTrojans( DcMotor lsR, DcMotor lsL, CRServo planeL,
-                                     Servo clawL, Servo clawR, Servo clawLi, Servo armL, CRServo robotL)
+                                     Servo clawL, Servo clawR, Servo clawLi, Servo armL)
     {
         //intake= intak;
         lsRight=lsR;
@@ -52,7 +55,7 @@ public class controls_NanoTrojans  {
         clawRight=clawR;
         clawLift=clawLi;
         armLift=armL;
-        robotLift=robotL;
+        //robotLift=robotL;
 //        dcArm =arm;
     }
     public void closeClaw()
@@ -86,6 +89,11 @@ public class controls_NanoTrojans  {
         //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
         clawLeft.setPosition(0.5);
     }
+    public void openLeftClawWide()
+    {
+        //for the claw, it is a regular motor so you set positions; you just have to keep tweaking the code and test out positions that you input.
+        clawLeft.setPosition(0.4);
+    }
 
     public void openRightClaw()
     {
@@ -93,25 +101,26 @@ public class controls_NanoTrojans  {
         clawRight.setPosition(1);
 
     }
-    public void hangSpin()
-    {
-        //since this servo is continuous, we have to use set power like motors; then sleep 1000 milliseconds which is equal to one second before turning the servo off.
-        //you can also hold down the button to continuously turn the servo instead of pressing multiple times.
-        robotLift.setPower(1);
-    }
-    public void hangSpinstop()
-    {
-        robotLift.setPower(0);
-    }
-    public void reversehangSpin()
-    {
-        // this is the same as the hang spin except reversing the servo so it goes the other way so that we can unload the tension.
-        robotLift.setPower(-1);
-    }
-    public void reversehangSpinstop()
-    {
-        robotLift.setPower(0);
-    }
+
+//    public void hangSpin()
+//    {
+//        //since this servo is continuous, we have to use set power like motors; then sleep 1000 milliseconds which is equal to one second before turning the servo off.
+//        //you can also hold down the button to continuously turn the servo instead of pressing multiple times.
+//        robotLift.setPower(1);
+//    }
+//    public void hangSpinstop()
+//    {
+//        robotLift.setPower(0);
+//    }
+//    public void reversehangSpin()
+//    {
+//        // this is the same as the hang spin except reversing the servo so it goes the other way so that we can unload the tension.
+//        robotLift.setPower(-1);
+//    }
+//    public void reversehangSpinstop()
+//    {
+//        robotLift.setPower(0);
+//    }
     public void planeLaunch()
     {
         //plane launch also uses a continuous servo so it has the same concept as the hang mechanism, it basically just turns the servo for a second and then turns it off.
@@ -137,7 +146,7 @@ public class controls_NanoTrojans  {
     {
         //same thing for this except the position is different.
 //        clawLift.setPosition(0.8);
-        clawLift.setPosition(1);
+        clawLift.setPosition(0.75);
         clawdown = false;
         autopicksucess = false;
 
@@ -155,7 +164,7 @@ public class controls_NanoTrojans  {
     public void clawFull()
     {
 
-        clawLift.setPosition(1);
+        clawLift.setPosition(0.75);
         clawdown = false;
     }
     public void clawparallel()
@@ -247,6 +256,48 @@ public class controls_NanoTrojans  {
         lsRight.setPower(0);
         lsLeft.setPower(0);
     }
+
+//    public boolean detectPixel (ColorSensor cs)
+//    {
+//        boolean rc = false;
+//        boolean enableTelemetry = false;
+//        int red = cs.red();
+//        int green = cs.green();
+//        int blue = cs.blue();
+//
+//        //boolean rightpixeldetected = false;
+//        if(enableTelemetry) {
+//            telemetry.addData("Red", red);
+//            telemetry.addData("Green", green);
+//            telemetry.addData("Blue", blue);
+//            telemetry.update();
+//        }
+//
+//        // Check for green color
+//        //else if (green > 250 && red < 200 && blue > 200) {
+//        if ( red > 150 && green > 250 && blue > 200) {
+//            if(enableTelemetry) {
+//                telemetry.addData("Color", "Green");
+//            }
+//            rc = true;
+//        }
+//        // Check for white color
+//        else if (red > 200 && green > 200 && blue > 200) {
+//            if(enableTelemetry) {
+//                telemetry.addData("Color", "White");
+//            }
+//            rc = true;
+//        }
+//        // None of the specified colors detected
+//        else {
+//            if(enableTelemetry) {
+//                telemetry.addData("Color", "Unknown");
+//            }
+//        }
+//
+//        telemetry.update();
+//        return rc;
+//    }
 
 //    private void moveArm(double inches, double power) {
 //        int targetPosition = (int) (inches * COUNTS_PER_INCH);

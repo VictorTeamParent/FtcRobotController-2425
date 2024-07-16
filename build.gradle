@@ -13,6 +13,7 @@ buildscript {
         // Note for FTC Teams: Do not modify this yourself.
         classpath 'com.android.tools.build:gradle:7.2.0'
         //implementation 'org.openftc:easyopencv:version_number'
+        //implementation 'com.acmerobotics.roadrunner:roadrunner:0.5.5'
     }
 }
 

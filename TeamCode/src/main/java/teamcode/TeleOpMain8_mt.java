@@ -36,24 +36,28 @@ public class TeleOpMain8_mt extends LinearOpMode {
     private boolean rightPixelPicked = false;
     private boolean leftPixelPicked = false;
     private boolean autopick = false;
+
+
     @Override
     public void runOpMode()  throws InterruptedException {
         resources=new resources_NanoTrojans (hardwareMap);
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
         rateLimit.expire();
 
-         g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
-                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
+        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
+                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
 
         //Thread baseControlThread = new Thread(new baseControl());
         Thread armControlThread = new Thread(new armControl());
         Thread lsControlThread = new Thread(new lsControl());
+        Thread lsControl2 = new Thread(new lsControl2());
 
         //Start 2  threads
         //baseControlThread.start();
         armControlThread.start();
-        lsControlThread.start();
+        lsControl2.start();
+        //lsControlThread.start();
 
         // This is the 3rd thread
         //The following  loop is just to keep this main thread running.
@@ -72,18 +76,21 @@ public class TeleOpMain8_mt extends LinearOpMode {
                             -gamepad1.right_stick_x
                     )
             );
-
             drive.update();
-
             Pose2d poseEstimate = drive.getPoseEstimate();
-//            telemetry.addData("x", poseEstimate.getX());
-//            telemetry.addData("y", poseEstimate.getY());
-//            telemetry.addData("heading", poseEstimate.getHeading());
-//            telemetry.update();
+
+            if ( gamepad1.y ){
+                telemetry.addLine("Y pressed");
+                g2control.planeLaunch();
+                sleep(100);
+                g2control.planeLaunchstop();
+                //droneLaunced = true;
+            }
         }
 
     }
 
+    // The following is developed by NT , but we are not using it now
     // This is the thread class to control the base of the robot to move arround, this normally is
     // controlled by another person seperated from the base control person
     private class baseControl implements Runnable {
@@ -109,6 +116,49 @@ public class TeleOpMain8_mt extends LinearOpMode {
         }
     }//end of class baseControl
 
+    private class lsControl2 implements Runnable {
+        boolean clawClosed = false;
+        @Override
+        public void run() {
+
+            boolean moveup2 = false;
+            boolean lsmove = false;
+            boolean lowscore = false;
+
+            waitForStart();
+            while (!Thread.interrupted() && opModeIsActive()) {
+                if (gamepad2.dpad_left) {
+                    if (lowscore == false) {
+                        //move up linear slides
+                        //end move up
+                        g2control.armFull();
+                        sleep(500);
+
+                        g2control.clawparallel();
+                        sleep(250);
+                    }
+                    //automation to reset position
+                    else if (lowscore == true) {
+
+                        g2control.armUp();
+                        sleep(1000);
+                        g2control.clawUp();
+                        g2control.closeClaw();
+                        g2control.armDown();
+                        sleep(250);
+                        g2control.clawUp();
+                        g2control.openClaw();
+                        sleep(250);
+                    }
+                    lowscore = !lowscore;
+                }
+
+
+
+            }
+        }
+    }//end of class baseControl
+
     private class lsControl implements Runnable {
         boolean clawClosed = false;
         @Override
@@ -117,52 +167,13 @@ public class TeleOpMain8_mt extends LinearOpMode {
             boolean moveup2 = false;
             boolean lsmove = false;
             boolean highscore = false;
+
             waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
-                // Motor control logic for motors 1 and 2
-                //Call Robot base movement algorithem to drive the base
-                //driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-                //sleep 90 seconds before you are able to launch the drone
-                //sleep(20000);
-//                //int redValue = rightClawColorSensor.red();
-//                int greenValue = rightClawColorSensor.green();
-//                int blueValue = rightClawColorSensor.blue();
-//
-//
-//                telemetry.addData("Red", redValue);
-//                telemetry.addData("Green", greenValue);
-//                telemetry.addData("Blue", blueValue);
-//
-//                if(redValue > 100 && greenValue < 50 && blueValue < 50)
-//                    telemetry.addData("Red color", "detected");
-//                telemetry.update();
-                if (highscore == false) {
-                    if (gamepad2.dpad_down) {
-                        //linear slide go up
-                        g2control.highls();
-                        sleep(1400);
-                        g2control.highlsstop();
-                        moveup2 = true;
-                        lsmove = true;
-                        sleep(250);
-                    }
-                }else {
 
-                    if (moveup2) {
-                        //reset linear slides only if it was up
-                        g2control.reversesmallls();
-                        sleep(250);
-                        g2control.reversesmalllsstop();
-                        moveup2 = false;
-                    }
-                    if (lsmove) {
-                        g2control.reversehighls();
-                        sleep(650);
-                        g2control.reversehighlsstop();
-                        lsmove = false;
-                    }
-                }
-                highscore = !highscore;
+                double lspower = gamepad2.right_stick_y;
+                resources.lsRight.setPower(lspower);
+                resources.lsLeft.setPower(-lspower);
 
             }
         }
@@ -174,12 +185,12 @@ public class TeleOpMain8_mt extends LinearOpMode {
 
         boolean rightpixeldetected;
         boolean leftpixeldetected;
+
+
+
         @Override
         public void run() {
 
-            //intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            double lspower = 0;
-            boolean moveup = false;
             boolean moveup2 = false;
             boolean moveup3 = false;
             boolean lsmove = false;
@@ -189,15 +200,13 @@ public class TeleOpMain8_mt extends LinearOpMode {
             boolean defaultscore = false;
             boolean mediumscore = false;
             boolean highscore = false;
-            boolean hang = false;
-            boolean hangcount = false;
             boolean leftclawopen = false;
             boolean rightclawopen = false;
-            boolean armup = false;
             boolean lowscore = false;
+            double lspower = 0;
+            //intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-            waitForStart();
+             waitForStart();
             //set closed claw and claw lift down
             //while (!isStopRequested()) {
             while (!Thread.interrupted() && opModeIsActive()) {
@@ -271,7 +280,15 @@ public class TeleOpMain8_mt extends LinearOpMode {
                     g2control.armDown();
 
                 }
-                if (gamepad2.dpad_left) {
+                if (gamepad2.dpad_up){
+                    g2control.smallls();
+                    sleep(170);
+                    g2control.smalllsstop();
+                }
+                if (gamepad2.dpad_right){
+                    g2control.clawparallel();
+                }
+//                if (gamepad2.dpad_left) {
 //                    if (lowscore == false) {
 //                        //move up linear slides
 //                        //end move up
@@ -299,112 +316,114 @@ public class TeleOpMain8_mt extends LinearOpMode {
 //                        sleep(250);
 //                    }
 //                    lowscore = !lowscore;
-                }
-                if (gamepad2.dpad_up) {
-                    if (defaultscore == false) {
-                        //move up linear slides
-                        g2control.armFull();
-                        sleep(500);
-                        g2control.clawparallel();
-                        sleep(250);
-                        g2control.smallls();
-                        sleep(250);
-                        g2control.smalllsstop();
-                        //end move up
-
-                        lsmove=true;
-                    }
-                    //automation to reset position
-                    else if (defaultscore == true) {
-
-                        //Victor comment out this code and move to run it later
+//                }
+//                if (gamepad2.dpad_up) {
+//                    if (defaultscore == false) {
+//                        //move up linear slides
+//                        g2control.armFull();
+//                        sleep(500);
+//                        g2control.clawparallel();
+//                        sleep(250);
+//                        g2control.smallls();
+//
+//                        sleep(250);
+//                        g2control.smalllsstop();
+//
+//                        //end move up
+//
+//                        lsmove=true;
+//                    }
+//                    //automation to reset position
+//                    else if (defaultscore == true) {
+//
+//                        //Victor comment out this code and move to run it later
+////                        if (lsmove){
+////                            g2control.reversesmallls();
+////                            sleep(250);
+////                            g2control.reversesmalllsstop();
+////                        }
+//
+//                        g2control.armUp();
+//                        sleep(1000);
+//
+//                        //victor move above code to here
 //                        if (lsmove){
 //                            g2control.reversesmallls();
 //                            sleep(250);
 //                            g2control.reversesmalllsstop();
 //                        }
-
-                        g2control.armUp();
-                        sleep(1000);
-
-                        //victor move above code to here
-                        if (lsmove){
-                            g2control.reversesmallls();
-                            sleep(250);
-                            g2control.reversesmalllsstop();
-                        }
-                        g2control.clawUp();
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
-                        rightclawopen= true;
-                        leftclawopen = true;
-                        lsmove=false;
-                        sleep(250);
-                    }
-                    defaultscore = !defaultscore;
-                }
-                if (gamepad2.dpad_right) {
-                    if (mediumscore == false) {
-                        g2control.armFull();
-                        sleep(1500);
-                        g2control.clawparallel();
-                        g2control.smallls();
-                        sleep(250);
-                        g2control.smalllsstop();
-                        //end move up
-                        g2control.mediumls();
-                        sleep(750);
-                        g2control.mediumlsstop();
-                        moveup3 = true;
-                        lsmove2 = true;
-                        sleep(250);
-                    } else if (mediumscore == true) {
-                        g2control.armUp();
-                        sleep(1500);
-                        g2control.clawUp();
-                        if (moveup3) {
-                            //reset linear slides only if it was up
-                            g2control.reversesmallls();
-                            sleep(250);
-                            g2control.reversesmalllsstop();
-                            moveup3 = false;
-                        }
-                        if (lsmove2) {
-                            g2control.reversemediumls();
-                            sleep(750);
-                            g2control.reversemediumlsstop();
-                            lsmove2 = false;
-
-                        }
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
-                        rightclawopen= true;
-                        leftclawopen = true;
-                        sleep(250);
-                    }
-                    mediumscore = !mediumscore;
-                }
-                //automation to score pixel
-                if (gamepad2.dpad_down) {
-                    if (highscore == false) {
-                        g2control.armFull();
-                        sleep(1250);
-                        g2control.clawparallel();
-                        g2control.smallls();
-                        sleep(250);
-                        g2control.smalllsstop();
-                        //end move up
-
+//                        g2control.clawUp();
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawDown();
+//                        g2control.openClaw();
+//                        clawup = false;
+//                        clawopen = true;
+//                        rightclawopen= true;
+//                        leftclawopen = true;
+//                        lsmove=false;
+//                        sleep(250);
+//                    }
+//                    defaultscore = !defaultscore;
+//                }
+//                if (gamepad2.dpad_right) {
+//                    if (mediumscore == false) {
+//                        g2control.armFull();
+//                        sleep(1500);
+//                        g2control.clawparallel();
+//                        g2control.smallls();
+//                        sleep(250);
+//                        g2control.smalllsstop();
+//                        //end move up
+//                        g2control.mediumls();
+//                        sleep(750);
+//                        g2control.mediumlsstop();
+//                        moveup3 = true;
+//                        lsmove2 = true;
+//                        sleep(250);
+//                    } else if (mediumscore == true) {
+//                        g2control.armUp();
+//                        sleep(1500);
+//                        g2control.clawUp();
+//                        if (moveup3) {
+//                            //reset linear slides only if it was up
+//                            g2control.reversesmallls();
+//                            sleep(250);
+//                            g2control.reversesmalllsstop();
+//                            moveup3 = false;
+//                        }
+//                        if (lsmove2) {
+//                            g2control.reversemediumls();
+//                            sleep(750);
+//                            g2control.reversemediumlsstop();
+//                            lsmove2 = false;
+//
+//                        }
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawDown();
+//                        g2control.openClaw();
+//                        clawup = false;
+//                        clawopen = true;
+//                        rightclawopen= true;
+//                        leftclawopen = true;
+//                        sleep(250);
+//                    }
+//                    mediumscore = !mediumscore;
+//                }
+//                //automation to score pixel
+//                if (gamepad2.dpad_down) {
+//                    if (highscore == false) {
+//                        g2control.armFull();
+//                        sleep(1250);
+//                        g2control.clawparallel();
+//                        g2control.smallls();
+//                        sleep(250);
+//                        g2control.smalllsstop();
+//                        //end move up
+//
 //                        //linear slide go up
 //                        g2control.highls();
 //                        sleep(1400);
@@ -412,10 +431,10 @@ public class TeleOpMain8_mt extends LinearOpMode {
 //                        moveup2 = true;
 //                        lsmove = true;
 //                        sleep(250);
-                    } else if (highscore == true) {
-                        g2control.armUp();
-                        sleep(500);
-                        g2control.clawUp();
+//                    } else if (highscore == true) {
+//                        g2control.armUp();
+//                        sleep(500);
+//                        g2control.clawUp();
 //                        if (moveup2) {
 //                            //reset linear slides only if it was up
 //                            g2control.reversesmallls();
@@ -429,19 +448,19 @@ public class TeleOpMain8_mt extends LinearOpMode {
 //                            g2control.reversehighlsstop();
 //                            lsmove = false;
 //                        }
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawDown();
-                        g2control.openClaw();
-                        clawup = false;
-                        clawopen = true;
-                        rightclawopen= true;
-                        leftclawopen = true;
-                        sleep(250);
-                    }
-                    highscore = !highscore;
-                }
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawDown();
+//                        g2control.openClaw();
+//                        clawup = false;
+//                        clawopen = true;
+//                        rightclawopen= true;
+//                        leftclawopen = true;
+//                        sleep(250);
+//                    }
+//                    highscore = !highscore;
+//                }
                 boolean enableTel = false;
 
                 if(enableTel) {
@@ -503,6 +522,7 @@ public class TeleOpMain8_mt extends LinearOpMode {
                        g2control.closeLeftClaw();
                        leftPixelPicked = true;
                        leftpixeldetected = false;
+                       leftclawopen = false;
                    }
                    if (rightpixeldetected && g2control.clawdown) {
 
@@ -510,6 +530,7 @@ public class TeleOpMain8_mt extends LinearOpMode {
                        g2control.closeRightClaw();
                        rightPixelPicked = true;
                        rightpixeldetected = false;
+                       rightclawopen = false;
                    }
 
 

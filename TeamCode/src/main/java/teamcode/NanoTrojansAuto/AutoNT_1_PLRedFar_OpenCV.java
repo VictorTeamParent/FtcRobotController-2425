@@ -46,7 +46,7 @@ import teamcode.trajectorysequence.TrajectorySequence;
  * This class contains the Autonomous Mode program.
  */
 @Config
-@Autonomous(name = "Auto_2_PL_RedFar_OpenCV")
+@Autonomous(name = "AutoNT_1_PL_RedFar_OpenCV")
 public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
 
     // Constants for encoder counts and wheel measurements
@@ -63,7 +63,7 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Initialize motors
 
-
+        resources = new resources_NanoTrojans(hardwareMap);
         /*
          *  Initialize camera and set pipeline
          */
@@ -72,7 +72,7 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
         pipeline2 = new LCamConeLocDetection();
         webcam2.setPipeline(pipeline2);
         g2control=new controls_NanoTrojans( resources.lsRight, resources.lsLeft, resources.planeLaunch,
-                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift, resources.robotLift);
+                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
         /*
          *  Create a thread for camera, so it will watch for us
@@ -80,7 +80,7 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
         webcam2.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam2.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN);
+                webcam2.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -115,30 +115,28 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
 
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
                         .forward(27)
-                        .turn(Math.toRadians(90))
+                        .turn(Math.toRadians(89))
                         .back(8)
                         .forward(6)
                         .strafeRight(7)
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheLeftConePixel();
+
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .strafeRight(18)
                         .turn(-Math.toRadians(89))
                         .turn(-Math.toRadians(89))
-                        .forward(87)
-                        .strafeRight(29)
+                        .forward(83.5)
+                        .strafeRight(33)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 doRestStuff();
+
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeLeft(27)
+                        .strafeLeft(29)
                         .build();
                 drive.followTrajectorySequence(trajSeq3);
 
@@ -150,7 +148,7 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
                 telemetry.addLine("Detected Cone at Center");
                 telemetry.update();
                 TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(new Pose2d())
-                        .forward(49)
+                        .forward(47)
 //                        .turn(Math.toRadians(90))
 //                        .turn(Math.toRadians(90))
                         .build();
@@ -159,21 +157,20 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
                 dropTheLeftConePixel();
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
 
-
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
-                        .forward(2)
+                        .forward(3)
                         .turn(-Math.toRadians(89))
-                        .forward(89)
-                        .strafeRight(21)
+                        .forward(85)
+                        .strafeRight(25.5)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
 //                turnLeft90D5MoreD(0.8);
                 doRestStuff();
+
                 //********Parking
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
                 TrajectorySequence trajSeq4 = drive.trajectorySequenceBuilder(startingPose3)
-                        .strafeLeft(21)
+                        .strafeLeft(23)
                         .build();
                 drive.followTrajectorySequence(trajSeq4);
 
@@ -192,20 +189,18 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequence(trajSeq);
                 dropTheLeftConePixel();
+
                 Pose2d startingPose2 = trajSeq.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(startingPose2)
                         .strafeLeft(25)
-                        .forward(86)
-                        .strafeRight(15)
+                        .forward(84)
+                        .strafeRight(15.5)
                         .build();
                 drive.followTrajectorySequence(trajSeq2);
                 sleep(500);
                 doRestStuff();
+
                 Pose2d startingPose3 = trajSeq2.end(); // Use the end pose of the first sequence as the starting pose for the second sequence
-
-
                 TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(startingPose3)
                         .strafeLeft(18)
                         .build();
@@ -245,7 +240,7 @@ public class AutoNT_1_PLRedFar_OpenCV extends LinearOpMode {
         g2control.armFull();
         sleep(250);
         g2control.smallls();
-        sleep(250);
+        sleep(350);
         g2control.smalllsstop();
 
 

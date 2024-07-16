@@ -94,7 +94,7 @@ public class RobotDefinition {
         driveControl = new DriveControl_NanoTorjan(frontLeft, frontRight, backLeft, backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
         g2control=new controls_NanoTrojans(lsRight, lsLeft, planeLaunch,
-                clawLeft, clawRight, clawLift, armLift, robotLift);
+                clawLeft, clawRight, clawLift, armLift);
         
     }
 }
