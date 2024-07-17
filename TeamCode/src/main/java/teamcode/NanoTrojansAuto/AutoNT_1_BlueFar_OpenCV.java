@@ -261,7 +261,7 @@ public class AutoNT_1_BlueFar_OpenCV extends LinearOpMode {
 
         g2control.reversesmallls();
         sleep(250);
-        g2control.reversehighlsstop();
+        g2control.reversesmalllsstop();
 
     }
 

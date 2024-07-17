@@ -214,7 +214,8 @@ public class controls_NanoTrojans  {
     }
     public void mediumls()
     {
-        //same as smallls but let the motor run for longer.
+        //since this is a motor, it uses power, this works the same as robotlift but one of the powers are negative because one of the motors is facing the opposite way.
+        //since this is the small linear slide lift, we only wait 250 milliseconds which is equivilant to a quarter of a second; then we just turn off the motors.
         lsRight.setPower(-1);
         lsLeft.setPower(1);
     }
@@ -233,11 +234,10 @@ public class controls_NanoTrojans  {
         lsRight.setPower(0);
         lsLeft.setPower(0);
     }
-
     public void highls()
     {
-        //same as mediumls but let motor run for even longer.
-        //this is only raising it from medium by a little bit because we wont go any higher than that within the time limit.
+        //since this is a motor, it uses power, this works the same as robotlift but one of the powers are negative because one of the motors is facing the opposite way.
+        //since this is the small linear slide lift, we only wait 250 milliseconds which is equivilant to a quarter of a second; then we just turn off the motors.
         lsRight.setPower(-1);
         lsLeft.setPower(1);
     }
@@ -256,6 +256,7 @@ public class controls_NanoTrojans  {
         lsRight.setPower(0);
         lsLeft.setPower(0);
     }
+
 
 //    public boolean detectPixel (ColorSensor cs)
 //    {

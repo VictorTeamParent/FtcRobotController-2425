@@ -1,14 +1,13 @@
-package teamcode;
+package teamcode.drive;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-public class DriveControl_NanoTorjan {
+
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+public class DriveControl_NanoTorjan2 {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -28,7 +27,7 @@ public class DriveControl_NanoTorjan {
     double frontRightPower ;
     double backRightPower ;
 
-    public DriveControl_NanoTorjan(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br, BNO055IMU imuInstance) {
+    public DriveControl_NanoTorjan2(DcMotor fl, DcMotor fr, DcMotor bl, DcMotor br, BNO055IMU imuInstance) {
         this.frontLeft = fl;
         this.frontRight = fr;
         this.backLeft = bl;
@@ -65,9 +64,9 @@ public class DriveControl_NanoTorjan {
         backRightPower = (y + x + rx) / denominator;
 
 
-        frontLeft.setPower(frontLeftPower);
-        backLeft.setPower(backLeftPower);
-        frontRight.setPower(frontRightPower);
-        backRight.setPower(backRightPower);
+        frontLeft.setPower(frontLeftPower*0.5);
+        backLeft.setPower(backLeftPower*0.5);
+        frontRight.setPower(frontRightPower*0.5);
+        backRight.setPower(backRightPower*0.5);
     }
 }
