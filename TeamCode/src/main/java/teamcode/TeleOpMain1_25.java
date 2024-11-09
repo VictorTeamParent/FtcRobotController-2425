@@ -144,7 +144,7 @@ public class TeleOpMain1_25 extends LinearOpMode {
                 if (gamepad2.right_stick_y==0){
                     intakewheel.setPower(0);
                 }
-               // if (gamepad2.dpad_left) {
+
 
 
                     //automation to reset position
@@ -152,7 +152,7 @@ public class TeleOpMain1_25 extends LinearOpMode {
 //
 //                        g2control.armUp();
 //                        sleep(1000);
-//                        g2control.clawUp();
+//                        g2control.clawUp();K
 //                        g2control.closeClaw();
 //                        g2control.armDown();
 //                        sleep(250);
@@ -161,7 +161,7 @@ public class TeleOpMain1_25 extends LinearOpMode {
 //                        sleep(250);
 //                    }
 //                    lowscore = !lowscore;
-                }
+
 
 
 
