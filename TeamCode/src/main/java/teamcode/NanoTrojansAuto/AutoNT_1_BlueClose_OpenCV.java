@@ -26,9 +26,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -39,7 +36,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import teamcode.OpenCVExt.LCamConeLocDetection;
 import teamcode.controls_NanoTrojans;
 import teamcode.drive.SampleMecanumDrive;
-import teamcode.resources_NanoTrojans;
+import teamcode.resources_NanoTrojans1;
 import teamcode.trajectorysequence.TrajectorySequence;
 
 /**
@@ -56,7 +53,7 @@ public class AutoNT_1_BlueClose_OpenCV extends LinearOpMode {
     LCamConeLocDetection.LSideConePosition position2 = LCamConeLocDetection.LSideConePosition.OTHER;
 
     private controls_NanoTrojans g2control;
-    private resources_NanoTrojans resources;
+    private resources_NanoTrojans1 resources;
 
 
     @Override
@@ -68,7 +65,7 @@ public class AutoNT_1_BlueClose_OpenCV extends LinearOpMode {
 
         // Set motor modes
 
-        resources = new resources_NanoTrojans(hardwareMap);
+        resources = new resources_NanoTrojans1(hardwareMap);
         /*
          *  Initialize camera and set pipeline
          */

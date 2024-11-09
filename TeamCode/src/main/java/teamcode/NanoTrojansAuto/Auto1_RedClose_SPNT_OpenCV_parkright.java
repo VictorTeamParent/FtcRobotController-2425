@@ -38,7 +38,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import teamcode.OpenCVExt.RCamConeLocDetection;
 import teamcode.controls_NanoTrojans;
 import teamcode.drive.SampleMecanumDrive;
-import teamcode.resources_NanoTrojans;
+import teamcode.resources_NanoTrojans1;
 import teamcode.trajectorysequence.TrajectorySequence;
 //import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 
@@ -58,14 +58,14 @@ public class Auto1_RedClose_SPNT_OpenCV_parkright extends LinearOpMode {
 
     private controls_NanoTrojans g2control;
 
-    private resources_NanoTrojans resources;
+    private resources_NanoTrojans1 resources;
     
     private int autoOptions = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        resources = new resources_NanoTrojans(hardwareMap);
+        resources = new resources_NanoTrojans1(hardwareMap);
 
         /*
          *  Initialize camera and set pipeline

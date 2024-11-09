@@ -37,7 +37,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import teamcode.OpenCVExt.LCamConeLocDetection;
 import teamcode.controls_NanoTrojans;
 import teamcode.drive.SampleMecanumDrive;
-import teamcode.resources_NanoTrojans;
+import teamcode.resources_NanoTrojans1;
 import teamcode.trajectorysequence.TrajectorySequence;
 
 /**
@@ -55,13 +55,13 @@ public class Auto2_PickMore_PLRedFar_OpenCV extends LinearOpMode {
 
     private controls_NanoTrojans g2control;
 
-    private resources_NanoTrojans resources;
+    private resources_NanoTrojans1 resources;
 
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize motors
 
-        resources = new resources_NanoTrojans(hardwareMap);
+        resources = new resources_NanoTrojans1(hardwareMap);
         /*
          *  Initialize camera and set pipeline
          */

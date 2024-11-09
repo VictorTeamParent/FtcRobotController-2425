@@ -5,11 +5,8 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
@@ -17,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 
 @TeleOp(name = "TeleOpMain7_mt", group = "TeleOp")
@@ -41,7 +37,7 @@ public class TeleOpMain7_mt extends LinearOpMode {
     //private DriveControl driveControl;
 
     private controls_NanoTrojans g2control;
-    private resources_NanoTrojans resources;
+    private resources_NanoTrojans1 resources;
 
     private resources_base_NanoTrojans resourcesbase;
 
@@ -50,7 +46,7 @@ public class TeleOpMain7_mt extends LinearOpMode {
     private boolean autopick = false;
     @Override
     public void runOpMode()  throws InterruptedException {
-        resources = new resources_NanoTrojans(hardwareMap);
+        resources = new resources_NanoTrojans1(hardwareMap);
 
         resourcesbase = new resources_base_NanoTrojans(hardwareMap);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

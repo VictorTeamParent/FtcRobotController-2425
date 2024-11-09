@@ -37,7 +37,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import teamcode.OpenCVExt.RCamConeLocDetection;
 import teamcode.controls_NanoTrojans;
 import teamcode.drive.SampleMecanumDrive;
-import teamcode.resources_NanoTrojans;
+import teamcode.resources_NanoTrojans1;
 import teamcode.trajectorysequence.TrajectorySequence;
 
 /**
@@ -54,7 +54,7 @@ public class Auto1__BlueFar_SPNT_OpenCV extends LinearOpMode {
     RCamConeLocDetection.RSideConePosition position = RCamConeLocDetection.RSideConePosition.OTHER;
 
     private controls_NanoTrojans g2control;
-    private resources_NanoTrojans resources;
+    private resources_NanoTrojans1 resources;
 
     public static double parkingLongStrafe = 30;
 
@@ -62,7 +62,7 @@ public class Auto1__BlueFar_SPNT_OpenCV extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Initialize motors
 
-        resources = new resources_NanoTrojans(hardwareMap);
+        resources = new resources_NanoTrojans1(hardwareMap);
         /*
          *  Initialize camera and set pipeline
          */

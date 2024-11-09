@@ -1,21 +1,24 @@
 //package org.firstinspires.ftc.teamcode;
 package teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
+
 import java.util.concurrent.TimeUnit;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+
 import teamcode.drive.SampleMecanumDrive;
 
 
-@TeleOp(name = "TeleOpMain8_mt", group = "TeleOp")
+@TeleOp(name = "TeleOpMain1_2525", group = "TeleOp")
 
 
-public class TeleOpMain8_mt extends LinearOpMode {
+public class TeleOpMain1_25 extends LinearOpMode {
 
       private final double driveAdjuster = 1;
 
@@ -31,21 +34,28 @@ public class TeleOpMain8_mt extends LinearOpMode {
 
     private controls_NanoTrojans g2control;
 
-    private resources_NanoTrojans1 resources;
+    private resources_NanoTrojans resources;
 
     private boolean rightPixelPicked = false;
     private boolean leftPixelPicked = false;
     private boolean autopick = false;
+    private boolean horizontalls = false;
+    double clawpos = resources.claw.getPosition();
+    double lhslpos = resources.lhsl.getPosition();
+    double rhslpos = resources.rhsl.getPosition();
+    double casketpos = resources.claw.getPosition();
+
+    CRServo intakewheel = hardwareMap.get(CRServo.class, "intakewheel");
 
 
     @Override
     public void runOpMode()  throws InterruptedException {
-        resources=new resources_NanoTrojans1(hardwareMap);
+        resources=new resources_NanoTrojans(hardwareMap);
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
         rateLimit.expire();
 
-        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
-                resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
+        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
+                resources.lhsl, resources.rhsl, resources.clawlift, resources.intakelift, resources.intakewheels, resources.casket);
 
 
         //Thread baseControlThread = new Thread(new baseControl());
@@ -79,13 +89,7 @@ public class TeleOpMain8_mt extends LinearOpMode {
             drive.update();
             Pose2d poseEstimate = drive.getPoseEstimate();
 
-            if ( gamepad1.y ){
-                telemetry.addLine("Y pressed");
-                g2control.planeLaunch();
-                sleep(100);
-                g2control.planeLaunchstop();
-                //droneLaunced = true;
-            }
+
         }
 
     }
@@ -99,15 +103,19 @@ public class TeleOpMain8_mt extends LinearOpMode {
         public void run() {
             waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
+
                 // Motor control logic for motors 1 and 2
                 //Call Robot base movement algorithem to drive the base
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-                if ( gamepad1.y ){
-                    g2control.planeLaunch();
-                    sleep(100);
-                    g2control.planeLaunchstop();
-                    //droneLaunced = true;
+                if ( gamepad2.y){
+                    if (!horizontalls);{
+                        g2control.horizontal_fw();
+                    }
+                    if (horizontalls){
+                        g2control.horizontal_back();
+                    }
+                    horizontalls = !horizontalls;
                 }
 
 
@@ -127,30 +135,32 @@ public class TeleOpMain8_mt extends LinearOpMode {
 
             waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
-                if (gamepad2.dpad_left) {
-                    if (lowscore == false) {
-                        //move up linear slides
-                        //end move up
-                        g2control.armFull();
-                        sleep(500);
+                if (gamepad2.right_stick_y>0){
+                    intakewheel.setPower(1);
+                }
+                if (gamepad2.right_stick_y<0){
+                    intakewheel.setPower(-1);
+                }
+                if (gamepad2.right_stick_y==0){
+                    intakewheel.setPower(0);
+                }
+               // if (gamepad2.dpad_left) {
 
-                        g2control.clawparallel();
-                        sleep(250);
-                    }
+
                     //automation to reset position
-                    else if (lowscore == true) {
-
-                        g2control.armUp();
-                        sleep(1000);
-                        g2control.clawUp();
-                        g2control.closeClaw();
-                        g2control.armDown();
-                        sleep(250);
-                        g2control.clawUp();
-                        g2control.openClaw();
-                        sleep(250);
-                    }
-                    lowscore = !lowscore;
+//                    else if (lowscore == true) {
+//
+//                        g2control.armUp();
+//                        sleep(1000);
+//                        g2control.clawUp();
+//                        g2control.closeClaw();
+//                        g2control.armDown();
+//                        sleep(250);
+//                        g2control.clawUp();
+//                        g2control.openClaw();
+//                        sleep(250);
+//                    }
+//                    lowscore = !lowscore;
                 }
 
 
@@ -183,8 +193,8 @@ public class TeleOpMain8_mt extends LinearOpMode {
     // This is the thread class to control arms , claws
     private class armControl implements Runnable {
 
-        boolean rightpixeldetected;
-        boolean leftpixeldetected;
+//        boolean rightpixeldetected;
+//        boolean leftpixeldetected;
 
 
 
@@ -204,14 +214,15 @@ public class TeleOpMain8_mt extends LinearOpMode {
             boolean rightclawopen = false;
             boolean lowscore = false;
             double lspower = 0;
+
+            boolean casketup = false;
             //intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
              waitForStart();
             //set closed claw and claw lift down
             //while (!isStopRequested()) {
             while (!Thread.interrupted() && opModeIsActive()) {
-                double clawliftpos = resources.clawLift.getPosition();
-                double armliftpos = resources.armLift.getPosition();
+
 
                 //lift power take from the second game pad
                 lspower = gamepad2.right_stick_y;
@@ -219,39 +230,27 @@ public class TeleOpMain8_mt extends LinearOpMode {
                 resources.lsLeft.setPower(-lspower);
 
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
-                if (gamepad2.right_bumper) {
-                    if (leftclawopen) {
-                        g2control.closeLeftClaw();
-                        sleep(250);
+
+
+                if (gamepad2.x){
+                    if (!casketup ){
+                        g2control.casket_back();
                     }
                     else {
-                        g2control.openLeftClaw();
-                        sleep(250);
+                        g2control.casket_fw();
                     }
-                    leftclawopen=!leftclawopen;
+                    casketup=!casketup;
 
-                }
-
-                if (gamepad2.left_bumper){
-                    if(rightclawopen){
-                        g2control.closeRightClaw();
-                        sleep(250);
-                    }
-                    else{
-                        g2control.openRightClaw();
-                        sleep(250);
-                    }
-                    rightclawopen= !rightclawopen;
                 }
                 if (gamepad2.left_trigger>=0.1) {
                     //if claw is closed then open it
                     if (clawopen == false) {
-                        g2control.openClaw();
+                        //g2control.openClaw();
                         sleep(250);
                     }
                     //if claw is opened then close it
                     else {
-                        g2control.closeClaw();
+                        //g2control.closeClaw();
                         sleep(250);
                     }
                     clawopen = !clawopen;
@@ -262,32 +261,33 @@ public class TeleOpMain8_mt extends LinearOpMode {
                 //Claw - move up and down, when its already up, move it down, when its already down, then move up
                 if (gamepad2.right_trigger >= 0.1) {
                     if (clawup) {
-                        g2control.clawDown();
+                        //g2control.clawDown();
                         sleep(250);
                     } else {
-                        g2control.clawFull();
+                        //g2control.clawFull();
                         sleep(250);
                     }
                     clawup = !clawup;
                 }
                 //make the arm lift so we can manually reset it
                 if (gamepad2.a) {
-                    g2control.armFull();
+                    //g2control.armFull();
 
                 }
                 //make the arm go back down to default position on the ground
                 if (gamepad2.x) {
-                    g2control.armDown();
+                    //g2control.armDown();
 
                 }
                 if (gamepad2.dpad_up){
-                    g2control.smallls();
+                    //g2control.smallls();
                     sleep(170);
-                    g2control.smalllsstop();
+                    //g2control.smalllsstop();
                 }
                 if (gamepad2.dpad_right){
-                    g2control.clawparallel();
+                    // g2control.clawparallel();
                 }
+
 //                if (gamepad2.dpad_left) {
 //                    if (lowscore == false) {
 //                        //move up linear slides
@@ -464,34 +464,38 @@ public class TeleOpMain8_mt extends LinearOpMode {
                 boolean enableTel = false;
 
                 if(enableTel) {
-                    if (rightclawopen) {
-                        telemetry.addLine("Right claw open");
-                    }
-                    if (rightclawopen == false) {
-                        telemetry.addLine("Right claw closed");
-                    }
-                    if (leftclawopen) {
-                        telemetry.addLine("Left claw open");
-                    }
-                    if (leftclawopen == false) {
-                        telemetry.addLine("Left claw closed");
-                    }
-                    if (!g2control.clawdown) {
-                        telemetry.addLine("Claw up");
-                    }
-                    if (g2control.clawdown) {
-                        telemetry.addLine("Claw down");
-                    }
-                    telemetry.addData("Arm position:", armliftpos);
-                    telemetry.addData("Claw position:", clawliftpos);
+//                    if (rightclawopen) {
+//                        telemetry.addLine("Right claw open");
+//                    }
+//                    if (rightclawopen == false) {
+//                        telemetry.addLine("Right claw closed");
+//                    }
+//                    if (leftclawopen) {
+//                        telemetry.addLine("Left claw open");
+//                    }
+//                    if (leftclawopen == false) {
+//                        telemetry.addLine("Left claw closed");
+//                    }
+//                    if (!g2control.clawdown) {
+//                        telemetry.addLine("Claw up");
+//                    }
+//                    if (g2control.clawdown) {
+//                        telemetry.addLine("Claw down");
+//                    }
+//                    telemetry.addData("Arm position:", armliftpos);
+//                    telemetry.addData("Claw position:", clawliftpos);
+                    telemetry.addData("Claw position:", clawpos);
+                    telemetry.addData("Left Horizontal Slide position:", lhslpos);
+                    telemetry.addData("Right Horizontal Slide position:", rhslpos);
+                    telemetry.addData("Casket position:",casketpos);
+
 
 
                     telemetry.update();
 
                 }
                //if(!g2control.autopicksucess) {
-                   rightpixeldetected = detectPixel(resources.rightClawColorSensor);
-                   leftpixeldetected = detectPixel(resources.leftClawColorSensor);
+
 
 
 //                double distanceleft = leftClawDistanceSensor.getDistance(DistanceUnit.MM);
@@ -516,20 +520,20 @@ public class TeleOpMain8_mt extends LinearOpMode {
 //                    rightPixelPicked = true;
 //                }
 
-                   if (leftpixeldetected && g2control.clawdown) {
+                   //if (leftpixeldetected && g2control.clawdown) {
 
                        //telemetry.addLine("Distance less than 30");
-                       g2control.closeLeftClaw();
-                       leftPixelPicked = true;
-                       leftpixeldetected = false;
+                       //g2control.closeLeftClaw();
+//                       leftPixelPicked = true;
+//                       leftpixeldetected = false;
                        leftclawopen = false;
                    }
-                   if (rightpixeldetected && g2control.clawdown) {
+                   //if (rightpixeldetected && g2control.clawdown) {
 
                        //telemetry.addLine("Distance less than 30");
-                       g2control.closeRightClaw();
-                       rightPixelPicked = true;
-                       rightpixeldetected = false;
+                       //g2control.closeRightClaw();
+//                       rightPixelPicked = true;
+//                       rightpixeldetected = false;
                        rightclawopen = false;
                    }
 
@@ -551,60 +555,8 @@ public class TeleOpMain8_mt extends LinearOpMode {
             }
         } //end of class armControl.run()
 
-        private boolean detectPixel (ColorSensor  cs)
-        {
-            boolean rc = false;
-            boolean enableTelemetry = true;
-            int red = cs.red();
-            int green = cs.green();
-            int blue = cs.blue();
 
-            //boolean rightpixeldetected = false;
-            if(enableTelemetry) {
-                telemetry.addData("Red", red);
-                telemetry.addData("Green", green);
-                telemetry.addData("Blue", blue);
-                telemetry.update();
-            }
-//            if (red > 100 && blue > 100 && green < 50) {
-//                if(enableTelemetry) {
-//                    telemetry.addData("Color", "Purple");
-//                }
-//                rc = true;
-//            }
-//            // Check for yellow color
-//            else if (red > 100 && green > 100 && blue < 50) {
-//                if(enableTelemetry) {
-//                    telemetry.addData("Color", "Yellow");
-//                }
-//                rc = true;
-//            }
-            // Check for green color
-            //else if (green > 250 && red < 200 && blue > 200) {
-            if ( red > 150 && green > 250 && blue > 200) {
-                if(enableTelemetry) {
-                    telemetry.addData("Color", "Green");
-                }
-                rc = true;
-            }
-            // Check for white color
-            else if (red > 200 && green > 200 && blue > 200) {
-                if(enableTelemetry) {
-                    telemetry.addData("Color", "White");
-                }
-                rc = true;
-            }
-            // None of the specified colors detected
-            else {
-                if(enableTelemetry) {
-                    telemetry.addData("Color", "Unknown");
-                }
-            }
 
-            telemetry.update();
-            return rc;
-        }
-    }//end of class armControl
 
-}//end of main class to3controlchange_ms
+
 

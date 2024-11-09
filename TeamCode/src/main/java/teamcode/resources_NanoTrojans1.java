@@ -5,14 +5,14 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.openftc.easyopencv.OpenCvWebcam;
 
 import teamcode.OpenCVExt.LCamConeLocDetection;
 
-public class resources_NanoTrojans {
+public class resources_NanoTrojans1 {
 //    static final double COUNTS_PER_REVOLUTION = 537.7; // Encoder counts per revolution
 //    static final double WHEEL_DIAMETER_MM = 96.0; // Wheel diameter in millimeters
 //    static final double MM_PER_REVOLUTION = WHEEL_DIAMETER_MM * Math.PI; // Wheel circumference
@@ -25,26 +25,14 @@ public class resources_NanoTrojans {
 //    public DcMotor frontRight;
 //    public DcMotor backLeft;
 //    public DcMotor backRight;
+    public Servo clawLift = null;
+    public Servo armLift = null;
+    public Servo clawLeft = null;
+    public Servo clawRight = null;
     public DcMotor lsRight = null;
     public DcMotor lsLeft = null;
-    public DcMotor frontLeft = null;
-    public DcMotor frontRight = null;
-    public DcMotor backLeft = null;
-    public DcMotor backRight = null;
-
-    //servo motors
-    public Servo rhsl = null;
-
-    //2 claws servo motors
-    public Servo lhsl = null;
-    public Servo claw = null;
-
-    //2 arms servo motors
-    public CRServo intakewheels = null;
-    public Servo intakelift = null;
-    public Servo clawlift = null;
-    public Servo casket = null;
-
+    //public DcMotor intake = null;
+    public CRServo planeLaunch = null;
     //public CRServo robotLift = null;
 
     //public DcMotor dcArm;
@@ -65,20 +53,29 @@ public class resources_NanoTrojans {
     public ColorSensor leftClawColorSensor;
 
     private HuskyLens huskyLens;
-public resources_NanoTrojans(HardwareMap hardwareMap){
+public resources_NanoTrojans1(HardwareMap hardwareMap){
 //    frontLeft = hardwareMap.get(DcMotor.class,"frontLeft");
 //    frontRight = hardwareMap.get(DcMotor.class, "frontRight");
 //    backLeft = hardwareMap.get(DcMotor.class, "backLeft");
 //    backRight = hardwareMap.get(DcMotor.class, "backRight");
     lsRight = hardwareMap.dcMotor.get("lsRight");
     lsLeft = hardwareMap.dcMotor.get("lsLeft");
-    claw = hardwareMap.servo.get("claw");
-    intakewheels = hardwareMap.crservo.get("intake");
-    clawlift = hardwareMap.servo.get("clawlift");
-    intakelift = hardwareMap.servo.get("intakelift");
-    rhsl = hardwareMap.servo.get("rhsl");
-    lhsl = hardwareMap.servo.get("lhsl");
-    casket = hardwareMap.servo.get("casket");
+    //intake = hardwareMap.dcMotor.get("intake");
+
+    //Servo Motors
+    planeLaunch = hardwareMap.crservo.get("planeLaunch");
+    //robotLift = hardwareMap.crservo.get("robotLift");
+
+    //hang
+
+
+    // get 2 claw motors
+    clawLeft = hardwareMap.servo.get("clawLeft");
+    clawRight = hardwareMap.servo.get("clawRight");
+
+    // get 2 arm motors
+    clawLift = hardwareMap.servo.get("clawLift");
+    armLift = hardwareMap.servo.get("armLift");
 
     //dcArm = hardwareMap.dcMotor.get("dcArm");
 
@@ -95,7 +92,7 @@ public resources_NanoTrojans(HardwareMap hardwareMap){
 //    imu = hardwareMap.get(BNO055IMU.class, "imu");
 //    imu.initialize(parameters);
 
-//    rightClawColorSensor = hardwareMap.colorSensor.get("rightclawcolor");
-//    leftClawColorSensor = hardwareMap.colorSensor.get("leftclawcolor");
+    rightClawColorSensor = hardwareMap.colorSensor.get("rightclawcolor");
+    leftClawColorSensor = hardwareMap.colorSensor.get("leftclawcolor");
 }
 }
