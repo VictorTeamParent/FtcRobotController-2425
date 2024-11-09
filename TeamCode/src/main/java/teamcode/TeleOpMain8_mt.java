@@ -29,7 +29,7 @@ public class TeleOpMain8_mt extends LinearOpMode {
     private DriveControl_NanoTorjan driveControl;
     //private DriveControl driveControl;
 
-    private controls_NanoTrojans g2control;
+    private controls_NanoTrojans1 g2control;
 
     private resources_NanoTrojans1 resources;
 
@@ -44,7 +44,7 @@ public class TeleOpMain8_mt extends LinearOpMode {
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
         rateLimit.expire();
 
-        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
+        g2control=new controls_NanoTrojans1(resources.lsRight, resources.lsLeft, resources.planeLaunch,
                 resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
 

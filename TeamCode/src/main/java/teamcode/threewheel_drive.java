@@ -1,6 +1,5 @@
 package teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,7 +15,7 @@ public class threewheel_drive extends LinearOpMode{
     private DcMotor Right;
 
 
-    private controls_NanoTrojans g2control;
+    private controls_NanoTrojans1 g2control;
     @Override
     public void runOpMode() throws InterruptedException {
 

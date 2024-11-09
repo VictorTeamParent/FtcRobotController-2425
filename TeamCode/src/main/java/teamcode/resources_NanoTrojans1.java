@@ -43,7 +43,7 @@ public class resources_NanoTrojans1 {
     public int frontRightMotorCounts = 0;
     public int rearLeftMotorCounts = 0;
     public int rearRightMotorCounts = 0;
-    public controls_NanoTrojans g2control;
+    public controls_NanoTrojans1 g2control;
 
     //private BNO055IMU imu;
 

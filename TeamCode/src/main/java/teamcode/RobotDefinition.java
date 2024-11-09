@@ -50,7 +50,7 @@ public class RobotDefinition {
     public DriveControl_NanoTorjan driveControl;
     //public DriveControl driveControl;
 
-    public controls_NanoTrojans g2control;
+    public controls_NanoTrojans1 g2control;
     
        
     public RobotDefinition() {
@@ -93,7 +93,7 @@ public class RobotDefinition {
 
         driveControl = new DriveControl_NanoTorjan(frontLeft, frontRight, backLeft, backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
-        g2control=new controls_NanoTrojans(lsRight, lsLeft, planeLaunch,
+        g2control=new controls_NanoTrojans1(lsRight, lsLeft, planeLaunch,
                 clawLeft, clawRight, clawLift, armLift);
         
     }

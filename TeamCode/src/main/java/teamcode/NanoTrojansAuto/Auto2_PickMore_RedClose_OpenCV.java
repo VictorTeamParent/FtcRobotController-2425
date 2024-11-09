@@ -37,7 +37,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 import teamcode.OpenCVExt.RCamConeLocDetection;
-import teamcode.controls_NanoTrojans;
+import teamcode.controls_NanoTrojans1;
 import teamcode.drive.SampleMecanumDrive;
 import teamcode.resources_NanoTrojans1;
 import teamcode.trajectorysequence.TrajectorySequence;
@@ -57,7 +57,7 @@ public class Auto2_PickMore_RedClose_OpenCV extends LinearOpMode {
     RCamConeLocDetection pipeline;
     RCamConeLocDetection.RSideConePosition position = RCamConeLocDetection.RSideConePosition.OTHER;
 
-    private controls_NanoTrojans g2control;
+    private controls_NanoTrojans1 g2control;
 
     private resources_NanoTrojans1 resources;
 
@@ -75,7 +75,7 @@ public class Auto2_PickMore_RedClose_OpenCV extends LinearOpMode {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new RCamConeLocDetection();
         webcam.setPipeline(pipeline);
-        g2control = new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
+        g2control = new controls_NanoTrojans1(resources.lsRight, resources.lsLeft, resources.planeLaunch,
                 resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
         /*

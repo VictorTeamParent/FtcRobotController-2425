@@ -36,7 +36,7 @@ public class TeleOpMain7_mt extends LinearOpMode {
     private DriveControl_NanoTorjan driveControl;
     //private DriveControl driveControl;
 
-    private controls_NanoTrojans g2control;
+    private controls_NanoTrojans1 g2control;
     private resources_NanoTrojans1 resources;
 
     private resources_base_NanoTrojans resourcesbase;
@@ -77,7 +77,7 @@ public class TeleOpMain7_mt extends LinearOpMode {
 
         driveControl = new DriveControl_NanoTorjan(resourcesbase.frontLeft, resourcesbase.frontRight, resourcesbase.backLeft, resourcesbase.backRight, imu);
         //driveControl = new DriveControl(frontLeft, frontRight, backLeft, backRight, imu);
-        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.planeLaunch,
+        g2control=new controls_NanoTrojans1(resources.lsRight, resources.lsLeft, resources.planeLaunch,
                 resources.clawLeft, resources.clawRight, resources.clawLift, resources.armLift);
 
         waitForStart();
