@@ -55,7 +55,7 @@ public class TeleOpMain1_25 extends LinearOpMode {
         rateLimit.expire();
 
         g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
-                resources.lhsl, resources.rhsl, resources.clawlift, resources.intakelift, resources.intakewheels, resources.casket);
+                resources.lhsl, resources.rhsl, resources.clawlift, resources.rintakelift, resources.lintakelift,  resources.intakewheels, resources.casket);
 
 
         //Thread baseControlThread = new Thread(new baseControl());
@@ -241,6 +241,12 @@ public class TeleOpMain1_25 extends LinearOpMode {
                     }
                     casketup=!casketup;
 
+                }
+                if (gamepad2.dpad_up){
+                    g2control.intakeup();
+                }
+                if (gamepad2.dpad_down){
+                    g2control.intakedown();
                 }
                 if (gamepad2.left_trigger>=0.1) {
                     //if claw is closed then open it

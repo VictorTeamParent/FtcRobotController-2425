@@ -32,7 +32,8 @@ public class controls_NanoTrojans {
 
     //2 arms servo motors
     private CRServo intakewheels = null;
-    private Servo intakelift = null;
+    private Servo rintakelift = null;
+    private Servo lintakelift = null;
     private Servo clawlift = null;
     private Servo casket = null;
     //private CRServo robotLift = null;
@@ -48,7 +49,7 @@ public class controls_NanoTrojans {
 
 
     public controls_NanoTrojans(DcMotor lsR, DcMotor lsL, Servo lhorizontal,
-                                Servo rhorizontal, Servo claw, Servo clawlift, Servo intakelift, CRServo intakewheels, Servo casket)
+                                Servo rhorizontal, Servo claw, Servo clawlift, Servo rintakelift, Servo lintakelift,  CRServo intakewheels, Servo casket)
     {
         //intake= intak;
         lsRight=lsR;
@@ -57,7 +58,8 @@ public class controls_NanoTrojans {
         rhorizontal=rhsl;
         claw =claw;
         clawlift=clawlift;
-        intakelift =intakelift;
+        rintakelift =rintakelift;
+        lintakelift = lintakelift;
         //robotLift=robotL;
 //        dcArm =arm;
     }
@@ -72,6 +74,7 @@ public class controls_NanoTrojans {
         claw.setPosition(0.8);
 
     }
+
 
     public void horizontal_fw()
     {
@@ -94,6 +97,14 @@ public class controls_NanoTrojans {
     public void casket_back()
     {
         casket.setPosition(0.7);
+    }
+    public void intakeup(){
+        lintakelift.setPosition(0.5);
+        rintakelift.setPosition(0.5);
+    }
+    public void intakedown(){
+        lintakelift.setPosition(0.2);
+        rintakelift.setPosition(0.8);
     }
 
 //    public void intake(){
