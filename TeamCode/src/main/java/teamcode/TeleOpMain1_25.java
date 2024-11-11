@@ -1,51 +1,71 @@
 //package org.firstinspires.ftc.teamcode;
 package teamcode;
 
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
+
 import java.util.concurrent.TimeUnit;
 
+
 import teamcode.drive.SampleMecanumDrive;
+
+
 
 
 @TeleOp(name = "TeleOpMain1_2525", group = "TeleOp")
 
 
+
+
 public class TeleOpMain1_25 extends LinearOpMode {
 
-      private final double driveAdjuster = 1;
+
+    private final double driveAdjuster = 1;
+
 
     // the following are for huskylen
+
 
     private final int READ_PERIOD = 1;
 
 
+
+
     Orientation angles;
+
 
     private DriveControl_NanoTorjan driveControl;
     //private DriveControl driveControl;
 
+
     private controls_NanoTrojans g2control;
 
+
     private resources_NanoTrojans resources;
+
 
     private boolean rightPixelPicked = false;
     private boolean leftPixelPicked = false;
     private boolean autopick = false;
     private boolean horizontalls = false;
-//    double clawpos = resources.claw.getPosition();
-//    double lhslpos = resources.lhsl.getPosition();
-//    double rhslpos = resources.rhsl.getPosition();
-//    double casketpos = resources.claw.getPosition();
+    double clawpos = 0;
+    double lhslpos = 0;
+    double rhslpos = 0;
+    double casketpos = 0;
 
-    //CRServo intakewheel = hardwareMap.get(CRServo.class, "intakewheel");
+
+//    CRServo intakewheel = hardwareMap.get(CRServo.class, "intakewheel");
+
+
 
 
     @Override
@@ -53,9 +73,16 @@ public class TeleOpMain1_25 extends LinearOpMode {
         resources=new resources_NanoTrojans(hardwareMap);
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
         rateLimit.expire();
+        clawpos = resources.claw.getPosition();
+        lhslpos = resources.lhsl.getPosition();
+        rhslpos = resources.rhsl.getPosition();
+        casketpos = resources.claw.getPosition();
 
-        //g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
-        //        resources.lhsl, resources.rhsl, resources.clawlift, resources.intakelift, resources.intakewheels, resources.casket);
+
+        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
+                resources.lhsl, resources.rhsl, resources.clawlift, resources.rintakelift, resources.lintakelift,  resources.intakewheels, resources.casket);
+
+
 
 
         //Thread baseControlThread = new Thread(new baseControl());
@@ -63,20 +90,25 @@ public class TeleOpMain1_25 extends LinearOpMode {
         Thread lsControlThread = new Thread(new lsControl());
         Thread lsControl2 = new Thread(new lsControl2());
 
+
         //Start 2  threads
         //baseControlThread.start();
         armControlThread.start();
         lsControl2.start();
         //lsControlThread.start();
 
+
         // This is the 3rd thread
         //The following  loop is just to keep this main thread running.
         // Add above 2 threads basicall we have 3 threads running
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
+
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+
         waitForStart();
+
 
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
@@ -90,9 +122,13 @@ public class TeleOpMain1_25 extends LinearOpMode {
             Pose2d poseEstimate = drive.getPoseEstimate();
 
 
+
+
         }
 
+
     }
+
 
     // The following is developed by NT , but we are not using it now
     // This is the thread class to control the base of the robot to move arround, this normally is
@@ -104,19 +140,24 @@ public class TeleOpMain1_25 extends LinearOpMode {
             waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
 
+
                 // Motor control logic for motors 1 and 2
                 //Call Robot base movement algorithem to drive the base
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-//                if ( gamepad2.y){
-//                    if (!horizontalls);{
-//                        g2control.horizontal_fw();
-//                    }
-//                    if (horizontalls){
-//                        g2control.horizontal_back();
-//                    }
-//                    horizontalls = !horizontalls;
-//                }
+
+                if ( gamepad2.y){
+                    if (!horizontalls);{
+                        g2control.horizontal_fw();
+                    }
+                    if (horizontalls){
+                        g2control.horizontal_back();
+                    }
+                    horizontalls = !horizontalls;
+                }
+
+
+
 
 
 
@@ -124,17 +165,26 @@ public class TeleOpMain1_25 extends LinearOpMode {
         }
     }//end of class baseControl
 
+
     private class lsControl2 implements Runnable {
         boolean clawClosed = false;
         @Override
         public void run() {
 
+
             boolean moveup2 = false;
             boolean lsmove = false;
             boolean lowscore = false;
 
+
             waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
+                if (gamepad2.left_stick_y>0){
+                    g2control.iwheels();
+                }
+                else {
+                    g2control.iwheelstop();
+                }
 //                if (gamepad2.right_stick_y>0){
 //                    intakewheel.setPower(1);
 //                }
@@ -147,7 +197,10 @@ public class TeleOpMain1_25 extends LinearOpMode {
 
 
 
-                    //automation to reset position
+
+
+
+                //automation to reset position
 //                    else if (lowscore == true) {
 //
 //                        g2control.armUp();
@@ -165,41 +218,57 @@ public class TeleOpMain1_25 extends LinearOpMode {
 
 
 
+
+
+
+
             }
         }
     }//end of class baseControl
+
 
     private class lsControl implements Runnable {
         boolean clawClosed = false;
         @Override
         public void run() {
 
+
             boolean moveup2 = false;
             boolean lsmove = false;
             boolean highscore = false;
 
+
             waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
+
 
                 double lspower = gamepad2.right_stick_y;
                 resources.lsRight.setPower(lspower);
                 resources.lsLeft.setPower(-lspower);
+
 
             }
         }
     }//end of class baseControl
 
 
+
+
     // This is the thread class to control arms , claws
     private class armControl implements Runnable {
+
 
 //        boolean rightpixeldetected;
 //        boolean leftpixeldetected;
 
 
 
+
+
+
         @Override
         public void run() {
+
 
             boolean moveup2 = false;
             boolean moveup3 = false;
@@ -215,13 +284,17 @@ public class TeleOpMain1_25 extends LinearOpMode {
             boolean lowscore = false;
             double lspower = 0;
 
+
             boolean casketup = false;
             //intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-             waitForStart();
+
+            waitForStart();
             //set closed claw and claw lift down
             //while (!isStopRequested()) {
             while (!Thread.interrupted() && opModeIsActive()) {
+
+
 
 
                 //lift power take from the second game pad
@@ -229,7 +302,10 @@ public class TeleOpMain1_25 extends LinearOpMode {
                 resources.lsRight.setPower(lspower);
                 resources.lsLeft.setPower(-lspower);
 
+
                 //Claw contols  -  close and open, when the claw is closed, then open it, when claw is open, then close it
+
+
 
 
                 if (gamepad2.x){
@@ -241,6 +317,13 @@ public class TeleOpMain1_25 extends LinearOpMode {
                     }
                     casketup=!casketup;
 
+
+                }
+                if (gamepad2.dpad_up){
+                    g2control.intakeup();
+                }
+                if (gamepad2.dpad_down){
+                    g2control.intakedown();
                 }
                 if (gamepad2.left_trigger>=0.1) {
                     //if claw is closed then open it
@@ -258,6 +341,7 @@ public class TeleOpMain1_25 extends LinearOpMode {
                     leftclawopen = !leftclawopen;
                 }
 
+
                 //Claw - move up and down, when its already up, move it down, when its already down, then move up
                 if (gamepad2.right_trigger >= 0.1) {
                     if (clawup) {
@@ -273,10 +357,12 @@ public class TeleOpMain1_25 extends LinearOpMode {
                 if (gamepad2.a) {
                     //g2control.armFull();
 
+
                 }
                 //make the arm go back down to default position on the ground
                 if (gamepad2.x) {
                     //g2control.armDown();
+
 
                 }
                 if (gamepad2.dpad_up){
@@ -287,6 +373,7 @@ public class TeleOpMain1_25 extends LinearOpMode {
                 if (gamepad2.dpad_right){
                     // g2control.clawparallel();
                 }
+
 
 //                if (gamepad2.dpad_left) {
 //                    if (lowscore == false) {
@@ -463,6 +550,7 @@ public class TeleOpMain1_25 extends LinearOpMode {
 //                }
                 boolean enableTel = false;
 
+
                 if(enableTel) {
 //                    if (rightclawopen) {
 //                        telemetry.addLine("Right claw open");
@@ -484,17 +572,24 @@ public class TeleOpMain1_25 extends LinearOpMode {
 //                    }
 //                    telemetry.addData("Arm position:", armliftpos);
 //                    telemetry.addData("Claw position:", clawliftpos);
-//                    telemetry.addData("Claw position:", clawpos);
-//                    telemetry.addData("Left Horizontal Slide position:", lhslpos);
-//                    telemetry.addData("Right Horizontal Slide position:", rhslpos);
-//                    telemetry.addData("Casket position:",casketpos);
+                    telemetry.addData("Claw position:", clawpos);
+                    telemetry.addData("Left Horizontal Slide position:", lhslpos);
+                    telemetry.addData("Right Horizontal Slide position:", rhslpos);
+                    telemetry.addData("Casket position:",casketpos);
+
+
+
 
 
 
                     telemetry.update();
 
+
                 }
-               //if(!g2control.autopicksucess) {
+                //if(!g2control.autopicksucess) {
+
+
+
 
 
 
@@ -513,6 +608,7 @@ public class TeleOpMain1_25 extends LinearOpMode {
 //                    leftPixelPicked = true;
 //                }
 
+
 //                if(distanceright<=26 && g2control.clawdown){
 //
 //                    //telemetry.addLine("Distance less than 30");
@@ -520,22 +616,27 @@ public class TeleOpMain1_25 extends LinearOpMode {
 //                    rightPixelPicked = true;
 //                }
 
-                   //if (leftpixeldetected && g2control.clawdown) {
 
-                       //telemetry.addLine("Distance less than 30");
-                       //g2control.closeLeftClaw();
+                //if (leftpixeldetected && g2control.clawdown) {
+
+
+                //telemetry.addLine("Distance less than 30");
+                //g2control.closeLeftClaw();
 //                       leftPixelPicked = true;
 //                       leftpixeldetected = false;
-                       leftclawopen = false;
-                   }
-                   //if (rightpixeldetected && g2control.clawdown) {
+                leftclawopen = false;
+            }
+            //if (rightpixeldetected && g2control.clawdown) {
 
-                       //telemetry.addLine("Distance less than 30");
-                       //g2control.closeRightClaw();
+
+            //telemetry.addLine("Distance less than 30");
+            //g2control.closeRightClaw();
 //                       rightPixelPicked = true;
 //                       rightpixeldetected = false;
-                       rightclawopen = false;
-                   }
+            rightclawopen = false;
+        }
+
+
 
 
 //                   if (rightPixelPicked && leftPixelPicked) {
@@ -549,11 +650,21 @@ public class TeleOpMain1_25 extends LinearOpMode {
 //                       //autopick = false;
 //                   }
 
-               //}
+
+        //}
 
 
-            }
-        } //end of class armControl.run()
+
+
+    }
+} //end of class armControl.run()
+
+
+
+
+
+
+
 
 
 
