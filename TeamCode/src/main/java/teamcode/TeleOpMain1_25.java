@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import teamcode.drive.SampleMecanumDrive;
 
 
-@TeleOp(name = "TeleOpMain1_2525", group = "TeleOp")
+@TeleOp(name = "TeleOpMain1_2425", group = "TeleOp")
 
 
 public class TeleOpMain1_25 extends LinearOpMode {
@@ -40,10 +40,11 @@ public class TeleOpMain1_25 extends LinearOpMode {
     private boolean leftPixelPicked = false;
     private boolean autopick = false;
     private boolean horizontalls = false;
-    double clawpos = resources.claw.getPosition();
-    double lhslpos = resources.lhsl.getPosition();
-    double rhslpos = resources.rhsl.getPosition();
-    double casketpos = resources.claw.getPosition();
+    double clawpos = 0;
+    double lhslpos = 0;
+    double rhslpos = 0;
+    double casketpos = 0;
+
 
     CRServo intakewheel = hardwareMap.get(CRServo.class, "intakewheel");
 
@@ -53,6 +54,10 @@ public class TeleOpMain1_25 extends LinearOpMode {
         resources=new resources_NanoTrojans(hardwareMap);
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
         rateLimit.expire();
+        clawpos = resources.claw.getPosition();
+        lhslpos = resources.lhsl.getPosition();
+        rhslpos = resources.rhsl.getPosition();
+        casketpos = resources.casket.getPosition();
 
         g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
                 resources.lhsl, resources.rhsl, resources.clawlift, resources.rintakelift, resources.lintakelift,  resources.intakewheels, resources.casket);
