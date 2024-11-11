@@ -40,12 +40,12 @@ public class TeleOpMain1_25 extends LinearOpMode {
     private boolean leftPixelPicked = false;
     private boolean autopick = false;
     private boolean horizontalls = false;
-    double clawpos = resources.claw.getPosition();
-    double lhslpos = resources.lhsl.getPosition();
-    double rhslpos = resources.rhsl.getPosition();
-    double casketpos = resources.claw.getPosition();
+//    double clawpos = resources.claw.getPosition();
+//    double lhslpos = resources.lhsl.getPosition();
+//    double rhslpos = resources.rhsl.getPosition();
+//    double casketpos = resources.claw.getPosition();
 
-    CRServo intakewheel = hardwareMap.get(CRServo.class, "intakewheel");
+    //CRServo intakewheel = hardwareMap.get(CRServo.class, "intakewheel");
 
 
     @Override
@@ -54,8 +54,8 @@ public class TeleOpMain1_25 extends LinearOpMode {
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
         rateLimit.expire();
 
-        g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
-                resources.lhsl, resources.rhsl, resources.clawlift, resources.intakelift, resources.intakewheels, resources.casket);
+        //g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
+        //        resources.lhsl, resources.rhsl, resources.clawlift, resources.intakelift, resources.intakewheels, resources.casket);
 
 
         //Thread baseControlThread = new Thread(new baseControl());
@@ -108,15 +108,15 @@ public class TeleOpMain1_25 extends LinearOpMode {
                 //Call Robot base movement algorithem to drive the base
                 driveControl.driveRobot(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-                if ( gamepad2.y){
-                    if (!horizontalls);{
-                        g2control.horizontal_fw();
-                    }
-                    if (horizontalls){
-                        g2control.horizontal_back();
-                    }
-                    horizontalls = !horizontalls;
-                }
+//                if ( gamepad2.y){
+//                    if (!horizontalls);{
+//                        g2control.horizontal_fw();
+//                    }
+//                    if (horizontalls){
+//                        g2control.horizontal_back();
+//                    }
+//                    horizontalls = !horizontalls;
+//                }
 
 
 
@@ -135,15 +135,15 @@ public class TeleOpMain1_25 extends LinearOpMode {
 
             waitForStart();
             while (!Thread.interrupted() && opModeIsActive()) {
-                if (gamepad2.right_stick_y>0){
-                    intakewheel.setPower(1);
-                }
-                if (gamepad2.right_stick_y<0){
-                    intakewheel.setPower(-1);
-                }
-                if (gamepad2.right_stick_y==0){
-                    intakewheel.setPower(0);
-                }
+//                if (gamepad2.right_stick_y>0){
+//                    intakewheel.setPower(1);
+//                }
+//                if (gamepad2.right_stick_y<0){
+//                    intakewheel.setPower(-1);
+//                }
+//                if (gamepad2.right_stick_y==0){
+//                    intakewheel.setPower(0);
+//                }
 
 
 
@@ -484,10 +484,10 @@ public class TeleOpMain1_25 extends LinearOpMode {
 //                    }
 //                    telemetry.addData("Arm position:", armliftpos);
 //                    telemetry.addData("Claw position:", clawliftpos);
-                    telemetry.addData("Claw position:", clawpos);
-                    telemetry.addData("Left Horizontal Slide position:", lhslpos);
-                    telemetry.addData("Right Horizontal Slide position:", rhslpos);
-                    telemetry.addData("Casket position:",casketpos);
+//                    telemetry.addData("Claw position:", clawpos);
+//                    telemetry.addData("Left Horizontal Slide position:", lhslpos);
+//                    telemetry.addData("Right Horizontal Slide position:", rhslpos);
+//                    telemetry.addData("Casket position:",casketpos);
 
 
 
