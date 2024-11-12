@@ -21,7 +21,10 @@ import teamcode.drive.SampleMecanumDrive;
 
 
 
+
 @TeleOp(name = "TeleOpMain1_2525", group = "TeleOp")
+
+
 
 
 
@@ -63,7 +66,9 @@ public class TeleOpMain1_25 extends LinearOpMode {
     double casketpos = 0;
 
 
+
 //    CRServo intakewheel = hardwareMap.get(CRServo.class, "intakewheel");
+
 
 
 
@@ -76,11 +81,16 @@ public class TeleOpMain1_25 extends LinearOpMode {
         clawpos = resources.claw.getPosition();
         lhslpos = resources.lhsl.getPosition();
         rhslpos = resources.rhsl.getPosition();
+
         casketpos = resources.claw.getPosition();
 
 
         g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
                 resources.lhsl, resources.rhsl, resources.clawlift, resources.rintakelift, resources.lintakelift,  resources.intakewheels, resources.casket);
+
+
+
+        
 
 
 
@@ -318,6 +328,12 @@ public class TeleOpMain1_25 extends LinearOpMode {
                     casketup=!casketup;
 
 
+                }
+                if (gamepad2.dpad_up){
+                    g2control.intakeup();
+                }
+                if (gamepad2.dpad_down){
+                    g2control.intakedown();
                 }
                 if (gamepad2.dpad_up){
                     g2control.intakeup();
