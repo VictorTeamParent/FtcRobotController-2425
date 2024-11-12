@@ -50,7 +50,7 @@ public class controls_NanoTrojans {
 
 
     public controls_NanoTrojans(DcMotor lsR, DcMotor lsL, Servo lhorizontal,
-                                Servo rhorizontal, Servo claw, Servo clawlift, Servo rintakelift, Servo lintakelift, CRServo intakewheels, Servo casket)
+                                Servo rhorizontal, Servo claw, Servo rintakelift, Servo lintakelift, CRServo intakewheels, Servo casket)
     {
         //intake= intak;
         lsRight=lsR;

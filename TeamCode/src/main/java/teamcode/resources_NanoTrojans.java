@@ -46,7 +46,7 @@ public class resources_NanoTrojans {
 
 
 
-    public Servo clawlift = null;
+//    public Servo clawlift = null;
     public Servo casket = null;
 
     //public CRServo robotLift = null;
@@ -76,9 +76,11 @@ public resources_NanoTrojans(HardwareMap hardwareMap){
 //    backRight = hardwareMap.get(DcMotor.class, "backRight");
     lsRight = hardwareMap.dcMotor.get("lsRight");
     lsLeft = hardwareMap.dcMotor.get("lsLeft");
+
+
     claw = hardwareMap.servo.get("claw");
     intakewheels = hardwareMap.crservo.get("intake");
-    clawlift = hardwareMap.servo.get("clawlift");
+   // clawlift = hardwareMap.servo.get("clawlift");
 
     rintakelift = hardwareMap.servo.get("rintakelift");
     lintakelift = hardwareMap.servo.get("lintakelift");

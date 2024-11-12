@@ -3,6 +3,7 @@ package teamcode;
 
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -22,7 +23,7 @@ import teamcode.drive.SampleMecanumDrive;
 
 
 
-@TeleOp(name = "TeleOpMain1_2525", group = "TeleOp")
+@TeleOp(name = "TeleOpMain1_2425", group = "TeleOp")
 
 
 
@@ -46,8 +47,8 @@ public class TeleOpMain1_25 extends LinearOpMode {
     Orientation angles;
 
 
-    private DriveControl_NanoTorjan driveControl;
-    //private DriveControl driveControl;
+    //private DriveControl_NanoTorjan driveControl;
+    private DriveControl driveControl;
 
 
     private controls_NanoTrojans g2control;
@@ -55,17 +56,14 @@ public class TeleOpMain1_25 extends LinearOpMode {
 
     private resources_NanoTrojans resources;
 
-
-    private boolean rightPixelPicked = false;
-    private boolean leftPixelPicked = false;
-    private boolean autopick = false;
+    private resources_base_NanoTrojans resourcesbase;
     private boolean horizontalls = false;
     double clawpos = 0;
     double lhslpos = 0;
     double rhslpos = 0;
     double casketpos = 0;
 
-
+    BNO055IMU imu;
 
 //    CRServo intakewheel = hardwareMap.get(CRServo.class, "intakewheel");
 
@@ -76,6 +74,15 @@ public class TeleOpMain1_25 extends LinearOpMode {
     @Override
     public void runOpMode()  throws InterruptedException {
         resources=new resources_NanoTrojans(hardwareMap);
+        resourcesbase = new resources_base_NanoTrojans(hardwareMap);
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
         rateLimit.expire();
         clawpos = resources.claw.getPosition();
@@ -83,14 +90,15 @@ public class TeleOpMain1_25 extends LinearOpMode {
         rhslpos = resources.rhsl.getPosition();
 
         casketpos = resources.claw.getPosition();
+        driveControl = new DriveControl(resourcesbase.frontLeft, resourcesbase.frontRight, resourcesbase.backLeft, resourcesbase.backRight, imu);
 
 
         g2control=new controls_NanoTrojans(resources.lsRight, resources.lsLeft, resources.claw,
-                resources.lhsl, resources.rhsl, resources.clawlift, resources.rintakelift, resources.lintakelift,  resources.intakewheels, resources.casket);
+                resources.lhsl, resources.rhsl, resources.rintakelift, resources.lintakelift,  resources.intakewheels, resources.casket);
 
 
 
-        
+
 
 
 
